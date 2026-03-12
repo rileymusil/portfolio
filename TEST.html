@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+        .projects-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .project-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1 1 calc(33.333% - 20px);
+            min-width: 250px;
+        }
+        .project-card h3 {
+            margin-top: 0;
+        }
+        .contact {
+            text-align: center;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #2c3e50;
+            color: #fff;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>[Your Name Here]</h1>
+        <p>[Your Profession or Tagline - e.g., Creative Developer & Designer]</p>
+    </header>
+
+    <div class="container">
+        <section id="about">
+            <h2 class="section-title">About Me</h2>
+            <p style="text-align: center;">Hello! I am a passionate professional looking to solve complex problems and build amazing things. I specialize in [Skill 1], [Skill 2], and [Skill 3]. I'm always eager to learn and take on new challenges.</p>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 3rem 0;">
+
+        <section id="portfolio">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Project One</h3>
+                    <p>A brief description of this project. What problem did you solve, and what technologies did you use?</p>
+                </div>
+                <div class="project-card">
+                    <h3>Project Two</h3>
+                    <p>A brief description of this project. Highlight your specific contributions and the impact of your work.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Project Three</h3>
+                    <p>A brief description of this project. Link to the live version or the GitHub repository if applicable.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 3rem 0;">
+
+        <section id="contact" class="contact">
+            <h2 class="section-title">Let's Connect</h2>
+            <p>Interested in working together? Drop me a line!</p>
+            <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+            <p>LinkedIn: <a href="#">linkedin.com/in/yourprofile</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 [Your Name]. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
