@@ -3,25 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riley Musil | Creative</title>
+    <title>Video | Riley Musil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --lora: 'Lora', serif;
+            --poppins: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: var(--poppins);
             margin: 0;
             padding: 0;
+            background: #fff;
             color: #333;
-            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        
-        /* Header & Navigation Styles */
+
+        /* Header & Navigation — consistent with index.html / photography.html */
         header {
-            background: #ffffff; /* White background for your black logo */
+            background: #fff;
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .logo-container {
             display: flex;
@@ -30,67 +41,76 @@
             color: #333;
         }
         .logo-container img {
-            height: 60px; /* Adjust this to make your logo bigger or smaller */
+            height: 50px;
             margin-right: 15px;
         }
         .logo-container h1 {
+            font-family: var(--lora);
+            font-size: 1.4rem;
             margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
         }
         nav ul {
             list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
             gap: 2rem;
+            margin: 0;
+            padding: 0;
         }
         nav a {
             text-decoration: none;
             color: #333;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+            font-family: var(--lora);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
         nav a:hover {
-            color: #777;
+            color: #555;
         }
 
-        /* Hero / Main Section Styles */
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: #2c3e50;
-            color: #fff;
-        }
-        .hero h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
+        /* Page content */
+        .container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 20px;
+            flex: 1;
         }
 
-        /* Contact Details (For preview on homepage) */
-        .quick-contact {
+        .page-title {
             text-align: center;
-            padding: 3rem 2rem;
-            background: #fff;
-            margin: 2rem auto;
-            width: 80%;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: var(--lora);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
         }
-        .quick-contact a {
-            color: #2c3e50;
-            text-decoration: none;
-            font-weight: bold;
+
+        /* Video gallery */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
         }
-        .quick-contact a:hover {
-            text-decoration: underline;
+
+        .video-item {
+            width: 100%;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         footer {
@@ -98,7 +118,8 @@
             padding: 1.5rem;
             background: #1a252f;
             color: #fff;
-            margin-top: auto;
+            font-size: 0.8rem;
+            margin-top: 4rem;
         }
     </style>
 </head>
@@ -119,19 +140,73 @@
         </nav>
     </header>
 
-    <section class="hero">
-        <h2>Capturing the Moment.</h2>
-        <p>I am a creative professional specializing in event video and photography coverage, as well as high-quality editing.</p>
-    </section>
+    <div class="container">
+        <h1 class="page-title">Video Portfolio</h1>
 
-    <section class="quick-contact">
-        <h3>Let's Work Together</h3>
-        <p>Email: <a href="mailto:rileymusil2006@gmail.com">rileymusil2006@gmail.com</a> | Phone: 832-318-4789</p>
-        <p>
-            <a href="https://www.linkedin.com/in/riley-musil-402786332" target="_blank">LinkedIn</a> | 
-            <a href="https://instagram.com/rileymusil" target="_blank">Instagram</a>
-        </p>
-    </section>
+        <div class="video-list">
+
+            <div class="video-item">
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/9wd2dRwnwMc"
+                        title="Riley Musil Video 1"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/YqYoziZZlg8"
+                        title="Riley Musil Video 2"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/GGQ91WSZXIY"
+                        title="Riley Musil Video 3"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/5tpDpPqEXyU"
+                        title="Riley Musil Video 4"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/3e0WRKEbBAQ"
+                        title="Riley Musil Video 5"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
