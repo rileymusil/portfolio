@@ -3,25 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riley Musil | Creative</title>
+    <title>About | Riley Musil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background-color: #f4f4f4;
+        :root {
+            --lora: 'Lora', serif;
+            --poppins: 'Poppins', sans-serif;
+            --dark: #1a252f;
+            --mid: #2c3e50;
+            --accent: #bdc3c7;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
         }
-        
-        /* Header & Navigation Styles */
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--poppins);
+            background: var(--light-bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ── Navbar ── */
         header {
-            background: #ffffff; /* White background for your black logo */
+            background: var(--white);
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .logo-container {
             display: flex;
@@ -29,76 +45,377 @@
             text-decoration: none;
             color: #333;
         }
-        .logo-container img {
-            height: 60px; /* Adjust this to make your logo bigger or smaller */
-            margin-right: 15px;
-        }
+        .logo-container img { height: 50px; margin-right: 15px; }
         .logo-container h1 {
+            font-family: var(--lora);
+            font-size: 1.4rem;
             margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
         }
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 2rem;
-        }
+        nav ul { list-style: none; display: flex; gap: 2rem; }
         nav a {
             text-decoration: none;
             color: #333;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+            font-family: var(--lora);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
-        nav a:hover {
-            color: #777;
+        nav a:hover { color: #555; }
+        nav a.active { border-bottom: 2px solid var(--mid); padding-bottom: 2px; }
+
+        /* ── Banner ── */
+        .banner {
+            background: var(--mid);
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 40px,
+                rgba(255,255,255,0.02) 40px,
+                rgba(255,255,255,0.02) 80px
+            );
+        }
+        .banner h2 {
+            font-family: var(--lora);
+            font-size: 3.2rem;
+            font-weight: 700;
+            position: relative;
+        }
+        .banner p {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-style: italic;
+            font-family: var(--lora);
+            margin-top: 0.5rem;
+            position: relative;
         }
 
-        /* Hero / Main Section Styles */
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: #2c3e50;
-            color: #fff;
+        /* ── Main content wrapper ── */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 4rem 5% 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
         }
-        .hero h2 {
-            font-size: 3rem;
+
+        /* ── Section label ── */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .section-label span {
+            font-family: var(--lora);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--mid);
+            white-space: nowrap;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        /* ── INTRO: photo left, text right ── */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .photo-slot {
+            background: #e8ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+        }
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* Placeholder shown when no real image */
+        .photo-slot .placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 2.5rem 1.5rem;
+            min-height: 380px;
+            color: #9aa5ae;
+            text-align: center;
+        }
+        .photo-slot .placeholder svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.45;
+        }
+        .photo-slot .placeholder p {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            max-width: 160px;
+        }
+        .photo-slot .placeholder strong {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #7a8a94;
+            margin-bottom: 4px;
+        }
+
+        .intro-text h3 {
+            font-family: var(--lora);
+            font-size: 2rem;
+            color: var(--mid);
+            margin-bottom: 0.5rem;
+        }
+        .intro-text .title-tag {
+            display: inline-block;
+            background: var(--mid);
+            color: var(--white);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+        .intro-text p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.8;
             margin-bottom: 1rem;
         }
-        .hero p {
+
+        /* ── Skills ── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        .skill-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+            border-top: 3px solid var(--mid);
+        }
+        .skill-card h4 {
+            font-family: var(--lora);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--mid);
+            margin-bottom: 0.75rem;
+        }
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .tag {
+            background: var(--light-bg);
+            border: 1px solid #dce1e5;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* ── Experience timeline ── */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 2rem;
+            position: relative;
+            padding-bottom: 2.5rem;
+        }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 186px;
+            top: 8px;
+            bottom: 0;
+            width: 1px;
+            background: #ddd;
+        }
+        .timeline-item:last-child::before { display: none; }
+        .timeline-dot {
+            position: absolute;
+            left: 181px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--mid);
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 2px var(--mid);
+        }
+        .timeline-date {
+            text-align: right;
+            padding-top: 2px;
+        }
+        .timeline-date span {
+            font-size: 0.78rem;
+            color: #999;
+            font-style: italic;
+        }
+        .timeline-content h4 {
+            font-family: var(--lora);
+            font-size: 1.1rem;
+            color: var(--mid);
+            margin-bottom: 2px;
+        }
+        .timeline-content .org {
+            font-size: 0.82rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+        }
+        .timeline-content ul {
+            padding-left: 1.1rem;
+        }
+        .timeline-content ul li {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 2px;
+        }
+
+        /* ── Education ── */
+        .edu-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .edu-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--mid);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .edu-icon svg { width: 30px; height: 30px; fill: #fff; }
+        .edu-details h4 {
+            font-family: var(--lora);
             font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
+            color: var(--mid);
+            margin-bottom: 4px;
+        }
+        .edu-details p {
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        /* Contact Details (For preview on homepage) */
-        .quick-contact {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: #fff;
-            margin: 2rem auto;
-            width: 80%;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        /* ── Photo gallery row ── */
+        .photo-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
-        .quick-contact a {
-            color: #2c3e50;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .quick-contact a:hover {
-            text-decoration: underline;
+        .photo-row .photo-slot .placeholder {
+            min-height: 240px;
         }
 
+        /* ── Honors & Hobbies ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .info-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+        }
+        .info-card h4 {
+            font-family: var(--lora);
+            font-size: 1rem;
+            color: var(--mid);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid #eee;
+        }
+        .info-card ul {
+            padding-left: 1.1rem;
+        }
+        .info-card ul li {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 4px;
+        }
+
+        /* ── Footer ── */
         footer {
+            background: var(--dark);
+            color: var(--white);
             text-align: center;
             padding: 1.5rem;
-            background: #1a252f;
-            color: #fff;
-            margin-top: auto;
+            font-size: 0.8rem;
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .intro-grid { grid-template-columns: 1fr; }
+            .timeline-item { grid-template-columns: 1fr; }
+            .timeline-item::before, .timeline-dot { display: none; }
+            .timeline-date { text-align: left; }
+            .two-col { grid-template-columns: 1fr; }
+            .photo-row { grid-template-columns: 1fr 1fr; }
+            .edu-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -113,29 +430,196 @@
             <ul>
                 <li><a href="video.html">Video</a></li>
                 <li><a href="photography.html">Photography</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="about.html" class="active">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero">
-        <h2>Capturing the Moment.</h2>
-        <p>I am a creative professional specializing in event video and photography coverage, as well as high-quality editing.</p>
-    </section>
+    <div class="banner">
+        <h2>About Me</h2>
+        <p>Live Event Coverage Specialist &amp; Creative Storyteller</p>
+    </div>
 
-    <section class="quick-contact">
-        <h3>Let's Work Together</h3>
-        <p>Email: <a href="mailto:rileymusil2006@gmail.com">rileymusil2006@gmail.com</a> | Phone: 832-318-4789</p>
-        <p>
-            <a href="https://www.linkedin.com/in/riley-musil-402786332" target="_blank">LinkedIn</a> | 
-            <a href="https://instagram.com/rileymusil" target="_blank">Instagram</a>
-        </p>
-    </section>
+    <main>
 
-    <footer>
-        <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
-    </footer>
+        <!-- ── INTRO ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>Who I Am</span></div>
+            <div class="intro-grid">
+                <div class="photo-slot">
+                    <!-- Replace src with your headshot, e.g. src="RileyHeadshot.jpg" -->
+                    <div class="placeholder">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" fill="#9aa5ae"/></svg>
+                        <p><strong>Photo Placeholder</strong>Replace with your headshot<br><em>(e.g. RileyHeadshot.jpg)</em></p>
+                    </div>
+                </div>
+                <div class="intro-text">
+                    <h3>Riley Musil</h3>
+                    <span class="title-tag">Live Event Coverage Specialist</span>
+                    <p>
+                        I'm a creative professional based in <strong>Houston, TX</strong> and a graduate of 
+                        <strong>Lone Star College Kingwood</strong>, where I earned my Associate's degree in 
+                        Visual Communication with a focus on Film and Video.
+                    </p>
+                    <p>
+                        I specialize in high-end live event coverage, blending technical precision with 
+                        creative storytelling. Whether I'm behind a camera at a large event or in the 
+                        editing suite bringing footage to life, I bring the same enthusiasm and reliability 
+                        to every project.
+                    </p>
+                    <p>
+                        Outside of work, you'll find me painting — a hobby that keeps my creative eye sharp 
+                        and my love for visual art alive.
+                    </p>
+                    <p>
+                        <strong>📧</strong> <a href="mailto:rileymusil2006@gmail.com" style="color: var(--mid); font-weight:600;">rileymusil2006@gmail.com</a>
+                        &nbsp;&nbsp;
+                        <strong>📞</strong> <a href="tel:+18323033162" style="color: var(--mid); font-weight:600;">(832) 303-3162</a>
+                    </p>
+                </div>
+            </div>
+        </section>
 
-</body>
-</html>
+        <!-- ── SKILLS ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>Skills &amp; Tools</span></div>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h4>Software</h4>
+                    <div class="tag-list">
+                        <span class="tag">Premiere Pro</span>
+                        <span class="tag">After Effects</span>
+                        <span class="tag">Photoshop</span>
+                        <span class="tag">Lightroom</span>
+                        <span class="tag">Illustrator</span>
+                        <span class="tag">Audition</span>
+                        <span class="tag">OBS</span>
+                        <span class="tag">Excel</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h4>Production Tools</h4>
+                    <div class="tag-list">
+                        <span class="tag">Camera Operation</span>
+                        <span class="tag">Lighting Equipment</span>
+                        <span class="tag">Audio Recording</span>
+                        <span class="tag">Post-Production</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h4>Suites &amp; Platforms</h4>
+                    <div class="tag-list">
+                        <span class="tag">Adobe Creative Suite</span>
+                        <span class="tag">Microsoft 365</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h4>Soft Skills</h4>
+                    <div class="tag-list">
+                        <span class="tag">Eager to Learn</span>
+                        <span class="tag">Reliable</span>
+                        <span class="tag">Enthusiastic</span>
+                        <span class="tag">Strong Character</span>
+                        <span class="tag">Passionate</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── EXPERIENCE ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>Experience</span></div>
+            <div class="timeline">
+
+                <div class="timeline-item">
+                    <div class="timeline-date"><span>Sept 2023 – Present</span></div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Communications Team</h4>
+                        <p class="org">STX Network Royal Rangers</p>
+                        <ul>
+                            <li>Photograph and video events</li>
+                            <li>Plan outreach and social media posts</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date"><span>Mar 2021 – Jul 2024</span></div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Media Intern</h4>
+                        <p class="org">North Central Church</p>
+                        <ul>
+                            <li>Interned with Media Pastor William A. Horton, 4 hours weekly</li>
+                            <li>Created and edited social media posts and Sunday morning announcement videos</li>
+                            <li>Photographed and filmed church events</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── PHOTO ROW ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>In The Field</span></div>
+            <div class="photo-row">
+                <div class="photo-slot">
+                    <!-- Replace with an action/work photo -->
+                    <div class="placeholder">
+                        <svg viewBox="0 0 24 24"><path d="M21 6.5h-3.5l-2-2.5h-7l-2 2.5H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-11c0-1.1-.9-2-2-2zm-9 10.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#9aa5ae"/></svg>
+                        <p><strong>Photo Placeholder</strong>Add a work/event photo here</p>
+                    </div>
+                </div>
+                <div class="photo-slot">
+                    <div class="placeholder">
+                        <svg viewBox="0 0 24 24"><path d="M21 6.5h-3.5l-2-2.5h-7l-2 2.5H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-11c0-1.1-.9-2-2-2zm-9 10.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#9aa5ae"/></svg>
+                        <p><strong>Photo Placeholder</strong>Add a work/event photo here</p>
+                    </div>
+                </div>
+                <div class="photo-slot">
+                    <div class="placeholder">
+                        <svg viewBox="0 0 24 24"><path d="M21 6.5h-3.5l-2-2.5h-7l-2 2.5H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-11c0-1.1-.9-2-2-2zm-9 10.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#9aa5ae"/></svg>
+                        <p><strong>Photo Placeholder</strong>Add a work/event photo here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── EDUCATION ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>Education</span></div>
+            <div class="edu-card">
+                <div class="edu-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+                </div>
+                <div class="edu-details">
+                    <h4>Associate's Degree — Visual Communication &amp; Film and Video</h4>
+                    <p>Lone Star College Kingwood</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── HONORS & HOBBIES ── -->
+        <section class="fade-in">
+            <div class="section-label"><span>Beyond the Lens</span></div>
+            <div class="two-col">
+                <div class="info-card">
+                    <h4>Honors &amp; Activities</h4>
+                    <ul>
+                        <li>President's Honors List</li>
+                        <li>Design-a-Thon 2024/2025 Participant</li>
+                        <li>Volunteer, North Central Church Kid's Dept. (Aug 2022 – Nov 2024) — helped run children's church twice monthly and planned youth group events</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>Hobbies &amp; Interests</h4>
+                    <ul>
+                        <li>Painting — keeping the creative eye sharp</li>
+                        <li>Photography &amp; videography outside of work</li>
+                        <li>Exploring new techniques in post-production</li>
+                    </ul>
+                </div>
+            
