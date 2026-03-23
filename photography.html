@@ -9,6 +9,36 @@
         :root {
             --laraz: 'Lora', serif;
             --poppins: 'Poppins', sans-serif;
+            --mid: #2c3e50;
+            --accent: #bdc3c7;
+        }
+
+        .banner {
+            background: var(--mid);
+            color: #fff;
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+        }
+        .banner h2 {
+            font-family: var(--laraz);
+            font-size: 3rem;
+            margin: 0 0 0.5rem;
+            font-weight: 700;
+        }
+        .banner p {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin: 0;
+            font-style: italic;
+            font-family: var(--laraz);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeUp 0.6s ease both;
         }
 
         body { font-family: var(--poppins); margin: 0; background: #fff; color: #333; }
@@ -83,7 +113,12 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="banner">
+        <h2>Photography Portfolio</h2>
+        <p>Event coverage, portraits &amp; behind the scenes.</p>
+    </div>
+
+    <div class="container fade-in">
         <h1 class="page-title">Photography Portfolio</h1>
 
         <div class="category-dropdown">
