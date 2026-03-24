@@ -7,100 +7,122 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --laraz: 'Lora', serif;
+            --lora: 'Lora', serif;
             --poppins: 'Poppins', sans-serif;
+            --dark: #1a252f;
             --mid: #2c3e50;
             --accent: #bdc3c7;
+            --white: #ffffff;
         }
 
-        .banner {
-            background: var(--mid);
-            color: #fff;
-            text-align: center;
-            padding: 4rem 2rem 3rem;
-        }
-        .banner h2 {
-            font-family: var(--laraz);
-            font-size: 3rem;
-            margin: 0 0 0.5rem;
-            font-weight: 700;
-        }
-        .banner p {
-            font-size: 1.1rem;
-            color: var(--accent);
-            margin: 0;
-            font-style: italic;
-            font-family: var(--laraz);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in {
-            animation: fadeUp 0.6s ease both;
-        }
+        body { font-family: var(--poppins); background: #fff; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
 
-        body { font-family: var(--poppins); margin: 0; background: #fff; color: #333; }
-
+        /* ── Navbar ── */
         header {
             background: #fff; padding: 1rem 5%; display: flex; justify-content: space-between;
             align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
         }
         .logo-container { display: flex; align-items: center; text-decoration: none; color: #333; }
         .logo-container img { height: 50px; margin-right: 15px; }
-        .logo-container h1 { font-family: var(--laraz); font-size: 1.4rem; margin: 0; }
+        .logo-container h1 { font-family: var(--lora); font-size: 1.4rem; margin: 0; font-weight: 700; }
         nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
-        nav a { text-decoration: none; color: #333; font-family: var(--laraz); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        nav a { text-decoration: none; color: #333; font-family: var(--lora); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; transition: color 0.2s; }
+        nav a:hover { color: #555; }
 
-        .container { max-width: 1100px; margin: 4rem auto; padding: 0 20px; }
-        .page-title { text-align: center; font-family: var(--laraz); font-size: 2.5rem; margin-bottom: 3rem; }
-
-        .category-dropdown { border-bottom: 1px solid #eee; margin-bottom: 10px; }
-        .category-header {
-            width: 100%; padding: 25px; background: none; border: none; text-align: left;
-            font-family: var(--laraz); font-size: 1.6rem; cursor: pointer; display: flex;
-            justify-content: space-between; align-items: center; transition: background 0.2s;
+        /* ── Banner ── */
+        .banner {
+            background: var(--mid); color: var(--white); text-align: center;
+            padding: 4rem 2rem 3rem; position: relative; overflow: hidden;
         }
-        .category-header:hover { background: #fcfcfc; }
-        .category-header::after { content: '+'; font-weight: 300; font-size: 1.8rem; }
-        .category-header.active::after { content: '−'; }
+        .banner::before {
+            content: ''; position: absolute; inset: 0;
+            background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px);
+        }
+        .banner h2 { font-family: var(--lora); font-size: 3rem; margin: 0 0 0.5rem; font-weight: 700; position: relative; }
+        .banner p { font-size: 1.1rem; color: var(--accent); margin: 0; font-style: italic; font-family: var(--lora); position: relative; }
 
-        .category-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; position: relative; }
+        /* ── Accordion ── */
+        .container { max-width: 1100px; margin: 3rem auto 5rem; padding: 0 20px; flex: 1; }
 
-        .carousel-container { position: relative; display: flex; align-items: center; padding: 20px 0; }
-        
+        .category-dropdown {
+            border-bottom: 1px solid #eee;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.5s ease forwards;
+        }
+        .category-dropdown:nth-child(1) { animation-delay: 0.1s; }
+        .category-dropdown:nth-child(2) { animation-delay: 0.2s; }
+        .category-dropdown:nth-child(3) { animation-delay: 0.3s; }
+        .category-dropdown:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-header {
+            width: 100%; padding: 1.6rem 0.5rem; background: none; border: none; text-align: left;
+            font-family: var(--lora); font-size: 1.5rem; font-weight: 700; color: var(--mid);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: color 0.2s;
+        }
+        .category-header:hover { color: #000; }
+
+        .toggle-icon {
+            width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #ccc;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 300; color: #999; flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .category-header:hover .toggle-icon { border-color: var(--mid); color: var(--mid); }
+        .category-header.active .toggle-icon { background: var(--mid); border-color: var(--mid); color: #fff; }
+
+        .category-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+
+        /* ── Carousel ── */
+        .carousel-container { position: relative; display: flex; align-items: center; padding: 16px 0 28px; }
+
         .carousel {
-            display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth;
+            display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth;
             scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;
+            padding: 8px 4px;
         }
         .carousel::-webkit-scrollbar { display: none; }
 
-        .carousel img { flex: 0 0 auto; scroll-snap-align: center; border-radius: 4px; object-fit: cover; background: #f0f0f0; }
-        
-        /* Alternating Aspect Ratios */
-        .carousel img:nth-child(odd) { width: 300px; height: 400px; } /* 3:4 Portrait */
-        .carousel img:nth-child(even) { width: 400px; height: 300px; align-self: center; } /* 4:3 Landscape */
+        .carousel img {
+            flex: 0 0 auto; scroll-snap-align: center;
+            border-radius: 6px; object-fit: cover; background: #e8ecef;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .carousel img:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        }
+        .carousel img:nth-child(odd)  { width: 300px; height: 400px; }
+        .carousel img:nth-child(even) { width: 400px; height: 300px; align-self: center; }
 
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.95); border: 1px solid #ddd;
-            width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
-            z-index: 10; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
+            background: var(--white); border: 1.5px solid #ddd;
+            width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+            z-index: 10; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10); transition: all 0.2s; flex-shrink: 0;
         }
-        .nav-btn:hover { background: #000; color: #fff; border-color: #000; }
-        .prev { left: -10px; }
-        .next { right: -10px; }
+        .nav-btn:hover { background: var(--mid); color: var(--white); border-color: var(--mid); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+        .prev { left: -14px; }
+        .next { right: -14px; }
 
-        footer { text-align: center; padding: 4rem; font-size: 0.8rem; opacity: 0.5; margin-top: auto; }
+        /* ── Footer ── */
+        footer { text-align: center; padding: 1.5rem; background: var(--dark); color: var(--white); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <header>
         <a href="index.html" class="logo-container">
-            <img src="logo draft.png" alt="Riley Musil Logo">
+            <img src="MarkRM.png" alt="Riley Musil Logo">
             <h1>Riley Musil</h1>
         </a>
         <nav>
@@ -118,11 +140,10 @@
         <p>Event coverage, portraits &amp; behind the scenes.</p>
     </div>
 
-    <div class="container fade-in">
-        <h1 class="page-title">Photography Portfolio</h1>
+    <div class="container">
 
         <div class="category-dropdown">
-            <button class="category-header" onclick="toggleAccordion(this)">Event Coverage</button>
+            <button class="category-header" onclick="toggleAccordion(this)">Event Coverage <span class="toggle-icon">+</span></button>
             <div class="category-content">
                 <div class="carousel-container">
                     <button class="nav-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
@@ -135,7 +156,7 @@
         </div>
 
         <div class="category-dropdown">
-            <button class="category-header" onclick="toggleAccordion(this)">Portrait</button>
+            <button class="category-header" onclick="toggleAccordion(this)">Portrait <span class="toggle-icon">+</span></button>
             <div class="category-content">
                 <div class="carousel-container">
                     <button class="nav-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
@@ -148,7 +169,7 @@
         </div>
 
         <div class="category-dropdown">
-            <button class="category-header" onclick="toggleAccordion(this)">Behind the Scenes</button>
+            <button class="category-header" onclick="toggleAccordion(this)">Behind the Scenes <span class="toggle-icon">+</span></button>
             <div class="category-content">
                 <div class="carousel-container">
                     <button class="nav-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
@@ -161,7 +182,7 @@
         </div>
 
         <div class="category-dropdown">
-            <button class="category-header" onclick="toggleAccordion(this)">More</button>
+            <button class="category-header" onclick="toggleAccordion(this)">More <span class="toggle-icon">+</span></button>
             <div class="category-content">
                 <div class="carousel-container">
                     <button class="nav-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
@@ -176,27 +197,21 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Riley Musil | Creative Services</p>
+        <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
 
     <script>
         function toggleAccordion(btn) {
             btn.classList.toggle("active");
+            const icon = btn.querySelector('.toggle-icon');
+            icon.textContent = btn.classList.contains('active') ? '−' : '+';
             const content = btn.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = "550px"; 
-            }
+            content.style.maxHeight = content.style.maxHeight ? null : "550px";
         }
 
         function moveCarousel(btn, direction) {
             const carousel = btn.parentElement.querySelector('.carousel');
-            const scrollAmount = 450; 
-            carousel.scrollBy({
-                left: direction * scrollAmount,
-                behavior: 'smooth'
-            });
+            carousel.scrollBy({ left: direction * 450, behavior: 'smooth' });
         }
     </script>
 </body>
