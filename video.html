@@ -158,11 +158,20 @@
             border: 0;
         }
 
+        /* ── Bottom row: badges + read more ── */
+        .video-meta {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
         .role-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 1rem;
         }
         .badge {
             display: inline-flex;
@@ -186,6 +195,142 @@
             flex-shrink: 0;
         }
 
+        /* ── Read More button ── */
+        .read-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--mid);
+            color: var(--white);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-size: 0.78rem;
+            font-family: var(--lora);
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .read-more-btn:hover {
+            background: var(--dark);
+            transform: translateY(-1px);
+        }
+        .read-more-btn .btn-arrow {
+            display: inline-block;
+            font-style: normal;
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 300;
+            transition: opacity 0.2s;
+        }
+
+        /* ── Blog post panel ── */
+        .blog-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.4s ease;
+            opacity: 0;
+        }
+        .blog-panel.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        .blog-panel-inner {
+            margin-top: 2rem;
+            border-top: 1.5px solid #dde1e5;
+            padding-top: 2rem;
+        }
+
+        /* Project title */
+        .blog-project-title {
+            font-family: var(--lora);
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1.25;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Body text */
+        .blog-body {
+            font-family: var(--lora);
+            font-size: 1rem;
+            line-height: 1.85;
+            color: #444;
+        }
+        .blog-body p + p {
+            margin-top: 1rem;
+        }
+
+        /* Image embeds */
+        .blog-images {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1.2rem;
+        }
+        .blog-images.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+        .blog-image-slot {
+            border-radius: 6px;
+            overflow: hidden;
+            background: #e8eaed;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .blog-image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* Placeholder shown when no img src is set */
+        .blog-image-slot.placeholder::after {
+            content: 'Image';
+            font-family: var(--lora);
+            font-size: 0.8rem;
+            color: #aaa;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .blog-image-caption {
+            font-family: var(--lora);
+            font-size: 0.78rem;
+            color: #999;
+            font-style: italic;
+            margin-top: 0.4rem;
+            text-align: center;
+        }
+
+        /* Close affordance at bottom */
+        .blog-close-row {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .blog-close-btn {
+            background: none;
+            border: 1.5px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: 0.75rem;
+            font-family: var(--lora);
+            color: #888;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .blog-close-btn:hover {
+            border-color: var(--mid);
+            color: var(--mid);
+        }
+
         /* ── Footer ── */
         footer {
             text-align: center;
@@ -193,6 +338,13 @@
             background: var(--dark);
             color: var(--white);
             font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .blog-images.two-col { grid-template-columns: 1fr; }
+            .blog-project-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -218,6 +370,9 @@
         <p>Event coverage, highlights &amp; creative production.</p>
     </div>
 
+    <!-- ══════════════════════════════════════════
+         VIDEO 01
+    ══════════════════════════════════════════ -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -229,13 +384,36 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-            <div class="role-badges">
-                <span class="badge">Camera Operator</span>
-                <span class="badge">Editor</span>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Camera Operator</span>
+                    <span class="badge">Editor</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">NC Church Youth Camp Video</h3>
+                    <div class="blog-body">
+                        <p>This video is one of my all-time favorite projects that I've worked on. It started as a hobbyist project. I was working at North Central church as a part of an internship at the time, and as part of that, I had been previously tasked to create a short highlight of the church's 2023 Youth Camp. I really enjoyed making that short reel with the footage I had available, but I knew that next year I wanted to strive to do more. Now, with the 2024 camp coming up, knowing I would be attending, I made sure to come prepared. I packed my <a href="https://global.canon/en/c-museum/product/dslr801.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon T1i</a> and Sony DSC-H200 cameras as well as my ThinkPad P15s, all incredibly budget gear.</p>
+                        <p>I find that the limitations of my equipment were actually my favorite part of creating this project. It shows my ability to adapt and problem-solve. Shooting was very straightforward; neither camera boasts very high recording specs, so I chose to focus more on the composition and framing of my shots. During post-production, I encountered most of my limitations. I had a two-week trip in Missouri directly after the camp, where I did not have a stable internet connection. Because of this, I had to figure out solutions to any problems that came up with only the knowledge I had already obtained in Premiere Pro by this point. This turned out to be a really great exercise, and it helped a lot with my creativity. For the music tracks in this video, I had to resort to walking up a hill to the highest point in the campground I was staying at just to get enough of a connection to download them. That was the only point up to the finalization of the project, where anything besides what was in the program. This video also took a LONG time. My setup was extremely limited; I was using an old TV from a friend's RV as a preview monitor, my laptop, which had an <a href="https://www.techpowerup.com/gpu-specs/quadro-p600-mobile.c3200" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">NVIDIA Quadro P600</a> as its GPU, and, because of this, I also opted to use the 2022 version of Adobe Premiere for stability. The limitations of my hardware forced me to render a lot, but in the end, I believe my patience truly paid off.</p>
+                        <p>The North Texas chapter of AG, which ran the camp the NC church attended that year, created its own video for the camp, but I was really glad I created this project because I was able to capture all of the work our group and team put into the camp, as well as highlight more of our own smiling faces. Since the camp, I've been honored to have had NC Youth show my video at many of their services as a promo piece, and I'm really thankful to have had this experience to hone my craft.</p>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         VIDEO 02
+    ══════════════════════════════════════════ -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -247,13 +425,49 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-            <div class="role-badges">
-                <span class="badge">Camera Operator</span>
-                <span class="badge">Director</span>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Camera Operator</span>
+                    <span class="badge">Director</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Project Title Goes Here</h3>
+                    <div class="blog-body">
+                        <p>Write your project description here. Share the story behind the production — what inspired it, the challenges you faced, and what you're most proud of.</p>
+                        <p>Add a second paragraph with more detail about your creative process, the gear you used, or anything else that gives viewers context for what they just watched.</p>
+                    </div>
+                    <div class="blog-images two-col">
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="Behind the scenes"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image one</p>
+                        </div>
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="On set"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image two</p>
+                        </div>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         VIDEO 03
+    ══════════════════════════════════════════ -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -265,13 +479,49 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-            <div class="role-badges">
-                <span class="badge">Camera Operator</span>
-                <span class="badge">Editor</span>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Camera Operator</span>
+                    <span class="badge">Editor</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Project Title Goes Here</h3>
+                    <div class="blog-body">
+                        <p>Write your project description here. Share the story behind the production — what inspired it, the challenges you faced, and what you're most proud of.</p>
+                        <p>Add a second paragraph with more detail about your creative process, the gear you used, or anything else that gives viewers context for what they just watched.</p>
+                    </div>
+                    <div class="blog-images two-col">
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="Behind the scenes"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image one</p>
+                        </div>
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="On set"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image two</p>
+                        </div>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         VIDEO 04
+    ══════════════════════════════════════════ -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -283,13 +533,49 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-            <div class="role-badges">
-                <span class="badge">Camera Operator</span>
-                <span class="badge">Gaffer</span>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Camera Operator</span>
+                    <span class="badge">Gaffer</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Project Title Goes Here</h3>
+                    <div class="blog-body">
+                        <p>Write your project description here. Share the story behind the production — what inspired it, the challenges you faced, and what you're most proud of.</p>
+                        <p>Add a second paragraph with more detail about your creative process, the gear you used, or anything else that gives viewers context for what they just watched.</p>
+                    </div>
+                    <div class="blog-images two-col">
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="Behind the scenes"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image one</p>
+                        </div>
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="On set"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image two</p>
+                        </div>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         VIDEO 05
+    ══════════════════════════════════════════ -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -301,9 +587,42 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-            <div class="role-badges">
-                <span class="badge">Camera Operator</span>
-                <span class="badge">Editor</span>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Camera Operator</span>
+                    <span class="badge">Editor</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Project Title Goes Here</h3>
+                    <div class="blog-body">
+                        <p>Write your project description here. Share the story behind the production — what inspired it, the challenges you faced, and what you're most proud of.</p>
+                        <p>Add a second paragraph with more detail about your creative process, the gear you used, or anything else that gives viewers context for what they just watched.</p>
+                    </div>
+                    <div class="blog-images two-col">
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="Behind the scenes"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image one</p>
+                        </div>
+                        <div>
+                            <div class="blog-image-slot placeholder">
+                                <!-- <img src="your-image.jpg" alt="On set"> -->
+                            </div>
+                            <p class="blog-image-caption">Caption for image two</p>
+                        </div>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -311,6 +630,26 @@
     <footer>
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        function toggleBlog(btn) {
+            const panel = btn.closest('.video-meta').nextElementSibling;
+            const isOpen = panel.classList.contains('open');
+
+            panel.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+
+            const arrow = btn.querySelector('.btn-arrow');
+            arrow.textContent = isOpen ? '+' : '−';
+            btn.childNodes[0].textContent = isOpen ? 'Read More ' : 'Read Less ';
+
+            if (!isOpen) {
+                setTimeout(() => {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 80);
+            }
+        }
+    </script>
 
 </body>
 </html>
