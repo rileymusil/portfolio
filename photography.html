@@ -60,148 +60,104 @@
         .banner h2 { font-family: var(--lora); font-size: 3rem; margin: 0 0 0.5rem; font-weight: 700; position: relative; }
         .banner p { font-size: 1.1rem; color: var(--accent); margin: 0; font-style: italic; font-family: var(--lora); position: relative; }
 
-        /* ── Gallery ── */
-        .gallery-wrap {
-            max-width: 1200px;
-            margin: 2.5rem auto 5rem;
+        /* ── Categories Section ── */
+        .categories-wrap {
+            max-width: 1400px;
+            margin: 3rem auto 5rem;
             padding: 0 20px;
             flex: 1;
         }
 
-        .photo-gallery {
-            columns: 3;
-            column-gap: 12px;
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 equal columns horizontally */
+            gap: 2rem;
         }
-        @media (max-width: 860px)  { .photo-gallery { columns: 2; } }
-        @media (max-width: 480px)  { .photo-gallery { columns: 1; } }
 
-        .photo-item {
-            break-inside: avoid;
-            margin-bottom: 12px;
-            border-radius: 6px;
+        /* Adjusting for mobile so they don't squish completely, 
+           while maintaining a horizontal row layout if possible */
+        @media (max-width: 768px) {
+            .categories-grid {
+                /* Allows horizontal scrolling on very small screens 
+                   so the images don't look completely crushed */
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            .category-card {
+                flex: 0 0 300px; /* Gives them a fixed width on mobile scroll */
+            }
+        }
+
+        .category-card {
+            position: relative;
+            height: 400px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            background: #e8ecef;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-            opacity: 0;
-            animation: fadeUp 0.5s ease forwards;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .photo-item:hover {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-            transform: translateY(-3px);
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
         }
-        .photo-item img {
+
+        .category-card img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease, background 0.4s ease;
+            pointer-events: none;
+        }
+
+        .category-title {
+            font-family: var(--lora);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform: translateY(20px);
             transition: transform 0.4s ease;
         }
-        .photo-item:hover img { transform: scale(1.03); }
 
-        /* stagger first 20, rest fade in together */
-        .photo-item:nth-child(1)  { animation-delay: 0.03s; }
-        .photo-item:nth-child(2)  { animation-delay: 0.06s; }
-        .photo-item:nth-child(3)  { animation-delay: 0.09s; }
-        .photo-item:nth-child(4)  { animation-delay: 0.12s; }
-        .photo-item:nth-child(5)  { animation-delay: 0.15s; }
-        .photo-item:nth-child(6)  { animation-delay: 0.18s; }
-        .photo-item:nth-child(7)  { animation-delay: 0.21s; }
-        .photo-item:nth-child(8)  { animation-delay: 0.24s; }
-        .photo-item:nth-child(9)  { animation-delay: 0.27s; }
-        .photo-item:nth-child(10) { animation-delay: 0.30s; }
-        .photo-item:nth-child(11) { animation-delay: 0.33s; }
-        .photo-item:nth-child(12) { animation-delay: 0.36s; }
-        .photo-item:nth-child(13) { animation-delay: 0.39s; }
-        .photo-item:nth-child(14) { animation-delay: 0.42s; }
-        .photo-item:nth-child(15) { animation-delay: 0.45s; }
-        .photo-item:nth-child(16) { animation-delay: 0.48s; }
-        .photo-item:nth-child(17) { animation-delay: 0.51s; }
-        .photo-item:nth-child(18) { animation-delay: 0.54s; }
-        .photo-item:nth-child(19) { animation-delay: 0.57s; }
-        .photo-item:nth-child(20) { animation-delay: 0.60s; }
-        .photo-item:nth-child(n+21) { animation-delay: 0.60s; }
-
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* ── Lightbox ── */
-        .lightbox {
-            position: fixed; inset: 0; z-index: 9000;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .lightbox.active { opacity: 1; pointer-events: all; }
-
-        .lightbox-backdrop {
-            position: absolute; inset: 0;
-            background: rgba(26, 37, 47, 0.97);
+        .category-card:hover img {
+            filter: blur(4px) brightness(0.4);
+            transform: scale(1.05);
         }
 
-        .lightbox-inner {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column; align-items: center;
-            width: 92vw; max-width: 1000px;
+        .category-card:hover .category-overlay {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        .lightbox-stage {
-            display: flex; align-items: center;
-            justify-content: center; gap: 1.2rem; width: 100%;
+        .category-card:hover .category-title {
+            transform: translateY(0);
         }
-
-        .lightbox-img-wrap {
-            flex: 1; min-width: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .lightbox-img-wrap img {
-            max-width: 100%; max-height: 78vh;
-            object-fit: contain; border-radius: 6px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            display: block;
-            transition: opacity 0.18s ease;
-        }
-        .lightbox-img-wrap img.switching { opacity: 0; }
-
-        .lb-arrow {
-            flex-shrink: 0;
-            background: var(--white); border: 1.5px solid #ddd;
-            width: 44px; height: 44px; border-radius: 50%;
-            cursor: pointer; font-size: 1rem;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: all 0.2s; color: #333;
-        }
-        .lb-arrow:hover {
-            background: var(--mid); color: #fff;
-            border-color: var(--mid);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-        }
-
-        .lightbox-footer {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; margin-top: 1rem;
-        }
-        .lb-counter {
-            font-size: 0.8rem; color: var(--accent);
-            letter-spacing: 1px; font-family: var(--lora); font-style: italic;
-        }
-
-        .lb-close {
-            position: fixed; top: 1.2rem; right: 1.5rem; z-index: 9100;
-            background: var(--white); border: 1.5px solid #ddd;
-            width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            transition: all 0.2s; color: #333;
-        }
-        .lb-close:hover { background: var(--mid); color: #fff; border-color: var(--mid); }
-        .lb-close svg { width: 16px; height: 16px; }
 
         /* ── Footer ── */
         footer {
-            text-align: center; padding: 1.5rem;
-            background: var(--dark); color: var(--white); font-size: 0.8rem;
+            background: var(--mid);
+            color: var(--accent);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            font-family: var(--lora);
         }
     </style>
 </head>
@@ -209,12 +165,12 @@
 
     <header>
         <a href="index.html" class="logo-container">
-            <img src="MarkRM.png" alt="Riley Musil Logo">
+            <img src="logo.png" alt="Logo">
             <h1>Riley Musil</h1>
         </a>
         <nav>
             <ul>
-                <li><a href="video.html">Video</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="photography.html">Photography</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -224,95 +180,32 @@
 
     <div class="banner">
         <h2>Photography Portfolio</h2>
-        <p>Event coverage, portraits &amp; behind the scenes.</p>
+        <p>Event coverage, portraits &amp; creative work.</p>
     </div>
 
-    <div class="gallery-wrap">
-        <div class="photo-gallery" id="gallery">
+    <div class="categories-wrap">
+        <div class="categories-grid">
+            
+            <a href="portraits.html" class="category-card">
+                <img src="PORTRAITS.jpg" alt="Portraits">
+                <div class="category-overlay">
+                    <h3 class="category-title">Portraits</h3>
+                </div>
+            </a>
 
-            <!-- 1 · Aquarium -->
-            <div class="photo-item"><img src="Aquarium1.jpg" alt="Aquarium"></div>
-            <!-- 2 · Headshot (park, summer) -->
-            <div class="photo-item"><img src="HEADSHOT__6_of_24_.jpg" alt="Portrait"></div>
-            <!-- 3 · Blue night -->
-            <div class="photo-item"><img src="BLUE1.jpg" alt="Blue night portrait"></div>
-            <!-- 4 · Camp -->
-            <div class="photo-item"><img src="Camp1.JPG" alt="Camp event"></div>
-            <!-- 5 · BAU film -->
-            <div class="photo-item"><img src="BAU__1_of_12_.jpg" alt="Film shoot"></div>
-            <!-- 6 · DAT2025 -->
-            <div class="photo-item"><img src="DAT2025__4_of_8_.jpg" alt="Design-a-Thon 2025"></div>
-            <!-- 7 · Christmas Owl -->
-            <div class="photo-item"><img src="ChristmasOwl.jpg" alt="Christmas owl"></div>
-            <!-- 8 · Headshot (park, summer) -->
-            <div class="photo-item"><img src="HEADSHOT__11_of_24_.jpg" alt="Portrait"></div>
-            <!-- 9 · Aquarium -->
-            <div class="photo-item"><img src="Aquarium2.jpg" alt="Aquarium"></div>
-            <!-- 10 · Blue night -->
-            <div class="photo-item"><img src="BLUE5.jpg" alt="Blue night portrait"></div>
-            <!-- 11 · BAU film -->
-            <div class="photo-item"><img src="BAU__4_of_12_.jpg" alt="Film shoot"></div>
-            <!-- 12 · Camp -->
-            <div class="photo-item"><img src="Camp2.JPG" alt="Camp event"></div>
-            <!-- 13 · DAT2025 -->
-            <div class="photo-item"><img src="DAT2025__6_of_8_.jpg" alt="Design-a-Thon 2025"></div>
-            <!-- 14 · FFD -->
-            <div class="photo-item"><img src="FFD5.JPG" alt="Event"></div>
-            <!-- 15 · Headshot (park, summer) -->
-            <div class="photo-item"><img src="HEADSHOT__12_of_24_.jpg" alt="Portrait"></div>
-            <!-- 16 · Aquarium -->
-            <div class="photo-item"><img src="Aquarium3.jpg" alt="Aquarium"></div>
-            <!-- 17 · Blue night -->
-            <div class="photo-item"><img src="BLUE6.jpg" alt="Blue night portrait"></div>
-            <!-- 18 · BAU film -->
-            <div class="photo-item"><img src="BAU__9_of_12_.jpg" alt="Film shoot"></div>
-            <!-- 19 · DAT2025 -->
-            <div class="photo-item"><img src="DAT2025__8_of_8_.jpg" alt="Design-a-Thon 2025"></div>
-            <!-- 20 · BAU film -->
-            <div class="photo-item"><img src="BAU__10_of_12_.jpg" alt="Film shoot"></div>
+            <a href="event.html" class="category-card">
+                <img src="EVENT.jpg" alt="Event">
+                <div class="category-overlay">
+                    <h3 class="category-title">Event</h3>
+                </div>
+            </a>
 
-            <!-- ── BATCH 2 · 20 new images interleaved below ── -->
-
-            <!-- 21 · LYDIA portrait -->
-            <div class="photo-item"><img src="LYDIA__1_of_18_.jpg" alt="Lydia portrait"></div>
-            <!-- 22 · HEADSHOTS winter -->
-            <div class="photo-item"><img src="HEADSHOTS__5_of_22_.jpg" alt="Portrait"></div>
-            <!-- 23 · Lilly yellow -->
-            <div class="photo-item"><img src="Lilly1.jpg" alt="Baby portrait"></div>
-            <!-- 24 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly8.jpg" alt="Baby portrait"></div>
-            <!-- 25 · Lizard -->
-            <div class="photo-item"><img src="Lizard.jpg" alt="Lizard"></div>
-            <!-- 26 · LYDIA portrait -->
-            <div class="photo-item"><img src="LYDIA__4_of_18_.jpg" alt="Lydia portrait"></div>
-            <!-- 27 · Headshot (park, summer) — final from that session -->
-            <div class="photo-item"><img src="HEADSHOT__21_of_24_.jpg" alt="Portrait"></div>
-            <!-- 28 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly10.jpg" alt="Baby portrait"></div>
-            <!-- 29 · Plane -->
-            <div class="photo-item"><img src="Plane1.jpg" alt="Vintage plane"></div>
-            <!-- 30 · HEADSHOTS winter -->
-            <div class="photo-item"><img src="HEADSHOTS__12_of_22_.jpg" alt="Portrait"></div>
-            <!-- 31 · Lilly yellow -->
-            <div class="photo-item"><img src="Lilly2.jpg" alt="Baby portrait"></div>
-            <!-- 32 · LYDIA portrait -->
-            <div class="photo-item"><img src="LYDIA__6_of_18_.jpg" alt="Lydia portrait"></div>
-            <!-- 33 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly11.jpg" alt="Baby portrait"></div>
-            <!-- 34 · HEADSHOTS winter -->
-            <div class="photo-item"><img src="HEADSHOTS__17_of_22_.jpg" alt="Portrait"></div>
-            <!-- 35 · LYDIA portrait -->
-            <div class="photo-item"><img src="LYDIA__17_of_18_.jpg" alt="Lydia portrait"></div>
-            <!-- 36 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly12.jpg" alt="Baby portrait"></div>
-            <!-- 37 · HEADSHOTS winter -->
-            <div class="photo-item"><img src="HEADSHOTS__21_of_22_.jpg" alt="Portrait"></div>
-            <!-- 38 · LYDIA portrait -->
-            <div class="photo-item"><img src="LYDIA__18_of_18_.jpg" alt="Lydia portrait"></div>
-            <!-- 39 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly13.jpg" alt="Baby portrait"></div>
-            <!-- 40 · Lilly santa -->
-            <div class="photo-item"><img src="Lilly14.jpg" alt="Baby portrait"></div>
+            <a href="creative.html" class="category-card">
+                <img src="CREATIVE.jpg" alt="Creative">
+                <div class="category-overlay">
+                    <h3 class="category-title">Creative</h3>
+                </div>
+            </a>
 
         </div>
     </div>
@@ -320,88 +213,6 @@
     <footer>
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
-
-    <!-- ── LIGHTBOX ── -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
-        <div class="lightbox-backdrop" id="lbBackdrop"></div>
-
-        <div class="lightbox-inner">
-            <div class="lightbox-stage">
-                <button class="lb-arrow" id="lbPrev" aria-label="Previous">&#10094;</button>
-                <div class="lightbox-img-wrap">
-                    <img id="lbImg" src="" alt="">
-                </div>
-                <button class="lb-arrow" id="lbNext" aria-label="Next">&#10095;</button>
-            </div>
-            <div class="lightbox-footer">
-                <span class="lb-counter" id="lbCounter"></span>
-            </div>
-        </div>
-
-        <button class="lb-close" id="lbClose" aria-label="Close">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-        </button>
-    </div>
-
-    <script>
-        const gallery   = document.getElementById('gallery');
-        const lightbox  = document.getElementById('lightbox');
-        const lbImg     = document.getElementById('lbImg');
-        const lbCounter = document.getElementById('lbCounter');
-
-        let images  = [];
-        let current = 0;
-
-        function buildImageList() {
-            images = Array.from(gallery.querySelectorAll('.photo-item img'))
-                         .map(i => ({ src: i.src, alt: i.alt }));
-        }
-
-        function openAt(index) {
-            buildImageList();
-            current = (index + images.length) % images.length;
-            lbImg.src = images[current].src;
-            lbImg.alt = images[current].alt;
-            lbCounter.textContent = `${current + 1} / ${images.length}`;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function navigate(dir) {
-            current = (current + dir + images.length) % images.length;
-            lbImg.classList.add('switching');
-            setTimeout(() => {
-                lbImg.src = images[current].src;
-                lbImg.alt = images[current].alt;
-                lbImg.classList.remove('switching');
-                lbCounter.textContent = `${current + 1} / ${images.length}`;
-            }, 180);
-        }
-
-        function close() {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        gallery.querySelectorAll('.photo-item').forEach((item, i) => {
-            item.addEventListener('click', () => openAt(i));
-        });
-
-        document.getElementById('lbPrev').addEventListener('click', () => navigate(-1));
-        document.getElementById('lbNext').addEventListener('click', () => navigate(1));
-        document.getElementById('lbClose').addEventListener('click', close);
-        document.getElementById('lbBackdrop').addEventListener('click', close);
-
-        document.addEventListener('keydown', e => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape')     close();
-            if (e.key === 'ArrowLeft')  navigate(-1);
-            if (e.key === 'ArrowRight') navigate(1);
-        });
-    </script>
 
 </body>
 </html>
