@@ -111,7 +111,7 @@
         }
         .photo-item img {
             width: 100%;
-            height: auto;
+            height: auto; /* Detects ratio automatically */
             display: block;
             transition: transform 0.4s ease;
         }
@@ -202,10 +202,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             transition: all 0.2s; color: #333;
         }
-        .lb-close:hover {
-            background: var(--mid); color: #fff;
-            transform: rotate(90deg);
-        }
         .lb-close svg { width: 18px; height: 18px; }
 
         /* ── Footer ── */
@@ -245,32 +241,33 @@
     <div class="gallery-wrap">
         <div class="photo-gallery" id="gallery">
 
-            <!-- Add your portrait images here -->
-            <!-- Example: -->
-            <div class="photo-item"><img src="HEADSHOT__6_of_24_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOT__11_of_24_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOT__12_of_24_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOT__21_of_24_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOTS__5_of_22_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOTS__12_of_22_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOTS__17_of_22_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="HEADSHOTS__21_of_22_.jpg" alt="Portrait"></div>
-            <div class="photo-item"><img src="LYDIA__1_of_18_.jpg" alt="Lydia portrait"></div>
-            <div class="photo-item"><img src="LYDIA__4_of_18_.jpg" alt="Lydia portrait"></div>
-            <div class="photo-item"><img src="LYDIA__6_of_18_.jpg" alt="Lydia portrait"></div>
-            <div class="photo-item"><img src="LYDIA__17_of_18_.jpg" alt="Lydia portrait"></div>
-            <div class="photo-item"><img src="LYDIA__18_of_18_.jpg" alt="Lydia portrait"></div>
-            <div class="photo-item"><img src="BLUE1.jpg" alt="Blue night portrait"></div>
-            <div class="photo-item"><img src="BLUE5.jpg" alt="Blue night portrait"></div>
-            <div class="photo-item"><img src="BLUE6.jpg" alt="Blue night portrait"></div>
-            <div class="photo-item"><img src="Lilly1.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly2.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly8.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly10.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly11.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly12.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly13.jpg" alt="Baby portrait"></div>
-            <div class="photo-item"><img src="Lilly14.jpg" alt="Baby portrait"></div>
+            <div class="photo-item"><img src="portraits1.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits2.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits3.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits4.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits5.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits6.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits7.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits8.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits9.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits10.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits11.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits12.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits13.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits14.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits15.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits16.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits17.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits18.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits19.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits20.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits21.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits22.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits23.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits24.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits25.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits26.jpg" alt="Portrait"></div>
+            <div class="photo-item"><img src="portraits27.jpg" alt="Portrait"></div>
 
         </div>
     </div>
@@ -279,7 +276,6 @@
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
 
-    <!-- ── LIGHTBOX ── -->
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
         <div class="lightbox-backdrop" id="lbBackdrop"></div>
 
