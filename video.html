@@ -19,14 +19,13 @@
 
         body {
             font-family: var(--poppins);
-            background: #f8f9fa;
+            background: #fff;
             color: #333;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* ── Navbar ── */
         header {
             background: #fff;
             padding: 1rem 5%;
@@ -38,313 +37,121 @@
             top: 0;
             z-index: 1000;
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #333;
-        }
+        .logo-container { display: flex; align-items: center; text-decoration: none; color: #333; }
         .logo-container img { height: 50px; margin-right: 15px; }
-        .logo-container h1 {
-            font-family: var(--lora);
-            font-size: 1.4rem;
-            margin: 0;
-            font-weight: 700;
-        }
+        .logo-container h1 { font-family: var(--lora); font-size: 1.4rem; margin: 0; font-weight: 700; }
         nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
         nav a {
-            text-decoration: none;
-            color: #333;
-            font-family: var(--lora);
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: color 0.2s;
+            text-decoration: none; color: #333; font-family: var(--lora);
+            text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; transition: color 0.2s;
         }
         nav a:hover { color: #555; }
 
-        /* ── Banner ── */
         .banner {
-            background: var(--mid);
-            color: var(--white);
-            text-align: center;
-            padding: 4rem 2rem 3rem;
-            position: relative;
-            overflow: hidden;
+            background: var(--mid); color: var(--white); text-align: center;
+            padding: 4rem 2rem 3rem; position: relative; overflow: hidden;
         }
         .banner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                -45deg,
-                transparent, transparent 40px,
-                rgba(255,255,255,0.02) 40px,
-                rgba(255,255,255,0.02) 80px
-            );
+            content: ''; position: absolute; inset: 0;
+            background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px);
         }
-        .banner h2 {
-            font-family: var(--lora);
-            font-size: 3rem;
-            margin: 0 0 0.5rem;
-            font-weight: 700;
+        .banner h2 { font-family: var(--lora); font-size: 3rem; margin: 0 0 0.5rem; font-weight: 700; position: relative; }
+        .banner p { font-size: 1.1rem; color: var(--accent); margin: 0; font-style: italic; font-family: var(--lora); position: relative; }
+
+        .categories-wrap {
+            max-width: 1100px;
+            margin: 3rem auto 5rem;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .category-card {
             position: relative;
-        }
-        .banner p {
-            font-size: 1.1rem;
-            color: var(--accent);
-            margin: 0;
-            font-style: italic;
-            font-family: var(--lora);
-            position: relative;
-        }
-
-        /* ── Video sections ── */
-        .video-section {
-            padding: 4rem 5%;
-            opacity: 0;
-            transform: translateY(28px);
-            animation: fadeUp 0.6s ease forwards;
-        }
-        .video-section:nth-child(odd)  { background: #fff; }
-        .video-section:nth-child(even) { background: #f0f2f4; }
-
-        .video-section:nth-child(1) { animation-delay: 0.1s; }
-        .video-section:nth-child(2) { animation-delay: 0.2s; }
-        .video-section:nth-child(3) { animation-delay: 0.3s; }
-        .video-section:nth-child(4) { animation-delay: 0.4s; }
-        .video-section:nth-child(5) { animation-delay: 0.5s; }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .video-inner {
-            max-width: 960px;
-            margin: 0 auto;
-        }
-
-        .video-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.2rem;
-        }
-        .video-number {
-            font-family: var(--lora);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #aaa;
-        }
-
-        .video-wrapper {
-            position: relative;
-            aspect-ratio: 16 / 9;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 8px 28px rgba(0,0,0,0.13);
-            background: #111;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-        .video-wrapper:hover {
-            box-shadow: 0 18px 50px rgba(0,0,0,0.22);
-            transform: translateY(-4px);
-        }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: 0;
-        }
-
-        /* ── Bottom row: badges + read more ── */
-        .video-meta {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .role-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #fff;
-            border: 1.5px solid #dde1e5;
-            border-radius: 20px;
-            padding: 7px 19px;
-            font-size: 1.04rem;
-            font-family: var(--lora);
-            color: var(--mid);
-            letter-spacing: 0.3px;
-        }
-        .badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--mid);
-            flex-shrink: 0;
-        }
-
-        /* ── Read More button ── */
-        .read-more-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            background: var(--mid);
-            color: var(--white);
-            border: none;
-            border-radius: 20px;
-            padding: 8px 24px;
-            font-size: 1.04rem;
-            font-family: var(--lora);
-            letter-spacing: 0.4px;
             cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        .read-more-btn:hover {
-            background: var(--dark);
-            transform: translateY(-1px);
-        }
-        .read-more-btn .btn-arrow {
-            display: inline-block;
-            font-style: normal;
-            font-size: 1rem;
-            line-height: 1;
-            font-weight: 300;
-            transition: opacity 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* ── Blog post panel ── */
-        .blog-panel {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-                        opacity 0.4s ease;
-            opacity: 0;
-        }
-        .blog-panel.open {
-            max-height: 2000px;
-            opacity: 1;
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
         }
 
-        .blog-panel-inner {
-            margin-top: 2rem;
-            border-top: 1.5px solid #dde1e5;
-            padding-top: 2rem;
-        }
-
-        /* Project title */
-        .blog-project-title {
-            font-family: var(--lora);
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--dark);
-            line-height: 1.25;
-            margin-bottom: 1.2rem;
-        }
-
-        /* Body text */
-        .blog-body {
-            font-family: var(--lora);
-            font-size: 1rem;
-            line-height: 1.85;
-            color: #444;
-        }
-        .blog-body p + p {
-            margin-top: 1rem;
-        }
-
-        /* Image embeds */
-        .blog-images {
-            margin-top: 2rem;
-            display: grid;
-            gap: 1.2rem;
-        }
-        .blog-images.two-col {
-            grid-template-columns: 1fr 1fr;
-        }
-        .blog-image-slot {
-            border-radius: 6px;
-            overflow: hidden;
-            background: #e8eaed;
-            aspect-ratio: 16 / 9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .blog-image-slot img {
+        .category-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-        }
-        /* Placeholder shown when no img src is set */
-        .blog-image-slot.placeholder::after {
-            content: 'Image';
-            font-family: var(--lora);
-            font-size: 0.8rem;
-            color: #aaa;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .blog-image-caption {
-            font-family: var(--lora);
-            font-size: 0.78rem;
-            color: #999;
-            font-style: italic;
-            margin-top: 0.4rem;
-            text-align: center;
+            transition: filter 0.4s ease, transform 0.4s ease;
         }
 
-        /* Close affordance at bottom */
-        .blog-close-row {
-            margin-top: 2rem;
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
             display: flex;
-            justify-content: flex-end;
-        }
-        .blog-close-btn {
-            background: none;
-            border: 1.5px solid #ccc;
-            border-radius: 20px;
-            padding: 5px 16px;
-            font-size: 0.75rem;
-            font-family: var(--lora);
-            color: #888;
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
-        }
-        .blog-close-btn:hover {
-            border-color: var(--mid);
-            color: var(--mid);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease, background 0.4s ease;
+            pointer-events: none;
         }
 
-        /* ── Footer ── */
-        footer {
+        .category-title {
+            font-family: var(--lora);
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
             text-align: center;
-            padding: 1.5rem;
+            padding: 0 10px;
+        }
+
+        .category-card:hover img {
+            filter: blur(4px) brightness(0.4);
+            transform: scale(1.05);
+        }
+
+        .category-card:hover .category-overlay {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .category-card:hover .category-title {
+            transform: translateY(0);
+        }
+
+        footer {
             background: var(--dark);
             color: var(--white);
+            text-align: center;
+            padding: 1.5rem;
             font-size: 0.8rem;
-            margin-top: auto;
         }
 
-        /* ── Responsive ── */
-        @media (max-width: 600px) {
-            .blog-images.two-col { grid-template-columns: 1fr; }
-            .blog-project-title { font-size: 1.3rem; }
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+                margin: 0 auto;
+            }
+            .category-title {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
@@ -352,7 +159,7 @@
 
     <header>
         <a href="index.html" class="logo-container">
-            <img src="MarkRM.png" alt="Riley Musil Logo">
+            <img src="MarkRM.png" alt="Logo">
             <h1>Riley Musil</h1>
         </a>
         <nav>
@@ -367,304 +174,30 @@
 
     <div class="banner">
         <h2>Video Portfolio</h2>
-        <p>Event coverage, highlights &amp; creative production.</p>
+        <p>Select a category to view projects.</p>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         VIDEO 01
-    ══════════════════════════════════════════ -->
-    <section class="video-section">
-        <div class="video-inner">
-            <div class="video-header">
-                <span class="video-number">01</span>
-            </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/9wd2dRwnwMc"
-                    title="Riley Musil Video 1"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-            <div class="video-meta">
-                <div class="role-badges">
-                    <span class="badge">Camera Operator</span>
-                    <span class="badge">Editor</span>
+    <div class="categories-wrap">
+        <div class="categories-grid">
+            <a href="narrative.html" class="category-card">
+                <img src="Narrative.jpg" alt="Narrative">
+                <div class="category-overlay">
+                    <h3 class="category-title">Narrative</h3>
                 </div>
-                <button class="read-more-btn" onclick="toggleBlog(this)">
-                    Read More <span class="btn-arrow">+</span>
-                </button>
-            </div>
+            </a>
 
-            <div class="blog-panel">
-                <div class="blog-panel-inner">
-                    <h3 class="blog-project-title">NC Church Youth Camp Video</h3>
-                    <div class="blog-body">
-                        <p>This video is one of my all-time favorite projects that I've worked on. It started as a hobbyist project. I was working at North Central church as a part of an internship at the time, and as part of that, I had been previously tasked to create a short highlight of the church's 2023 Youth Camp. I really enjoyed making that short reel with the footage I had available, but I knew that next year I wanted to strive to do more. Now, with the 2024 camp coming up, knowing I would be attending, I made sure to come prepared. I packed my <a href="https://global.canon/en/c-museum/product/dslr801.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon T1i</a> and Sony DSC-H200 cameras as well as my ThinkPad P15s, all incredibly budget gear.</p>
-                        <p>I find that the limitations of my equipment were actually my favorite part of creating this project. It shows my ability to adapt and problem-solve. Shooting was very straightforward; neither camera boasts very high recording specs, so I chose to focus more on the composition and framing of my shots. During post-production, I encountered most of my limitations. I had a two-week trip in Missouri directly after the camp, where I did not have a stable internet connection. Because of this, I had to figure out solutions to any problems that came up with only the knowledge I had already obtained in Premiere Pro by this point. This turned out to be a really great exercise, and it helped a lot with my creativity. For the music tracks in this video, I had to resort to walking up a hill to the highest point in the campground I was staying at just to get enough of a connection to download them. That was the only point up to the finalization of the project, where anything besides what was in the program. This video also took a LONG time. My setup was extremely limited; I was using an old TV from a friend's RV as a preview monitor, my laptop, which had an <a href="https://www.techpowerup.com/gpu-specs/quadro-p600-mobile.c3200" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">NVIDIA Quadro P600</a> as its GPU, and, because of this, I also opted to use the 2022 version of Adobe Premiere for stability. The limitations of my hardware forced me to render a lot, but in the end, I believe my patience truly paid off.</p>
-                        <p>The North Texas chapter of AG, which ran the camp the NC church attended that year, created its own video for the camp, but I was really glad I created this project because I was able to capture all of the work our group and team put into the camp, as well as highlight more of our own smiling faces. Since the camp, I've been honored to have had NC Youth show my video at many of their services as a promo piece, and I'm really thankful to have had this experience to hone my craft.</p>
-                    </div>
-                    <div class="blog-close-row">
-                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-                    </div>
+            <a href="commercial.html" class="category-card">
+                <img src="Commercial.jpg" alt="Commercial">
+                <div class="category-overlay">
+                    <h3 class="category-title">Commercial</h3>
                 </div>
-            </div>
+            </a>
         </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════
-         VIDEO 02
-    ══════════════════════════════════════════ -->
-    <section class="video-section">
-        <div class="video-inner">
-            <div class="video-header">
-                <span class="video-number">02</span>
-            </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/YqYoziZZlg8"
-                    title="Riley Musil Video 2"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-            <div class="video-meta">
-                <div class="role-badges">
-                    <span class="badge">Camera Operator</span>
-                    <span class="badge">Director</span>
-                    <span class="badge">Short Film</span>
-                </div>
-                <button class="read-more-btn" onclick="toggleBlog(this)">
-                    Read More <span class="btn-arrow">+</span>
-                </button>
-            </div>
-
-            <div class="blog-panel">
-                <div class="blog-panel-inner">
-                    <h3 class="blog-project-title">The Man in the Woods</h3>
-                    <div class="blog-body">
-                        <p>This is a short film that I wrote in my second semester of College, filmed it in late fall of 2025. I served as the writer, storyboard artist, director, and cinematographer for this project. We shot this film with the <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon R5 C</a> and an <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New&srsltid=AfmBOopVxWYAPGGvHkupqPNR0J2rjs7bKe1EYv2bI-8ACP9jJAbCx7IS" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">RF24-70mm F2.8</a> lens. I had a fairly sizeable team for this shoot, which was extremely helpful considering we were having to haul all of our equipment through the woods. By the end of the first day of shooting, some of us had walked quite a few miles. One of the ways we tried to improve our efficiency with this shoot was by sending grips ahead to the next location while shooting a scene, so we wouldn't take us long setting up the next scene. Overall, that approach worked quite well. On the first day, we captured all of the scenes besides the scenes with the chicken coop, which were filmed in a different location on day two because of our lack of sunlight. I'm extremely happy with how this project came out. Everyone who was a part of our team worked so hard, and it really paid off. This specific edit of the film was fully created by my good friend Michelle Hernández, and I think she did an incredible job. I am currently working on a more refined version of my own edit, which I will host here eventually.</p>
-                    </div>
-                    <div class="blog-images two-col">
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="LocationScout1.jpg" alt="Early location scouting in the woods">
-                            </div>
-                            <p class="blog-image-caption">Early Location Scouting</p>
-                        </div>
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="LocationScout2.jpg" alt="Early location scouting, trail view">
-                            </div>
-                            <p class="blog-image-caption">Early Location Scouting</p>
-                        </div>
-                    </div>
-                    <div class="blog-images two-col" style="margin-top:1.2rem;">
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="Storyboard1.jpg" alt="Storyboard excerpt for The Man in the Woods">
-                            </div>
-                            <p class="blog-image-caption">Storyboard Excerpt</p>
-                        </div>
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="Script1.jpg" alt="Script excerpt for The Man in the Woods">
-                            </div>
-                            <p class="blog-image-caption">Script Excerpt</p>
-                        </div>
-                    </div>
-                    <div class="blog-close-row">
-                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════
-         VIDEO 03
-    ══════════════════════════════════════════ -->
-    <section class="video-section">
-        <div class="video-inner">
-            <div class="video-header">
-                <span class="video-number">03</span>
-            </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/GGQ91WSZXIY"
-                    title="Riley Musil Video 3"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-            <div class="video-meta">
-                <div class="role-badges">
-                    <span class="badge">Camera Operator</span>
-                    <span class="badge">Editor</span>
-                    <span class="badge">Top Submission</span>
-                </div>
-                <button class="read-more-btn" onclick="toggleBlog(this)">
-                    Read More <span class="btn-arrow">+</span>
-                </button>
-            </div>
-
-            <div class="blog-panel">
-                <div class="blog-panel-inner">
-                    <h3 class="blog-project-title">Powwow Video Contest</h3>
-                    <div class="blog-body">
-                        <p>This video was a submission on behalf of Royal Rangers Outpost 44 for the STXRR 2023 PowWow in April of that year. The contest is simply titled the "We Can't Wait for PowWow" video, where outposts are tasked with creating a short video showcasing why they're excited for the camp. I've attended this camp regularly since elementary school, and my friends and I loved working on our submission every year. This competition was a big reason I became so interested in media production at such an early age. Our concept for this video was simple; we had won the camp competition the previous year, so we used the trophy as our main set piece and created a short trailer for our next victory. We ended up not only winning first place in the competition with our submission, but that year we also won first place in the camp! Overall, this project was super fun and one of my earliest projects that I hold a lot of pride in. I'm really proud of what my friends and I were all able to accomplish; everyone really played their part perfectly. I filmed a decent percentage of the video; however, I was responsible for 99% of the editing on this project, and I think I was really able to push our idea to the next level.</p>
-                    </div>
-                    <div class="blog-images" style="margin-top:2rem; max-width:333px; margin-left:auto; margin-right:auto;">
-                        <div>
-                            <div class="blog-image-slot" style="aspect-ratio: 3 / 4;">
-                                <img src="Johno.jpg" alt="Behind the scenes on set">
-                            </div>
-                            <p class="blog-image-caption">BTS</p>
-                        </div>
-                    </div>
-                    <div class="blog-close-row">
-                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════
-         VIDEO 04
-    ══════════════════════════════════════════ -->
-    <section class="video-section">
-        <div class="video-inner">
-            <div class="video-header">
-                <span class="video-number">04</span>
-            </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/5tpDpPqEXyU"
-                    title="Riley Musil Video 4"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-            <div class="video-meta">
-                <div class="role-badges">
-                    <span class="badge">Camera Operator</span>
-                    <span class="badge">Gaffer</span>
-                </div>
-                <button class="read-more-btn" onclick="toggleBlog(this)">
-                    Read More <span class="btn-arrow">+</span>
-                </button>
-            </div>
-
-            <div class="blog-panel">
-                <div class="blog-panel-inner">
-                    <h3 class="blog-project-title">Family Dinner</h3>
-                    <div class="blog-body">
-                        <p>This short, appropriately titled <em>Family Dinner</em> was a final collaborative project for my lighting class in my third semester of college. The script was written and directed by <a href="https://linktr.ee/probablyaves" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Avery Evans</a>, a great friend of mine and a fantastic writer. This project took a lot of planning. I was mostly responsible for cameras and lights. Avery and I worked together in pre-production to create set maps to make shooting easier, and Avery even scheduled a day for us to practice and experiment with our location before the actual shoot day with all the actors. All of our work ahead of the shoot really paid off, as it made shooting much more streamlined. Our actual filming all took place in the morning and afternoon, actually right before the shoot for my previously featured short film <em>"The Man in the Woods"</em> and filmed with the same <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon R5 C</a> and <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New&srsltid=AfmBOopVxWYAPGGvHkupqPNR0J2rjs7bKe1EYv2bI-8ACP9jJAbCx7IS" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">RF24-70mm F2.8</a> lens setup as that film. I'm really proud of my work adapting the space to capture the emotion that Avery envisioned in this project, and I think our whole crew did a truly amazing job, especially the girl with the red hair, AKA my incredible girlfriend, Lydia.</p>
-                    </div>
-                    <div class="blog-images two-col">
-                        <div>
-                            <div class="blog-image-slot" style="aspect-ratio: 3 / 4;">
-                                <img src="AverySetMap.jpg" alt="Set planning sketch">
-                            </div>
-                            <p class="blog-image-caption">Early Set Map</p>
-                        </div>
-                        <div>
-                            <div class="blog-image-slot" style="aspect-ratio: 3 / 4;">
-                                <img src="KittyCat.jpg" alt="Behind the scenes with cat">
-                            </div>
-                            <p class="blog-image-caption">Kitty</p>
-                        </div>
-                    </div>
-                    <div class="blog-images two-col" style="margin-top:1.2rem;">
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="Set1.jpg" alt="Testing the set setup">
-                            </div>
-                            <p class="blog-image-caption">Test Setup</p>
-                        </div>
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="Framing.jpg" alt="Camera monitor showing framing">
-                            </div>
-                            <p class="blog-image-caption">Testing Framing</p>
-                        </div>
-                    </div>
-                    <div class="blog-images" style="margin-top:1.2rem; max-width:600px; margin-left:auto; margin-right:auto;">
-                        <div>
-                            <div class="blog-image-slot">
-                                <img src="Set2.jpg" alt="Testing lighting setup">
-                            </div>
-                            <p class="blog-image-caption">Testing Lighting</p>
-                        </div>
-                    </div>
-                    <div class="blog-close-row">
-                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════
-         VIDEO 05
-    ══════════════════════════════════════════ -->
-    <section class="video-section">
-        <div class="video-inner">
-            <div class="video-header">
-                <span class="video-number">05</span>
-            </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/3e0WRKEbBAQ"
-                    title="Riley Musil Video 5"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-            <div class="video-meta">
-                <div class="role-badges">
-                    <span class="badge">Camera Operator</span>
-                    <span class="badge">Editor</span>
-                    <span class="badge">Top Submission</span>
-                </div>
-                <button class="read-more-btn" onclick="toggleBlog(this)">
-                    Read More <span class="btn-arrow">+</span>
-                </button>
-            </div>
-
-            <div class="blog-panel">
-                <div class="blog-panel-inner">
-                    <h3 class="blog-project-title">Powwow Video Contest</h3>
-                    <div class="blog-body">
-                        <p>This video was another submission on behalf of Royal Rangers Outpost 44, this time for the STXRR 2024 PowWow "We Can't Wait for PowWow" video competition. This time we had the idea of showcasing the events, games, and activities as if they were in a 1920's silent film era motion picture. I think we were very effective with our video. Similar to the previous year was responsible for all editing and motion graphics, which I mostly composited in Adobe Premiere Pro.</p>
-                    </div>
-                    <div class="blog-close-row">
-                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <footer>
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
-
-    <script>
-        function toggleBlog(btn) {
-            const panel = btn.closest('.video-meta').nextElementSibling;
-            const isOpen = panel.classList.contains('open');
-
-            panel.classList.toggle('open', !isOpen);
-            btn.classList.toggle('open', !isOpen);
-
-            const arrow = btn.querySelector('.btn-arrow');
-            arrow.textContent = isOpen ? '+' : '−';
-            btn.childNodes[0].textContent = isOpen ? 'Read More ' : 'Read Less ';
-
-            if (!isOpen) {
-                setTimeout(() => {
-                    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 80);
-            }
-        }
-    </script>
 
 </body>
 </html>
