@@ -271,6 +271,38 @@
             color: var(--mid);
         }
 
+        .blog-images {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1.2rem;
+        }
+        .blog-images.two-col { grid-template-columns: 1fr 1fr; }
+
+        .blog-image-slot {
+            border-radius: 6px;
+            overflow: hidden;
+            background: #e8eaed;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .blog-image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .blog-image-caption {
+            font-family: var(--lora);
+            font-size: 0.78rem;
+            color: #999;
+            font-style: italic;
+            margin-top: 0.4rem;
+            text-align: center;
+        }
+
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -303,6 +335,7 @@
         <p>Commercial and promotional work.</p>
     </div>
 
+    <!-- 01: YTH Camp Video -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
@@ -333,6 +366,12 @@
                         <p>I find that the limitations of my equipment were actually my favorite part of creating this project. It shows my ability to adapt and problem-solve. Shooting was very straightforward; neither camera boasts very high recording specs, so I chose to focus more on the composition and framing of my shots. During post-production, I encountered most of my limitations. I had a two-week trip in Missouri directly after the camp, where I did not have a stable internet connection. Because of this, I had to figure out solutions to any problems that came up with only the knowledge I had already obtained in Premiere Pro by this point. This turned out to be a really great exercise, and it helped a lot with my creativity. For the music tracks in this video, I had to resort to walking up a hill to the highest point in the campground I was staying at just to get enough of a connection to download them. That was the only point up to the finalization of the project, where anything besides what was in the program. This video also took a LONG time. My setup was extremely limited; I was using an old TV from a friend's RV as a preview monitor, my laptop, which had an <a href="https://www.techpowerup.com/gpu-specs/quadro-p600-mobile.c3200" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">NVIDIA Quadro P600</a> as its GPU, and, because of this, I also opted to use the 2022 version of Adobe Premiere for stability. The limitations of my hardware forced me to render a lot, but in the end, I believe my patience truly paid off.</p>
                         <p>The North Texas chapter of AG, which ran the camp the NC church attended that year, created its own video for the camp, but I was really glad I created this project because I was able to capture all of the work our group and team put into the camp, as well as highlight more of our own smiling faces. Since the camp, I've been honored to have had NC Youth show my video at many of their services as a promo piece, and I'm really thankful to have had this experience to hone my craft.</p>
                     </div>
+                    <div class="blog-images" style="margin-top:2rem; max-width:600px; margin-left:auto; margin-right:auto;">
+                        <div>
+                            <div class="blog-image-slot"><img src="SetupYouthVideo.jpg" alt="Youth Camp video editing setup"></div>
+                            <p class="blog-image-caption">Editing Setup — Youth Camp Video</p>
+                        </div>
+                    </div>
                     <div class="blog-close-row">
                         <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
                     </div>
@@ -341,10 +380,85 @@
         </div>
     </section>
 
+    <!-- 02: BAWLS Promo -->
     <section class="video-section">
         <div class="video-inner">
             <div class="video-header">
                 <span class="video-number">02</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/ZYVO7ubnHF8"
+                    title="Bawls Guarana Mock Promo"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Gaffer</span>
+                    <span class="badge">Camera Operator</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Bawls Guarana Mock Promo</h3>
+                    <div class="blog-body">
+                        <p>This is a mockup promotional video I made for my lighting class; all color work came straight out of the camera, no post-processing was applied.</p>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03: Inspire Event -->
+    <section class="video-section">
+        <div class="video-inner">
+            <div class="video-header">
+                <span class="video-number">03</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/h-zspHzXdMQ"
+                    title="Inspire Event Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+
+            <div class="video-meta">
+                <div class="role-badges">
+                    <span class="badge">Event Coverage</span>
+                    <span class="badge">Editor</span>
+                </div>
+                <button class="read-more-btn" onclick="toggleBlog(this)">
+                    Read More <span class="btn-arrow">+</span>
+                </button>
+            </div>
+
+            <div class="blog-panel">
+                <div class="blog-panel-inner">
+                    <h3 class="blog-project-title">Inspire Event Video</h3>
+                    <div class="blog-body">
+                        <p>This was a short recap video I was tasked with shooting and editing by North Central Church for the Inspire event they hosted for Carl Wunsche Sr. High School.</p>
+                    </div>
+                    <div class="blog-close-row">
+                        <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04: Wellspring Hannah Testimonial -->
+    <section class="video-section">
+        <div class="video-inner">
+            <div class="video-header">
+                <span class="video-number">04</span>
             </div>
             <div class="video-wrapper">
                 <iframe src="https://www.youtube-nocookie.com/embed/3GHNIiwqSLE"
@@ -355,7 +469,7 @@
 
             <div class="video-meta">
                 <div class="role-badges">
-                    <span class="badge">Camera Op</span>
+                    <span class="badge">Camera Operator</span>
                     <span class="badge">Director</span>
                     <span class="badge">Editor</span>
                 </div>
