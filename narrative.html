@@ -13,19 +13,30 @@
       --mid: #2c3e50;
       --accent: #bdc3c7;
       --white: #ffffff;
+
+      --bg: #0d1520;
+      --card-bg: #131f2e;
+      --card-border: rgba(255,255,255,0.07);
+      --text-primary: #e8ecf0;
+      --text-secondary: #8a9bb0;
+      --text-muted: #4a5d72;
+      --badge-bg: rgba(255,255,255,0.05);
+      --badge-border: rgba(255,255,255,0.12);
+      --line: rgba(255,255,255,0.06);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: var(--poppins);
-      background: #f8f9fa;
-      color: #333;
+      background: var(--bg);
+      color: var(--text-primary);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
+    /* ── HEADER (unchanged) ─────────────────────────────── */
     header {
       background: #fff;
       padding: 1rem 5%;
@@ -35,11 +46,21 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 100;
     }
-    .logo-container { display: flex; align-items: center; text-decoration: none; color: #333; }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #333;
+    }
     .logo-container img { height: 50px; margin-right: 15px; }
-    .logo-container h1 { font-family: var(--lora); font-size: 1.4rem; margin: 0; font-weight: 700; }
+    .logo-container h1 {
+      font-family: var(--lora);
+      font-size: 1.4rem;
+      margin: 0;
+      font-weight: 700;
+    }
     nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
     nav a {
       text-decoration: none;
@@ -52,6 +73,7 @@
     }
     nav a:hover { color: #555; }
 
+    /* ── BANNER ─────────────────────────────────────────── */
     .banner {
       background: var(--mid);
       color: var(--white);
@@ -87,201 +109,7 @@
       position: relative;
     }
 
-    .video-section {
-      padding: 4rem 5%;
-      opacity: 0;
-      transform: translateY(28px);
-      animation: fadeUp 0.6s ease forwards;
-    }
-    .video-section:nth-child(odd)  { background: #fff; }
-    .video-section:nth-child(even) { background: #f0f2f4; }
-
-    .video-section:nth-child(1) { animation-delay: 0.1s; }
-    .video-section:nth-child(2) { animation-delay: 0.2s; }
-    .video-section:nth-child(3) { animation-delay: 0.3s; }
-    .video-section:nth-child(4) { animation-delay: 0.4s; }
-
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .video-inner { max-width: 960px; margin: 0 auto; }
-    .video-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .video-number {
-      font-family: var(--lora);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #aaa;
-    }
-
-    .video-wrapper {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
-      background: #111;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .video-wrapper:hover {
-      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
-      transform: translateY(-4px);
-    }
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: 0;
-    }
-
-    .video-meta {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    .role-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      border: 1.5px solid #dde1e5;
-      border-radius: 20px;
-      padding: 7px 19px;
-      font-size: 1.04rem;
-      font-family: var(--lora);
-      color: var(--mid);
-      letter-spacing: 0.3px;
-    }
-    .badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--mid);
-      flex-shrink: 0;
-    }
-
-    .read-more-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--mid);
-      color: var(--white);
-      border: none;
-      border-radius: 20px;
-      padding: 8px 24px;
-      font-size: 1.04rem;
-      font-family: var(--lora);
-      letter-spacing: 0.4px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-    .read-more-btn:hover { background: var(--dark); transform: translateY(-1px); }
-    .read-more-btn .btn-arrow {
-      display: inline-block;
-      font-style: normal;
-      font-size: 1rem;
-      line-height: 1;
-      font-weight: 300;
-      transition: opacity 0.2s;
-    }
-
-    .blog-panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-      opacity: 0;
-    }
-    .blog-panel.open { max-height: 2000px; opacity: 1; }
-
-    .blog-panel-inner {
-      margin-top: 2rem;
-      border-top: 1.5px solid #dde1e5;
-      padding-top: 2rem;
-    }
-
-    .blog-project-title {
-      font-family: var(--lora);
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: var(--dark);
-      line-height: 1.25;
-      margin-bottom: 1.2rem;
-    }
-
-    .blog-body {
-      font-family: var(--lora);
-      font-size: 1rem;
-      line-height: 1.85;
-      color: #444;
-    }
-    .blog-body p + p { margin-top: 1rem; }
-
-    .blog-images {
-      margin-top: 2rem;
-      display: grid;
-      gap: 1.2rem;
-    }
-    .blog-images.two-col { grid-template-columns: 1fr 1fr; }
-
-    .blog-image-slot {
-      border-radius: 6px;
-      overflow: hidden;
-      background: #e8eaed;
-      aspect-ratio: 16 / 9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .blog-image-slot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .blog-image-caption {
-      font-family: var(--lora);
-      font-size: 0.78rem;
-      color: #999;
-      font-style: italic;
-      margin-top: 0.4rem;
-      text-align: center;
-    }
-
-    .blog-close-row {
-      margin-top: 2rem;
-      display: flex;
-      justify-content: flex-end;
-    }
-    .blog-close-btn {
-      background: none;
-      border: 1.5px solid #ccc;
-      border-radius: 20px;
-      padding: 5px 16px;
-      font-size: 0.75rem;
-      font-family: var(--lora);
-      color: #888;
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .blog-close-btn:hover {
-      border-color: var(--mid);
-      color: var(--mid);
-    }
-
+    /* ── FOOTER (unchanged) ─────────────────────────────── */
     footer {
       text-align: center;
       padding: 1.5rem;
@@ -291,13 +119,348 @@
       margin-top: auto;
     }
 
-    @media (max-width: 600px) {
-      .blog-images.two-col { grid-template-columns: 1fr; }
-      .blog-project-title { font-size: 1.3rem; }
+    /* ── GALLERY GRID ───────────────────────────────────── */
+    .gallery {
+      padding: 3.5rem 5% 5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* ── THUMBNAIL CARD ─────────────────────────────────── */
+    .thumb-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s;
+    }
+    .thumb-card.visible {
+      animation: fadeUp 0.5s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .thumb-card:hover {
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      transform: translateY(-4px);
+    }
+    .thumb-card:hover .play-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .thumb-card:hover .thumb-img-wrap img {
+      transform: scale(1.04);
+      filter: brightness(0.55);
+    }
+
+    .thumb-img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #080e16;
+      overflow: hidden;
+    }
+    .thumb-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease, filter 0.3s ease;
+    }
+
+    .thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(8,14,22,0.8) 100%);
+      pointer-events: none;
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.82);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255,255,255,0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .play-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      margin-left: 3px;
+    }
+
+    .thumb-num {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-family: var(--lora);
+      font-size: 0.62rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .thumb-info {
+      padding: 0.85rem 1rem 1rem;
+    }
+    .thumb-title {
+      font-family: var(--lora);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+    }
+    .role-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.68rem;
+      font-family: var(--lora);
+      color: var(--text-secondary);
+    }
+    .badge::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* ── MODAL ──────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5,10,18,0.88);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: #111c28;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 820px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s ease;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    .modal-backdrop.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+    }
+    .modal-video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .modal-body {
+      padding: 1.75rem 2rem 2rem;
+    }
+    .modal-top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+    }
+    .modal-title-wrap { flex: 1; }
+    .modal-num {
+      font-family: var(--lora);
+      font-size: 0.65rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .modal-title {
+      font-family: var(--lora);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .modal-nav-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+    .modal-nav-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-nav-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.13);
+      color: var(--text-primary);
+    }
+    .modal-nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .modal-close {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      transition: background 0.2s, color 0.2s;
+      margin-left: 0.25rem;
+    }
+    .modal-close:hover {
+      background: rgba(255,255,255,0.13);
+      color: var(--text-primary);
+    }
+
+    .modal-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.4rem;
+    }
+    .modal-divider {
+      height: 1px;
+      background: var(--line);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-description {
+      font-family: var(--lora);
+      font-size: 0.97rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
+    }
+    .modal-description p + p { margin-top: 1rem; }
+    .modal-description a {
+      color: #8ab8e0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .modal-description a:hover { color: #aed0f0; }
+    .modal-description em { font-style: italic; }
+
+    .modal-images {
+      margin-top: 1.75rem;
+      display: grid;
+      gap: 1.2rem;
+    }
+    .modal-images.two-col { grid-template-columns: 1fr 1fr; }
+
+    .modal-image-slot {
+      border-radius: 6px;
+      overflow: hidden;
+      background: #0a1219;
+    }
+    .modal-image-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .modal-image-slot.ratio-16-9 { aspect-ratio: 16 / 9; }
+    .modal-image-slot.ratio-3-4  { aspect-ratio: 3 / 4; }
+
+    .modal-image-caption {
+      font-family: var(--lora);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .gallery { padding: 2.5rem 4% 4rem; }
+      .modal-body { padding: 1.25rem 1.25rem 1.5rem; }
+      .modal-title { font-size: 1.2rem; }
+      .banner h2 { font-size: 2.1rem; }
+      nav ul { gap: 1.1rem; }
+      .modal-images.two-col { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ── HEADER (unchanged) ──────────────────────────────── -->
   <header>
     <a href="index.html" class="logo-container">
       <img src="MarkRM.png" alt="Riley Musil Logo">
@@ -313,223 +476,302 @@
     </nav>
   </header>
 
+  <!-- ── BANNER ─────────────────────────────────────────── -->
   <div class="banner">
     <h2>Narrative Video</h2>
     <p>Narrative films and story-driven projects.</p>
   </div>
 
-  <section class="video-section">
-    <div class="video-inner">
-      <div class="video-header"><span class="video-number">01</span></div>
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube-nocookie.com/embed/YqYoziZZlg8" title="Riley Musil Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <div class="video-meta">
-        <div class="role-badges">
-          <span class="badge">Camera Operator</span>
-          <span class="badge">Director</span>
-          <span class="badge">Short Film</span>
-        </div>
-        <button class="read-more-btn" onclick="toggleBlog(this)">Read More <span class="btn-arrow">+</span></button>
-      </div>
-      <div class="blog-panel">
-        <div class="blog-panel-inner">
-          <h3 class="blog-project-title">The Man in the Woods</h3>
-          <div class="blog-body">
-            <p>This is a short film that I wrote in my second semester of College, filmed it in late fall of 2025. I served as the writer, storyboard artist, director, and cinematographer for this project. We shot this film with the <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon R5 C</a> and an <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New&srsltid=AfmBOopVxWYAPGGvHkupqPNR0J2rjs7bKe1EYv2bI-8ACP9jJAbCx7IS" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">RF24-70mm F2.8</a> lens. I had a fairly sizeable team for this shoot, which was extremely helpful considering we were having to haul all of our equipment through the woods. By the end of the first day of shooting, some of us had walked quite a few miles. One of the ways we tried to improve our efficiency with this shoot was by sending grips ahead to the next location while shooting a scene, so we wouldn't take us long setting up the next scene. Overall, that approach worked quite well. On the first day, we captured all of the scenes besides the scenes with the chicken coop, which were filmed in a different location on day two because of our lack of sunlight. I'm extremely happy with how this project came out. Everyone who was a part of our team worked so hard, and it really paid off. This specific edit of the film was fully created by my good friend Michelle Hernández, and I think she did an incredible job. I am currently working on a more refined version of my own edit, which I will host here eventually.</p>
-          </div>
-          <div class="blog-images two-col">
-            <div>
-              <div class="blog-image-slot"><img src="LocationScout1.jpg" alt="Early location scouting in the woods"></div>
-              <p class="blog-image-caption">Early Location Scouting</p>
-            </div>
-            <div>
-              <div class="blog-image-slot"><img src="LocationScout2.jpg" alt="Early location scouting, trail view"></div>
-              <p class="blog-image-caption">Early Location Scouting</p>
-            </div>
-          </div>
-          <div class="blog-images two-col" style="margin-top:1.2rem;">
-            <div>
-              <div class="blog-image-slot"><img src="Storyboard1.jpg" alt="Storyboard excerpt for The Man in the Woods"></div>
-              <p class="blog-image-caption">Storyboard Excerpt</p>
-            </div>
-            <div>
-              <div class="blog-image-slot"><img src="Script1.jpg" alt="Script excerpt for The Man in the Woods"></div>
-              <p class="blog-image-caption">Script Excerpt</p>
-            </div>
-          </div>
-          <div class="blog-close-row">
-            <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- ── GALLERY GRID ────────────────────────────────────── -->
+  <main class="gallery">
+    <div class="grid">
 
-  <section class="video-section">
-    <div class="video-inner">
-      <div class="video-header"><span class="video-number">02</span></div>
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube-nocookie.com/embed/GGQ91WSZXIY" title="Riley Musil Video 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <div class="video-meta">
-        <div class="role-badges">
-          <span class="badge">Camera Operator</span>
-          <span class="badge">Editor</span>
-          <span class="badge">Top Submission</span>
+      <div class="thumb-card" data-index="0" onclick="openModal(0)" tabindex="0" role="button" aria-label="Open The Man in the Woods">
+        <div class="thumb-img-wrap">
+          <img src="https://img.youtube.com/vi/YqYoziZZlg8/hqdefault.jpg" alt="The Man in the Woods" loading="lazy">
+          <div class="thumb-overlay"></div>
+          <span class="thumb-num">01</span>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <button class="read-more-btn" onclick="toggleBlog(this)">Read More <span class="btn-arrow">+</span></button>
-      </div>
-      <div class="blog-panel">
-        <div class="blog-panel-inner">
-          <h3 class="blog-project-title">Powwow Video Contest</h3>
-          <div class="blog-body">
-            <p>This video was a submission on behalf of Royal Rangers Outpost 44 for the STXRR 2023 PowWow in April of that year. The contest is simply titled the "We Can't Wait for PowWow" video, where outposts are tasked with creating a short video showcasing why they're excited for the camp. I've attended this camp regularly since elementary school, and my friends and I loved working on our submission every year. This competition was a big reason I became so interested in media production at such an early age. Our concept for this video was simple; we had won the camp competition the previous year, so we used the trophy as our main set piece and created a short trailer for our next victory. We ended up not only winning first place in the competition with our submission, but that year we also won first place in the camp! Overall, this project was super fun and one of my earliest projects that I hold a lot of pride in. I'm really proud of what my friends and I were all able to accomplish; everyone really played their part perfectly. I filmed a decent percentage of the video; however, I was responsible for 99% of the editing on this project, and I think I was really able to push our idea to the next level.</p>
-          </div>
-          <div class="blog-images" style="margin-top:2rem; max-width:333px; margin-left:auto; margin-right:auto;">
-            <div>
-              <div class="blog-image-slot" style="aspect-ratio: 3 / 4;"><img src="Johno.jpg" alt="Behind the scenes on set"></div>
-              <p class="blog-image-caption">BTS</p>
-            </div>
-          </div>
-          <div class="blog-close-row">
-            <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+        <div class="thumb-info">
+          <div class="thumb-title">The Man in the Woods</div>
+          <div class="role-badges">
+            <span class="badge">Camera Operator</span>
+            <span class="badge">Director</span>
+            <span class="badge">Short Film</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="video-section">
-    <div class="video-inner">
-      <div class="video-header"><span class="video-number">03</span></div>
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube-nocookie.com/embed/5tpDpPqEXyU" title="Riley Musil Video 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <div class="video-meta">
-        <div class="role-badges">
-          <span class="badge">Camera Operator</span>
-          <span class="badge">Gaffer</span>
+      <div class="thumb-card" data-index="1" onclick="openModal(1)" tabindex="0" role="button" aria-label="Open Powwow Video Contest 2023">
+        <div class="thumb-img-wrap">
+          <img src="https://img.youtube.com/vi/GGQ91WSZXIY/hqdefault.jpg" alt="Powwow Video Contest 2023" loading="lazy">
+          <div class="thumb-overlay"></div>
+          <span class="thumb-num">02</span>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <button class="read-more-btn" onclick="toggleBlog(this)">Read More <span class="btn-arrow">+</span></button>
-      </div>
-      <div class="blog-panel">
-        <div class="blog-panel-inner">
-          <h3 class="blog-project-title">Family Dinner</h3>
-          <div class="blog-body">
-            <p>This short, appropriately titled <em>Family Dinner</em> was a final collaborative project for my lighting class in my third semester of college. The script was written and directed by <a href="https://linktr.ee/probablyaves" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Avery Evans</a>, a great friend of mine and a fantastic writer. This project took a lot of planning. I was mostly responsible for cameras and lights. Avery and I worked together in pre-production to create set maps to make shooting easier, and Avery even scheduled a day for us to practice and experiment with our location before the actual shoot day with all the actors. All of our work ahead of the shoot really paid off, as it made shooting much more streamlined. Our actual filming all took place in the morning and afternoon, actually right before the shoot for my previously featured short film <em>"The Man in the Woods"</em> and filmed with the same <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">Canon R5 C</a> and <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New&srsltid=AfmBOopVxWYAPGGvHkupqPNR0J2rjs7bKe1EYv2bI-8ACP9jJAbCx7IS" target="_blank" rel="noopener" style="color: var(--mid); text-decoration: underline; text-underline-offset: 2px;">RF24-70mm F2.8</a> lens setup as that film. I'm really proud of my work adapting the space to capture the emotion that Avery envisioned in this project, and I think our whole crew did a truly amazing job, especially the girl with the red hair, AKA my incredible girlfriend, Lydia.</p>
-          </div>
-          <div class="blog-images two-col">
-            <div>
-              <div class="blog-image-slot" style="aspect-ratio: 3 / 4;"><img src="AverySetMap.jpg" alt="Set planning sketch"></div>
-              <p class="blog-image-caption">Early Set Map</p>
-            </div>
-            <div>
-              <div class="blog-image-slot" style="aspect-ratio: 3 / 4;"><img src="KittyCat.jpg" alt="Behind the scenes with cat"></div>
-              <p class="blog-image-caption">Kitty</p>
-            </div>
-          </div>
-          <div class="blog-images two-col" style="margin-top:1.2rem;">
-            <div>
-              <div class="blog-image-slot"><img src="Set1.jpg" alt="Testing the set setup"></div>
-              <p class="blog-image-caption">Test Setup</p>
-            </div>
-            <div>
-              <div class="blog-image-slot"><img src="Framing.jpg" alt="Camera monitor showing framing"></div>
-              <p class="blog-image-caption">Testing Framing</p>
-            </div>
-          </div>
-          <div class="blog-images" style="margin-top:1.2rem; max-width:600px; margin-left:auto; margin-right:auto;">
-            <div>
-              <div class="blog-image-slot"><img src="Set2.jpg" alt="Testing lighting setup"></div>
-              <p class="blog-image-caption">Testing Lighting</p>
-            </div>
-          </div>
-          <div class="blog-close-row">
-            <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+        <div class="thumb-info">
+          <div class="thumb-title">Powwow Video Contest — 2023</div>
+          <div class="role-badges">
+            <span class="badge">Camera Operator</span>
+            <span class="badge">Editor</span>
+            <span class="badge">Top Submission</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="video-section">
-    <div class="video-inner">
-      <div class="video-header"><span class="video-number">04</span></div>
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube-nocookie.com/embed/3e0WRKEbBAQ" title="Riley Musil Video 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <div class="video-meta">
-        <div class="role-badges">
-          <span class="badge">Camera Operator</span>
-          <span class="badge">Editor</span>
-          <span class="badge">Top Submission</span>
+      <div class="thumb-card" data-index="2" onclick="openModal(2)" tabindex="0" role="button" aria-label="Open Family Dinner">
+        <div class="thumb-img-wrap">
+          <img src="https://img.youtube.com/vi/5tpDpPqEXyU/hqdefault.jpg" alt="Family Dinner" loading="lazy">
+          <div class="thumb-overlay"></div>
+          <span class="thumb-num">03</span>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <button class="read-more-btn" onclick="toggleBlog(this)">Read More <span class="btn-arrow">+</span></button>
-      </div>
-      <div class="blog-panel">
-        <div class="blog-panel-inner">
-          <h3 class="blog-project-title">Powwow Video Contest</h3>
-          <div class="blog-body">
-            <p>This video was another submission on behalf of Royal Rangers Outpost 44, this time for the STXRR 2024 PowWow "We Can't Wait for PowWow" video competition. This time we had the idea of showcasing the events, games, and activities as if they were in a 1920's silent film era motion picture. I think we were very effective with our video. Similar to the previous year was responsible for all editing and motion graphics, which I mostly composited in Adobe Premiere Pro.</p>
-          </div>
-          <div class="blog-close-row">
-            <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+        <div class="thumb-info">
+          <div class="thumb-title">Family Dinner</div>
+          <div class="role-badges">
+            <span class="badge">Camera Operator</span>
+            <span class="badge">Gaffer</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="video-section">
-    <div class="video-inner">
-      <div class="video-header"><span class="video-number">05</span></div>
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube-nocookie.com/embed/9tvs-Rycvx8" title="Hostage Scene - Lighting Assignment" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <div class="video-meta">
-        <div class="role-badges">
-          <span class="badge">Gaffer</span>
-          <span class="badge">Camera Operator</span>
+      <div class="thumb-card" data-index="3" onclick="openModal(3)" tabindex="0" role="button" aria-label="Open Powwow Video Contest 2024">
+        <div class="thumb-img-wrap">
+          <img src="https://img.youtube.com/vi/3e0WRKEbBAQ/hqdefault.jpg" alt="Powwow Video Contest 2024" loading="lazy">
+          <div class="thumb-overlay"></div>
+          <span class="thumb-num">04</span>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <button class="read-more-btn" onclick="toggleBlog(this)">Read More <span class="btn-arrow">+</span></button>
-      </div>
-      <div class="blog-panel">
-        <div class="blog-panel-inner">
-          <h3 class="blog-project-title">Hostage Scene - Lighting Assignment</h3>
-          <div class="blog-body">
-            <p>This project was a lighting exercise for class; all the visuals were straight from the camera. Only sound manipulation and stabilizing techniques were applied.</p>
-          </div>
-          <div class="blog-close-row">
-            <button class="blog-close-btn" onclick="toggleBlog(this.closest('.blog-panel').previousElementSibling.querySelector('.read-more-btn'))">Collapse −</button>
+        <div class="thumb-info">
+          <div class="thumb-title">Powwow Video Contest — 2024</div>
+          <div class="role-badges">
+            <span class="badge">Camera Operator</span>
+            <span class="badge">Editor</span>
+            <span class="badge">Top Submission</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
+      <div class="thumb-card" data-index="4" onclick="openModal(4)" tabindex="0" role="button" aria-label="Open Hostage Scene - Lighting Assignment">
+        <div class="thumb-img-wrap">
+          <img src="https://img.youtube.com/vi/9tvs-Rycvx8/hqdefault.jpg" alt="Hostage Scene - Lighting Assignment" loading="lazy">
+          <div class="thumb-overlay"></div>
+          <span class="thumb-num">05</span>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="thumb-info">
+          <div class="thumb-title">Hostage Scene — Lighting Assignment</div>
+          <div class="role-badges">
+            <span class="badge">Gaffer</span>
+            <span class="badge">Camera Operator</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── MODAL ───────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
+    <div class="modal" id="modal" role="dialog" aria-modal="true">
+
+      <div class="modal-video">
+        <iframe id="modal-iframe" src="" title=""
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-top-row">
+          <div class="modal-title-wrap">
+            <div class="modal-num" id="modal-num"></div>
+            <h2 class="modal-title" id="modal-title"></h2>
+          </div>
+          <div class="modal-nav-row">
+            <button class="modal-nav-btn" id="btn-prev" onclick="navigateModal(-1)" aria-label="Previous project">&#8592;</button>
+            <button class="modal-nav-btn" id="btn-next" onclick="navigateModal(1)" aria-label="Next project">&#8594;</button>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&#10005;</button>
+          </div>
+        </div>
+        <div class="modal-badges" id="modal-badges"></div>
+        <div class="modal-divider"></div>
+        <div class="modal-description" id="modal-description"></div>
+        <div class="modal-images" id="modal-images" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER (unchanged) ─────────────────────────────── -->
   <footer>
     <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
   </footer>
 
   <script>
-    function toggleBlog(btn) {
-      const panel = btn.closest('.video-meta').nextElementSibling;
-      const isOpen = panel.classList.contains('open');
-
-      panel.classList.toggle('open', !isOpen);
-      btn.classList.toggle('open', !isOpen);
-
-      const arrow = btn.querySelector('.btn-arrow');
-      arrow.textContent = isOpen ? '+' : '−';
-      btn.childNodes[0].textContent = isOpen ? 'Read More ' : 'Read Less ';
-
-      if (!isOpen) {
-        setTimeout(() => {
-          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 80);
+    const projects = [
+      {
+        num: '01', title: 'The Man in the Woods',
+        youtubeId: 'YqYoziZZlg8',
+        badges: ['Camera Operator', 'Director', 'Short Film'],
+        description: `<p>This is a short film that I wrote in my second semester of College, filmed it in late fall of 2025. I served as the writer, storyboard artist, director, and cinematographer for this project. We shot this film with the <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener">Canon R5 C</a> and an <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New" target="_blank" rel="noopener">RF24-70mm F2.8</a> lens. I had a fairly sizeable team for this shoot, which was extremely helpful considering we were having to haul all of our equipment through the woods. By the end of the first day of shooting, some of us had walked quite a few miles. One of the ways we tried to improve our efficiency with this shoot was by sending grips ahead to the next location while shooting a scene, so we wouldn't take us long setting up the next scene. Overall, that approach worked quite well. On the first day, we captured all of the scenes besides the scenes with the chicken coop, which were filmed in a different location on day two because of our lack of sunlight. I'm extremely happy with how this project came out. Everyone who was a part of our team worked so hard, and it really paid off. This specific edit of the film was fully created by my good friend Michelle Hernández, and I think she did an incredible job. I am currently working on a more refined version of my own edit, which I will host here eventually.</p>`,
+        images: [
+          { src: 'LocationScout1.jpg', alt: 'Early location scouting in the woods', caption: 'Early Location Scouting', ratio: 'ratio-16-9' },
+          { src: 'LocationScout2.jpg', alt: 'Early location scouting, trail view', caption: 'Early Location Scouting', ratio: 'ratio-16-9' },
+          { src: 'Storyboard1.jpg', alt: 'Storyboard excerpt for The Man in the Woods', caption: 'Storyboard Excerpt', ratio: 'ratio-16-9' },
+          { src: 'Script1.jpg', alt: 'Script excerpt for The Man in the Woods', caption: 'Script Excerpt', ratio: 'ratio-16-9' },
+        ],
+        imagesCols: 'two-col'
+      },
+      {
+        num: '02', title: 'Powwow Video Contest — 2023',
+        youtubeId: 'GGQ91WSZXIY',
+        badges: ['Camera Operator', 'Editor', 'Top Submission'],
+        description: `<p>This video was a submission on behalf of Royal Rangers Outpost 44 for the STXRR 2023 PowWow in April of that year. The contest is simply titled the "We Can't Wait for PowWow" video, where outposts are tasked with creating a short video showcasing why they're excited for the camp. I've attended this camp regularly since elementary school, and my friends and I loved working on our submission every year. This competition was a big reason I became so interested in media production at such an early age. Our concept for this video was simple; we had won the camp competition the previous year, so we used the trophy as our main set piece and created a short trailer for our next victory. We ended up not only winning first place in the competition with our submission, but that year we also won first place in the camp! Overall, this project was super fun and one of my earliest projects that I hold a lot of pride in. I'm really proud of what my friends and I were all able to accomplish; everyone really played their part perfectly. I filmed a decent percentage of the video; however, I was responsible for 99% of the editing on this project, and I think I was really able to push our idea to the next level.</p>`,
+        images: [
+          { src: 'Johno.jpg', alt: 'Behind the scenes on set', caption: 'BTS', ratio: 'ratio-3-4', single: true }
+        ]
+      },
+      {
+        num: '03', title: 'Family Dinner',
+        youtubeId: '5tpDpPqEXyU',
+        badges: ['Camera Operator', 'Gaffer'],
+        description: `<p>This short, appropriately titled <em>Family Dinner</em> was a final collaborative project for my lighting class in my third semester of college. The script was written and directed by <a href="https://linktr.ee/probablyaves" target="_blank" rel="noopener">Avery Evans</a>, a great friend of mine and a fantastic writer. This project took a lot of planning. I was mostly responsible for cameras and lights. Avery and I worked together in pre-production to create set maps to make shooting easier, and Avery even scheduled a day for us to practice and experiment with our location before the actual shoot day with all the actors. All of our work ahead of the shoot really paid off, as it made shooting much more streamlined. Our actual filming all took place in the morning and afternoon, actually right before the shoot for my previously featured short film <em>"The Man in the Woods"</em> and filmed with the same <a href="https://global.canon/en/c-museum/product/cesc900.html" target="_blank" rel="noopener">Canon R5 C</a> and <a href="https://www.usa.canon.com/shop/p/rf24-70mm-f2-8l-is-usm?color=Black&type=New" target="_blank" rel="noopener">RF24-70mm F2.8</a> lens setup as that film. I'm really proud of my work adapting the space to capture the emotion that Avery envisioned in this project, and I think our whole crew did a truly amazing job, especially the girl with the red hair, AKA my incredible girlfriend, Lydia.</p>`,
+        images: [
+          { src: 'AverySetMap.jpg', alt: 'Set planning sketch', caption: 'Early Set Map', ratio: 'ratio-3-4' },
+          { src: 'KittyCat.jpg', alt: 'Behind the scenes with cat', caption: 'Kitty', ratio: 'ratio-3-4' },
+          { src: 'Set1.jpg', alt: 'Testing the set setup', caption: 'Test Setup', ratio: 'ratio-16-9' },
+          { src: 'Framing.jpg', alt: 'Camera monitor showing framing', caption: 'Testing Framing', ratio: 'ratio-16-9' },
+          { src: 'Set2.jpg', alt: 'Testing lighting setup', caption: 'Testing Lighting', ratio: 'ratio-16-9', single: true }
+        ],
+        imagesCols: 'two-col'
+      },
+      {
+        num: '04', title: 'Powwow Video Contest — 2024',
+        youtubeId: '3e0WRKEbBAQ',
+        badges: ['Camera Operator', 'Editor', 'Top Submission'],
+        description: `<p>This video was another submission on behalf of Royal Rangers Outpost 44, this time for the STXRR 2024 PowWow "We Can't Wait for PowWow" video competition. This time we had the idea of showcasing the events, games, and activities as if they were in a 1920's silent film era motion picture. I think we were very effective with our video. Similar to the previous year was responsible for all editing and motion graphics, which I mostly composited in Adobe Premiere Pro.</p>`
+      },
+      {
+        num: '05', title: 'Hostage Scene — Lighting Assignment',
+        youtubeId: '9tvs-Rycvx8',
+        badges: ['Gaffer', 'Camera Operator'],
+        description: `<p>This project was a lighting exercise for class; all the visuals were straight from the camera. Only sound manipulation and stabilizing techniques were applied.</p>`
       }
+    ];
+
+    let currentIndex = 0;
+
+    // Staggered entrance
+    const cards = document.querySelectorAll('.thumb-card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const i = parseInt(entry.target.dataset.index);
+          setTimeout(() => entry.target.classList.add('visible'), i * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    cards.forEach(c => observer.observe(c));
+
+    // Keyboard on cards
+    cards.forEach(card => {
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(parseInt(card.dataset.index));
+        }
+      });
+    });
+
+    const backdrop = document.getElementById('modal-backdrop');
+    const iframe   = document.getElementById('modal-iframe');
+
+    function openModal(index) {
+      currentIndex = index;
+      const p = projects[index];
+
+      document.getElementById('modal-num').textContent = p.num;
+      document.getElementById('modal-title').textContent = p.title;
+
+      document.getElementById('modal-badges').innerHTML =
+        p.badges.map(b => `<span class="badge">${b}</span>`).join('');
+
+      document.getElementById('modal-description').innerHTML = p.description;
+
+      const imagesEl = document.getElementById('modal-images');
+      if (p.images && p.images.length) {
+        imagesEl.style.display = 'grid';
+        imagesEl.className = 'modal-images' + (p.imagesCols ? ' ' + p.imagesCols : '');
+
+        // Group images: singles go full-width, pairs go in two-col rows
+        if (p.imagesCols === 'two-col') {
+          let html = '';
+          let i = 0;
+          while (i < p.images.length) {
+            const img = p.images[i];
+            if (img.single) {
+              html += `<div style="grid-column: 1 / -1; max-width: 560px; margin: 0 auto; width: 100%;">
+                <div class="modal-image-slot ${img.ratio}"><img src="${img.src}" alt="${img.alt}"></div>
+                <p class="modal-image-caption">${img.caption}</p>
+              </div>`;
+              i++;
+            } else {
+              html += `<div>
+                <div class="modal-image-slot ${img.ratio}"><img src="${img.src}" alt="${img.alt}"></div>
+                <p class="modal-image-caption">${img.caption}</p>
+              </div>`;
+              i++;
+            }
+          }
+          imagesEl.innerHTML = html;
+        } else {
+          imagesEl.className = 'modal-images';
+          const img = p.images[0];
+          imagesEl.innerHTML = `<div style="max-width: 333px; margin: 0 auto;">
+            <div class="modal-image-slot ${img.ratio}"><img src="${img.src}" alt="${img.alt}"></div>
+            <p class="modal-image-caption">${img.caption}</p>
+          </div>`;
+        }
+      } else {
+        imagesEl.style.display = 'none';
+        imagesEl.innerHTML = '';
+      }
+
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === projects.length - 1;
+
+      iframe.src = `https://www.youtube-nocookie.com/embed/${p.youtubeId}?autoplay=1`;
+      iframe.title = p.title;
+
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('modal').scrollTop = 0;
     }
+
+    function navigateModal(dir) {
+      const next = currentIndex + dir;
+      if (next >= 0 && next < projects.length) openModal(next);
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { iframe.src = ''; }, 300);
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target === backdrop) closeModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (!backdrop.classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowRight') navigateModal(1);
+      if (e.key === 'ArrowLeft')  navigateModal(-1);
+    });
   </script>
+
 </body>
 </html>
