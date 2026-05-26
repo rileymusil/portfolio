@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riley Musil | Creative Services</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -180,6 +183,94 @@
             font-size: 0.8rem;
         }
 
+        /* ── PWA Install Banner ── */
+        #pwa-banner {
+            position: fixed;
+            bottom: -160px;
+            left: 0;
+            right: 0;
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #1a252f;
+            color: #fff;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.35);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            transition: bottom 0.4s cubic-bezier(0.34, 1.3, 0.64, 1);
+            font-family: 'Poppins', sans-serif;
+        }
+        #pwa-banner.show { bottom: 0; }
+
+        #pwa-banner .pwa-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #2c3e50;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.12);
+            overflow: hidden;
+        }
+        #pwa-banner .pwa-icon img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            filter: invert(1);
+        }
+        #pwa-banner .pwa-text {
+            flex: 1;
+            min-width: 0;
+        }
+        #pwa-banner .pwa-text strong {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #pwa-banner .pwa-text span {
+            font-size: 0.75rem;
+            color: #bdc3c7;
+            display: block;
+            margin-top: 1px;
+        }
+        #pwa-banner .pwa-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        #pwa-install-btn {
+            background: #fff;
+            color: #1a252f;
+            border: none;
+            border-radius: 20px;
+            padding: 0.45rem 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.15s;
+        }
+        #pwa-install-btn:hover { background: #ecf0f1; transform: scale(1.03); }
+        #pwa-dismiss-btn {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            font-size: 1.3rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 2px 4px;
+            transition: color 0.2s;
+        }
+        #pwa-dismiss-btn:hover { color: #bdc3c7; }
+
         /* ── Mobile nav toggle ── */
         .nav-toggle {
             display: none;
@@ -306,6 +397,21 @@
         </p>
     </div>
 
+    <!-- PWA Install Banner (shown by JS on Android Chrome) -->
+    <div id="pwa-banner" role="dialog" aria-label="Install Riley Musil app">
+        <div class="pwa-icon">
+            <img src="MarkRM.png" alt="Riley Musil">
+        </div>
+        <div class="pwa-text">
+            <strong>Riley Musil</strong>
+            <span>Add to your home screen for quick access</span>
+        </div>
+        <div class="pwa-actions">
+            <button id="pwa-install-btn">Add to Home Screen</button>
+            <button id="pwa-dismiss-btn" aria-label="Dismiss">&#x2715;</button>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Riley Musil. All Rights Reserved.</p>
     </footer>
@@ -328,6 +434,64 @@
                     ul.classList.remove('nav-open');
                     btn.setAttribute('aria-expanded', 'false');
                 });
+            });
+        })();
+    </script>
+    <script>
+        /* ── Service Worker registration ── */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js').catch(function(err) {
+                    console.warn('SW registration failed:', err);
+                });
+            });
+        }
+
+        /* ── PWA Install Banner ── */
+        (function() {
+            var DISMISSED_KEY = 'pwa_banner_dismissed';
+            var deferredPrompt = null;
+            var banner  = document.getElementById('pwa-banner');
+            var installBtn = document.getElementById('pwa-install-btn');
+            var dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+            /* Only show if user hasn't permanently dismissed */
+            if (sessionStorage.getItem(DISMISSED_KEY)) return;
+
+            /* Capture Chrome's install prompt event */
+            window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();           /* stop mini-infobar from appearing */
+                deferredPrompt = e;
+
+                /* Slight delay so the page feels settled before banner slides up */
+                setTimeout(function() {
+                    banner.classList.add('show');
+                }, 2500);
+            });
+
+            /* User taps "Add to Home Screen" */
+            installBtn.addEventListener('click', function() {
+                if (!deferredPrompt) return;
+                banner.classList.remove('show');
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function(result) {
+                    if (result.outcome === 'accepted') {
+                        sessionStorage.setItem(DISMISSED_KEY, '1');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+
+            /* User taps ✕ — hide for this session */
+            dismissBtn.addEventListener('click', function() {
+                banner.classList.remove('show');
+                sessionStorage.setItem(DISMISSED_KEY, '1');
+            });
+
+            /* Hide banner if user installs via another route */
+            window.addEventListener('appinstalled', function() {
+                banner.classList.remove('show');
+                deferredPrompt = null;
             });
         })();
     </script>
