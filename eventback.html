@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Gallery — Admin | Riley Musil</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lora: 'Lora', serif;
+            --poppins: 'Poppins', sans-serif;
+            --dark: #1a252f;
+            --mid: #2c3e50;
+            --accent: #bdc3c7;
+            --white: #ffffff;
+        }
+    </style>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+    <!-- Password gate -->
+    <div class="admin-gate" id="adminGate">
+        <div class="admin-gate-card">
+            <h1>Event Gallery — Admin</h1>
+            <p class="hint">Enter the password to manage this gallery.</p>
+            <input type="password" id="adminPassword" placeholder="Password123" autocomplete="off">
+            <div class="admin-gate-error" id="adminGateError"></div>
+            <button id="adminGateBtn" type="button">Enter</button>
+        </div>
+    </div>
+
+    <div class="admin-topbar">
+        <div class="brand">Riley Musil<span>Event Photography — Gallery Admin</span></div>
+        <a class="view-live" href="event.html" target="_blank" rel="noopener">View Live Page ↗</a>
+    </div>
+
+    <div id="adminApp">
+
+        <div class="admin-banner-note" id="draftNote" style="display:none;">
+            <span>You're viewing unsaved local changes. Export the file below and upload it to your site, or discard to reload the live version.</span>
+            <button id="reloadLiveBtn" type="button">Discard &amp; Reload Live</button>
+        </div>
+
+        <h2 class="admin-section-title">Sessions</h2>
+        <button class="admin-add-btn" id="addSessionBtn" type="button">+ Add New Session</button>
+        <div class="session-list" id="sessionList"></div>
+
+        <h2 class="admin-section-title">Publish Changes</h2>
+        <div class="export-box">
+            <p>
+                When you're happy with your changes, click Export. It downloads an updated
+                <strong>event-data.json</strong> file. Upload that file to your website
+                (replacing the old one), along with any new photos, using the exact filenames
+                you entered below for each session.
+            </p>
+            <div class="export-actions">
+                <button class="btn-primary" id="exportBtn" type="button">Export Updated Data</button>
+            </div>
+            <textarea id="exportArea" readonly style="display:none;"></textarea>
+        </div>
+    </div>
+
+    <!-- Add / Edit session form -->
+    <div class="admin-form-overlay" id="formOverlay">
+        <div class="admin-form-panel">
+            <h3 id="formTitle">Add New Session</h3>
+            <form id="sessionForm">
+                <div class="form-group">
+                    <label>Session Title</label>
+                    <input type="text" id="fieldTitle" placeholder="e.g. Smith Wedding Reception" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <textarea id="fieldDesc" placeholder="A sentence or two about this session."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Cover Photo</label>
+                    <div class="cover-picker">
+                        <img class="cover-preview" id="coverPreview" style="visibility:hidden;">
+                        <input type="text" id="fieldCover" placeholder="filename.jpg">
+                        <label class="file-btn">Choose File<input type="file" id="coverFile" accept="image/*"></label>
+                    </div>
+                    <p class="form-hint">Pick a photo to auto-fill its filename and preview it, or type a filename directly.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Gallery Photos</label>
+                    <div class="photo-rows" id="photoRows"></div>
+                    <div class="photo-picker-actions">
+                        <label class="file-btn">Choose Files<input type="file" id="photoFile" accept="image/*" multiple></label>
+                        <button type="button" class="add-photo-row-btn" id="addPhotoRowBtn">+ Add filename manually</button>
+                    </div>
+                    <p class="form-hint">Filenames must match the photo files you upload to your website.</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="cancelFormBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Save Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        initAdmin({
+            category: 'event',
+            dataFile: 'event-data.json',
+            pageTitle: 'Event Photography',
+            livePage: 'event.html',
+            password: 'Password123' // change this to set your own admin password
+        });
+    </script>
+</body>
+</html>
