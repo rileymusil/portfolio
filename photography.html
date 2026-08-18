@@ -215,7 +215,7 @@
         .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         @media (max-width: 680px) {
-            .nav-toggle { display: flex; }
+            .nav-toggle { display: flex; margin-left: auto; } /* pin to the right edge: nav collapses to 0 width on mobile, so space-between would otherwise strand the button mid-header */
             .logo-container h1 { font-size: 1.05rem !important; }
             .logo-container img { height: 38px !important; margin-right: 10px !important; }
             header { position: relative; }

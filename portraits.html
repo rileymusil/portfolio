@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <title>Portrait Photography | Riley Musil</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="gallery.css">
+    <link rel="stylesheet" href="gallery.css?v=2">
     <style>
         :root {
             --lora: 'Lora', serif;
@@ -120,7 +120,7 @@
         .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         @media (max-width: 680px) {
-            .nav-toggle { display: flex; }
+            .nav-toggle { display: flex; margin-left: auto; } /* pin to the right edge: nav collapses to 0 width on mobile, so space-between would otherwise strand the button mid-header */
             .logo-container h1 { font-size: 1.05rem !important; }
             .logo-container img { height: 38px !important; margin-right: 10px !important; }
             header { position: relative; }
@@ -223,7 +223,7 @@
         </div>
     </div>
 
-    <script src="gallery.js"></script>
+    <script src="gallery.js?v=2"></script>
     <script>
         initGallery('portraits-data.json');
     </script>
