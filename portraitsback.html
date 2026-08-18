@@ -16,7 +16,7 @@
             --white: #ffffff;
         }
     </style>
-    <link rel="stylesheet" href="admin.css?v=2">
+    <link rel="stylesheet" href="admin.css?v=3">
 </head>
 <body class="admin-body">
 
@@ -25,7 +25,7 @@
         <div class="admin-gate-card">
             <h1>Portrait Gallery — Admin</h1>
             <p class="hint">Enter the password to manage this gallery.</p>
-            <input type="password" id="adminPassword" placeholder="Password123" autocomplete="off">
+            <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off">
             <div class="admin-gate-error" id="adminGateError"></div>
             <button id="adminGateBtn" type="button">Enter</button>
         </div>
@@ -105,14 +105,15 @@
         </div>
     </div>
 
-    <script src="admin.js?v=2"></script>
+    <script src="admin.js?v=3"></script>
     <script>
         initAdmin({
             category: 'portraits',
             dataFile: 'portraits-data.json',
             pageTitle: 'Portrait Photography',
             livePage: 'portraits.html',
-            password: 'Password123' // change this to set your own admin password
+            /* SHA-256 of the password, not the password itself. See admin.js for how to generate a new one. */
+            passwordHash: '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601'
         });
     </script>
 </body>

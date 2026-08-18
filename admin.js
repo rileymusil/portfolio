@@ -5,11 +5,18 @@
 
    IMPORTANT — read this before relying on the password gate:
    This is a plain static HTML site with no server, so there is no way to do
-   *real* login security here. The password check below runs entirely in the
-   visitor's browser, which means the password is visible to anyone who
-   views the page source, and the whole check can be skipped with browser
-   dev tools. Treat it as a "keep casual visitors out" curtain, not a lock.
-   Don't reuse a password here that protects anything else.
+   *real* login security here. The page stores a SHA-256 hash rather than the
+   password itself, so the password is no longer readable in the page source —
+   but the check still runs entirely in the visitor's browser and can be
+   stepped over with dev tools. Treat it as a "keep casual visitors out"
+   curtain, not a lock. Don't reuse a password here that protects anything else.
+
+   To change the password, generate a new hash and paste it into the
+   passwordHash field of each *back.html page. In the browser console:
+       await (async p => {
+         const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(p));
+         return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('');
+       })('your-new-password')
 
    IMPORTANT — how "upload" actually works here:
    A static site can't accept file uploads from a browser and save them on
@@ -29,7 +36,7 @@ function initAdmin(config) {
     const dataFile  = config.dataFile;
     const pageTitle = config.pageTitle;
     const livePage  = config.livePage;
-    const password  = config.password;
+    const passwordHash = config.passwordHash;
     const draftKey  = 'admin_draft_' + category;
     const unlockKey = 'admin_unlocked_' + category;
 
@@ -73,10 +80,36 @@ function initAdmin(config) {
 
     gateBtn.addEventListener('click', tryUnlock);
     gateInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
-    function tryUnlock() {
-        if (gateInput.value === password) {
+
+    /* The page stores only a SHA-256 hash, so the password itself is not sitting
+       in the source for anyone who hits View Source. Note this hides the
+       password, it does not make the gate secure — the check still runs in the
+       visitor's browser and can still be stepped over with dev tools. */
+    async function sha256Hex(text) {
+        const bytes = new TextEncoder().encode(text);
+        const digest = await crypto.subtle.digest('SHA-256', bytes);
+        return Array.from(new Uint8Array(digest))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+    }
+
+    async function tryUnlock() {
+        if (!window.crypto || !crypto.subtle) {
+            /* crypto.subtle only exists in a secure context (https or localhost). */
+            gateError.textContent = 'This page must be opened over https to sign in.';
+            return;
+        }
+        let entered;
+        try {
+            entered = await sha256Hex(gateInput.value);
+        } catch (e) {
+            gateError.textContent = 'Could not check the password on this browser.';
+            return;
+        }
+        if (entered === passwordHash) {
             sessionStorage.setItem(unlockKey, 'yes');
             gateError.textContent = '';
+            gateInput.value = '';
             unlock();
         } else {
             gateError.textContent = 'Incorrect password. Try again.';
