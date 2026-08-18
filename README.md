@@ -67,11 +67,11 @@ pnpm dev
 
 ## GitHub Pages
 
-The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. Photography galleries are baked in at build time from Sanity, so publish a new build after CMS changes.
+The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. The page shells are static files; photography galleries fetch Sanity from the browser, so new sessions show up without a rebuild.
 
 1. In the repo, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
 2. Add repository secrets (Settings → Secrets and variables → Actions):
-   - `NEXT_PUBLIC_SANITY_PROJECT_ID` (required for photography galleries)
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID` (required so the browser can call Sanity)
    - `NEXT_PUBLIC_SANITY_DATASET` (optional, defaults to `production`)
    - `NEXT_PUBLIC_SANITY_API_VERSION` (optional)
 3. Optional repository variables:
@@ -79,4 +79,4 @@ The app is statically exported (`output: "export"`) so it can be hosted on GitHu
    - `NEXT_PUBLIC_BASE_PATH` — repo name only if this is a project site (`https://org.github.io/repo`). Leave empty for a custom domain or `username.github.io` site.
 4. Push to `main` (or run the **Deploy to GitHub Pages** workflow). Custom domain is `public/CNAME`.
 
-Sanity Studio stays available locally at `/studio` during `pnpm dev`. Hosted Studio can also be deployed with `pnpm dlx sanity@latest deploy`. To rebuild after CMS publishes, add a Sanity webhook that sends a GitHub `repository_dispatch` of type `sanity-publish`.
+Sanity Studio stays available locally at `/studio` during `pnpm dev`. Hosted Studio can also be deployed with `pnpm dlx sanity@latest deploy`.

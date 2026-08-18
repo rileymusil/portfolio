@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { LiveSessionGallery } from "@/components/organisms/LiveSessionGallery";
 import { PageBanner } from "@/components/organisms/PageBanner";
-import { SessionGallery } from "@/components/organisms/SessionGallery";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
 import {
   getPhotoCategoryMeta,
   isPhotoCategory,
   PHOTO_CATEGORIES,
 } from "@/lib/photography";
-import { getPhotoSessions } from "@/lib/sanity/queries";
 
 interface PhotographyCategoryPageProps {
   params: Promise<{ category: string }>;
@@ -41,7 +40,6 @@ export default async function PhotographyCategoryPage({
   }
 
   const meta = getPhotoCategoryMeta(category);
-  const sessions = await getPhotoSessions(category);
 
   return (
     <MarketingLayout>
@@ -52,7 +50,7 @@ export default async function PhotographyCategoryPage({
         backLabel="All photography"
       />
       <div className="mx-auto max-w-[1200px] px-5 py-10 md:py-16">
-        <SessionGallery sessions={sessions} />
+        <LiveSessionGallery category={category} />
       </div>
     </MarketingLayout>
   );
