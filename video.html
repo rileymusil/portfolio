@@ -216,6 +216,30 @@
             .banner h2 { font-size: 2.2rem; }
             .categories-wrap { margin: 2rem auto 3rem; }
         }
+
+        /* ── Touch devices ──
+           The category titles were revealed only on :hover, so on phones and
+           tablets the cards showed no labels at all. Devices without hover get
+           the title permanently, anchored over a bottom scrim so the photo stays
+           visible rather than being blurred and dimmed the way hover does. */
+        @media (hover: none) {
+            .category-overlay {
+                opacity: 1;
+                align-items: flex-end;
+                justify-content: center;
+                padding-bottom: 1.4rem;
+                background: linear-gradient(0deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%);
+            }
+            .category-title {
+                transform: translateY(0);
+            }
+            /* Tapping can leave a sticky :hover on touch browsers - don't let the
+               card get stuck blurred after the visitor taps through. */
+            .category-card:hover img {
+                filter: none;
+                transform: none;
+            }
+        }
     </style>
 </head>
 <body>

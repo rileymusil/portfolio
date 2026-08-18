@@ -183,6 +183,11 @@
 }
 
 .session-thumb-grid {
+    /* Implicit rows default to `auto`, which stretched to divide up the panel's
+       fixed height. That made the row tracks shorter than the aspect-ratio:1
+       thumbs, so each row rendered on top of the next. min-content sizes rows to
+       the thumbs instead, and the grid scrolls as intended. */
+    grid-auto-rows: min-content;
     padding: 1.6rem 2.2rem 2.2rem;
     overflow-y: auto;
     display: grid;

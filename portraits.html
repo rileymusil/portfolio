@@ -85,6 +85,10 @@
 
         /* ── Gallery wrap ── */
         .gallery-wrap {
+            /* body is a column flexbox; auto side margins on a flex item cancel the
+               default stretch and shrink it to fit its content, which collapsed this
+               to ~280px. An explicit width restores the intended 1200px container. */
+            width: 100%;
             max-width: 1200px;
             margin: 2.5rem auto 5rem;
             padding: 0 20px;
