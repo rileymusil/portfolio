@@ -10,8 +10,6 @@ import {
 } from "@/lib/photography";
 import { getPhotoSessions } from "@/lib/sanity/queries";
 
-export const revalidate = 60;
-
 interface PhotographyCategoryPageProps {
   params: Promise<{ category: string }>;
 }

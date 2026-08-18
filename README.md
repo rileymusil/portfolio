@@ -10,7 +10,7 @@ A template repository for quickly spinning up small business websites.
 - **Component Dev:** [Storybook](https://storybook.js.org/)
 - **Unit Testing:** [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react)
 - **E2E Testing:** [Playwright](https://playwright.dev/)
-- **Deployment:** [Vercel](https://vercel.com/)
+- **Deployment:** [GitHub Pages](https://pages.github.com/) (static export)
 - **Package Manager:** [pnpm](https://pnpm.io/)
 - **Node Version:** managed via [fnm](https://github.com/Schniz/fnm) (`.node-version`)
 
@@ -46,16 +46,16 @@ pnpm dev
 
 ## Commands
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Start development server (Turbopack) |
-| `pnpm build` | Production build |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Lint with ESLint |
-| `pnpm test` | Run unit tests (Vitest) |
-| `pnpm test:e2e` | Run E2E tests (Playwright) |
-| `pnpm storybook` | Start Storybook |
-| `pnpm format` | Format code with Prettier |
+| Command          | Description                            |
+| ---------------- | -------------------------------------- |
+| `pnpm dev`       | Start development server (Turbopack)   |
+| `pnpm build`     | Production build                       |
+| `pnpm start`     | Serve the static `out/` folder locally |
+| `pnpm lint`      | Lint with ESLint                       |
+| `pnpm test`      | Run unit tests (Vitest)                |
+| `pnpm test:e2e`  | Run E2E tests (Playwright)             |
+| `pnpm storybook` | Start Storybook                        |
+| `pnpm format`    | Format code with Prettier              |
 
 ## Creating a New Business Site
 
@@ -63,4 +63,20 @@ pnpm dev
 2. Update `src/app/layout.tsx` with your business name and metadata
 3. Add your components in `src/components/`
 4. Add shadcn/ui components: `pnpm dlx shadcn@latest add button`
-5. Deploy to Vercel
+5. Deploy with GitHub Pages (see below)
+
+## GitHub Pages
+
+The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. Photography galleries are baked in at build time from Sanity, so publish a new build after CMS changes.
+
+1. In the repo, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+2. Add repository secrets (Settings → Secrets and variables → Actions):
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID` (required for photography galleries)
+   - `NEXT_PUBLIC_SANITY_DATASET` (optional, defaults to `production`)
+   - `NEXT_PUBLIC_SANITY_API_VERSION` (optional)
+3. Optional repository variables:
+   - `NEXT_PUBLIC_SITE_URL` — canonical URL, e.g. `https://rileymusil.com`
+   - `NEXT_PUBLIC_BASE_PATH` — repo name only if this is a project site (`https://org.github.io/repo`). Leave empty for a custom domain or `username.github.io` site.
+4. Push to `main` (or run the **Deploy to GitHub Pages** workflow). Custom domain is `public/CNAME`.
+
+Sanity Studio stays available locally at `/studio` during `pnpm dev`. Hosted Studio can also be deployed with `pnpm dlx sanity@latest deploy`. To rebuild after CMS publishes, add a Sanity webhook that sends a GitHub `repository_dispatch` of type `sanity-publish`.
