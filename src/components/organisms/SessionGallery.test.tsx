@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
 import { SessionGallery } from "@/components/organisms/SessionGallery";
 import type { PhotoSession } from "@/lib/sanity/types";
@@ -40,4 +41,25 @@ test("shows empty copy when a category has no sessions", () => {
   render(<SessionGallery sessions={[]} />);
 
   expect(screen.getByText(/no photos yet/i)).toBeInTheDocument();
+});
+
+test("the full-size viewer serves a compressed webp, not the original", async () => {
+  const user = userEvent.setup();
+  render(<SessionGallery sessions={[session]} />);
+
+  await user.click(
+    screen.getByRole("button", { name: /open golden hour gallery/i }),
+  );
+  await user.click(
+    await screen.findByRole("button", { name: /golden hour photo 1/i }),
+  );
+
+  const viewer = await screen.findByRole("dialog", { name: /photo viewer/i });
+  const full = within(viewer).getByRole("img", { name: /one/i });
+  const src = new URL(full.getAttribute("src") ?? "");
+
+  expect(src.searchParams.get("auto")).toBe("format");
+  expect(src.searchParams.get("q")).toBe("85");
+  expect(src.searchParams.get("w")).toBe("2048");
+  expect(src.searchParams.get("fit")).toBe("max");
 });

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { SessionCard } from "@/components/molecules/SessionCard";
+import sanityImageLoader from "@/lib/sanity/image-loader";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +24,9 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
 
   const photos = activeSession?.photos ?? [];
   const lightboxPhoto =
-    lightboxIndex !== null && photos[lightboxIndex] ? photos[lightboxIndex] : null;
+    lightboxIndex !== null && photos[lightboxIndex]
+      ? photos[lightboxIndex]
+      : null;
 
   function closeLightbox(): void {
     setLightboxIndex(null);
@@ -33,7 +36,9 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
     if (lightboxIndex === null || photos.length === 0) {
       return;
     }
-    setLightboxIndex((lightboxIndex + direction + photos.length) % photos.length);
+    setLightboxIndex(
+      (lightboxIndex + direction + photos.length) % photos.length,
+    );
   }
 
   useEffect(() => {
@@ -46,7 +51,9 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
       }
       if (event.key === "ArrowLeft") {
         setLightboxIndex((current) =>
-          current === null ? current : (current - 1 + photos.length) % photos.length,
+          current === null
+            ? current
+            : (current - 1 + photos.length) % photos.length,
         );
       }
       if (event.key === "ArrowRight") {
@@ -116,7 +123,8 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
                   alt={photo.alt}
                   fill
                   className="object-cover transition hover:scale-110"
-                  sizes="150px"
+                  sizes="(max-width: 640px) 33vw, 220px"
+                  quality={70}
                 />
               </button>
             ))}
@@ -149,14 +157,21 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
             <button
               type="button"
               onClick={() => navigateLightbox(-1)}
-              className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+              className="hover:bg-brand-mid flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:text-white"
               aria-label="Previous photo"
             >
               <ChevronLeft className="size-5" />
             </button>
             <div className="relative max-h-[84vh] min-w-0 flex-1">
+              {/* Not next/image: the viewer sizes itself to the photo's own
+                  aspect ratio. Reuse the loader so the full view is still WebP
+                  and compressed rather than the untouched original. */}
               <img
-                src={lightboxPhoto.url}
+                src={sanityImageLoader({
+                  src: lightboxPhoto.url,
+                  width: 2048,
+                  quality: 85,
+                })}
                 alt={lightboxPhoto.alt}
                 className="mx-auto max-h-[84vh] max-w-full rounded-md object-contain shadow-2xl"
               />
@@ -164,7 +179,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
             <button
               type="button"
               onClick={() => navigateLightbox(1)}
-              className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+              className="hover:bg-brand-mid flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:text-white"
               aria-label="Next photo"
             >
               <ChevronRight className="size-5" />
