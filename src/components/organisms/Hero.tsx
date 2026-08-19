@@ -38,6 +38,7 @@ export function Hero() {
           height={1080}
           className="mx-auto mb-4 block h-auto w-4/5 max-w-[520px] invert"
           priority
+          unoptimized
         />
       </div>
       <h1 data-hero-item className="sr-only">
@@ -45,7 +46,7 @@ export function Hero() {
       </h1>
       <h2
         data-hero-item
-        className="mt-2.5 mb-5 font-serif text-[1.2rem] font-normal text-accent italic md:text-[1.8rem]"
+        className="text-accent mt-2.5 mb-5 font-serif text-[1.2rem] font-normal italic md:text-[1.8rem]"
       >
         {site.tagline}
       </h2>

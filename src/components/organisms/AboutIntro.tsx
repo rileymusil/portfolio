@@ -17,11 +17,14 @@ export function AboutIntro() {
               fill
               className="object-cover"
               sizes="320px"
+              unoptimized
             />
           </div>
           <div>
-            <h3 className="mb-2 font-serif text-[2rem] text-primary">{site.name}</h3>
-            <span className="mb-6 inline-block rounded-full bg-brand-mid px-3.5 py-1 text-[0.78rem] tracking-[1.5px] text-white uppercase">
+            <h3 className="text-primary mb-2 font-serif text-[2rem]">
+              {site.name}
+            </h3>
+            <span className="bg-brand-mid mb-6 inline-block rounded-full px-3.5 py-1 text-[0.78rem] tracking-[1.5px] text-white uppercase">
               {aboutCopy.role}
             </span>
             {aboutCopy.intro.map((paragraph) => (
@@ -29,14 +32,18 @@ export function AboutIntro() {
                 {paragraph}
               </p>
             ))}
-            <p className="mt-2 font-semibold text-primary">
+            <p className="text-primary mt-2 font-semibold">
               <a href={`mailto:${site.email}`} className="mr-4">
                 {site.email}
               </a>
               <a href={site.phoneHref} className="mr-4">
                 {site.phoneDisplay}
               </a>
-              <a href={site.resumeUrl} target="_blank" rel="noopener noreferrer">
+              <a
+                href={site.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Resume
               </a>
             </p>

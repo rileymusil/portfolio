@@ -66,7 +66,9 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
             <div className="p-6 md:p-8">
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm tracking-widest text-[#8a9bb0]">{project.number}</p>
+                  <p className="text-sm tracking-widest text-[#8a9bb0]">
+                    {project.number}
+                  </p>
                   <h2 id="video-modal-title" className="font-serif text-2xl">
                     {project.title}
                   </h2>
@@ -113,19 +115,23 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                 ))}
               </div>
               <div
-                className="space-y-3 text-sm leading-7 text-[#c5ced6] [&_a]:text-accent [&_a]:underline"
+                className="[&_a]:text-accent space-y-3 text-sm leading-7 text-[#c5ced6] [&_a]:underline"
                 dangerouslySetInnerHTML={{ __html: project.descriptionHtml }}
               />
               {project.stills?.length ? (
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {project.stills.map((still) => (
-                    <figure key={still.src} className="overflow-hidden rounded-lg">
+                    <figure
+                      key={still.src}
+                      className="overflow-hidden rounded-lg"
+                    >
                       <Image
                         src={still.src}
                         alt={still.alt}
                         width={800}
                         height={500}
                         className="h-auto w-full object-cover"
+                        unoptimized
                       />
                       <figcaption className="mt-2 text-xs tracking-wide text-[#8a9bb0] uppercase">
                         {still.caption}

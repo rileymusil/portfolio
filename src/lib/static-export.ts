@@ -3,7 +3,8 @@ export interface StaticExportOptions {
   trailingSlash: true;
   basePath: string;
   images: {
-    unoptimized: true;
+    loader: "custom";
+    loaderFile: string;
   };
 }
 
@@ -23,7 +24,10 @@ export function getStaticExportOptions(
     trailingSlash: true,
     basePath: getBasePath(env),
     images: {
-      unoptimized: true,
+      // Next's own optimizer needs a server, so a static export routes resizing
+      // through Sanity's image CDN instead of shipping originals.
+      loader: "custom",
+      loaderFile: "./src/lib/sanity/image-loader.ts",
     },
   };
 }

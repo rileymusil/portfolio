@@ -32,8 +32,13 @@ export async function getPhotoSessions(
     });
     return mapPhotoSessions(Array.isArray(docs) ? docs : []);
   } catch (error) {
+    // This now runs at build time. Swallowing the error would publish a gallery
+    // that is silently empty until the next build, so fail the build instead and
+    // leave the previous deploy serving.
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error(`Failed to load ${category} sessions: ${message}`);
-    return [];
+    throw new Error(
+      `Failed to load ${category} photo sessions from Sanity: ${message}`,
+      { cause: error },
+    );
   }
 }
