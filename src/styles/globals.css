@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant can-hover (@media (hover: hover) and (pointer: fine));
 
 @theme {
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
