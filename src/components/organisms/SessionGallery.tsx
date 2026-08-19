@@ -124,7 +124,6 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
                   fill
                   className="object-cover transition hover:scale-110"
                   sizes="(max-width: 640px) 33vw, 220px"
-                  quality={70}
                 />
               </button>
             ))}

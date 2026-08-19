@@ -19,7 +19,7 @@ describe("sanity image loader", () => {
       new URL(
         sanityImageLoader({ src: SANITY_SRC, width: 640 }),
       ).searchParams.get("q"),
-    ).toBe("75");
+    ).toBe("65");
     expect(
       new URL(
         sanityImageLoader({ src: SANITY_SRC, width: 640, quality: 90 }),
