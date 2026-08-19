@@ -21,7 +21,7 @@ export function CategoryCard({
     <Link
       href={href}
       className={cn(
-        "group relative block overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(0,0,0,0.2)]",
+        "group @container relative block overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(0,0,0,0.2)]",
         className,
       )}
     >
@@ -30,13 +30,15 @@ export function CategoryCard({
         alt={title}
         fill
         className={cn(
-          "object-cover transition duration-500 group-hover:scale-105 group-hover:blur-[4px] group-hover:brightness-[0.4]",
+          "can-hover:group-hover:scale-105 can-hover:group-hover:blur-[4px] can-hover:group-hover:brightness-[0.4] object-cover transition duration-500",
           imageClassName,
         )}
         sizes="(max-width: 768px) 100vw, 33vw"
       />
-      <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition duration-500 group-hover:bg-black/50 group-hover:opacity-100">
-        <h3 className="translate-y-5 px-2.5 text-center font-serif text-[2.2rem] font-bold tracking-[3px] text-white uppercase transition duration-500 group-hover:translate-y-0 md:text-5xl">
+      {/* Touch devices keep the title permanently visible over a scrim; pointer
+          devices start clean and reveal it on hover. */}
+      <div className="can-hover:bg-black/0 can-hover:opacity-0 can-hover:group-hover:bg-black/50 can-hover:group-hover:opacity-100 absolute inset-0 flex items-center justify-center bg-black/45 opacity-100 transition duration-500">
+        <h3 className="can-hover:translate-y-5 can-hover:drop-shadow-none can-hover:group-hover:translate-y-0 max-w-full px-4 text-center font-serif text-[clamp(1.1rem,11cqi,3rem)] leading-tight font-bold tracking-[0.08em] text-balance break-words text-white uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.65)] transition duration-500">
           {title}
         </h3>
       </div>
