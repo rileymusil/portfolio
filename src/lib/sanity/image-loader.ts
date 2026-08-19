@@ -29,7 +29,8 @@ export default function sanityImageLoader({
   // 65 is a deliberate default for photography at grid sizes; the full-size
   // viewer opts up explicitly.
   url.searchParams.set("q", String(quality ?? 65));
-  // Serve AVIF/WebP by Accept header, and never upscale past the original.
+  // Negotiate a modern format (WebP) off the Accept header, and never upscale
+  // past the original.
   url.searchParams.set("auto", "format");
   url.searchParams.set("fit", "max");
   return url.toString();
