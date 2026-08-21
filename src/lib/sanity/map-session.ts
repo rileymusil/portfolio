@@ -1,5 +1,6 @@
 import { isPhotoCategory } from "@/lib/photography";
-import type { PhotoSession, SanityPhotoDoc } from "@/lib/sanity/types";
+import { sizedSanityImageUrl } from "@/lib/sanity/image";
+import type { GalleryImage, PhotoSession, SanityPhotoDoc } from "@/lib/sanity/types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -7,6 +8,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value : null;
+}
+
+function toGalleryImage(url: string, alt: string, lqip: string | null): GalleryImage {
+  return {
+    alt,
+    thumbUrl: sizedSanityImageUrl(url, "thumb"),
+    coverUrl: sizedSanityImageUrl(url, "cover"),
+    fullUrl: sizedSanityImageUrl(url, "lightbox"),
+    ...(lqip ? { lqip } : {}),
+  };
 }
 
 export function mapPhotoSession(doc: unknown): PhotoSession | null {
@@ -33,10 +44,11 @@ export function mapPhotoSession(doc: unknown): PhotoSession | null {
           return [];
         }
         return [
-          {
+          toGalleryImage(
             url,
-            alt: asString(photo.alt) ?? title,
-          },
+            asString(photo.alt) ?? title,
+            asString(photo.lqip),
+          ),
         ];
       })
     : [];
@@ -46,10 +58,11 @@ export function mapPhotoSession(doc: unknown): PhotoSession | null {
     title,
     description: asString(doc.description) ?? "",
     category,
-    cover: {
-      url: coverUrl,
-      alt: asString(doc.coverAlt) ?? title,
-    },
+    cover: toGalleryImage(
+      coverUrl,
+      asString(doc.coverAlt) ?? title,
+      asString(doc.coverLqip),
+    ),
     photos,
   };
 }

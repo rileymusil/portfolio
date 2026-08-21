@@ -5,6 +5,7 @@ interface SessionCardProps {
   coverUrl: string;
   photoCount: number;
   onOpen: () => void;
+  blurDataUrl?: string;
 }
 
 export function SessionCard({
@@ -12,6 +13,7 @@ export function SessionCard({
   coverUrl,
   photoCount,
   onOpen,
+  blurDataUrl,
 }: SessionCardProps) {
   const countLabel = `${photoCount} photo${photoCount === 1 ? "" : "s"}`;
 
@@ -26,8 +28,11 @@ export function SessionCard({
         src={coverUrl}
         alt={title}
         fill
+        decoding="async"
         className="object-cover transition duration-500 group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, 33vw"
+        placeholder={blurDataUrl ? "blur" : "empty"}
+        blurDataURL={blurDataUrl}
       />
       <div className="absolute inset-x-0 bottom-0 translate-y-[44%] bg-linear-to-t from-brand-dark/95 via-brand-dark/60 to-transparent px-[1.1rem] pt-[1.1rem] pb-[0.9rem] text-white transition duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0">
         <h3 className="mb-1.5 font-serif text-[1.05rem] leading-snug font-bold">

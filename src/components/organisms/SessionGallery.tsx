@@ -13,17 +13,27 @@ import {
 } from "@/components/ui/dialog";
 import type { PhotoSession } from "@/lib/sanity/types";
 
+export const GALLERY_DIALOG_ANIMATION_MS = 200;
+
 interface SessionGalleryProps {
   sessions: PhotoSession[];
+}
+
+function prefetchImage(url: string): void {
+  const image = new window.Image();
+  image.decoding = "async";
+  image.src = url;
 }
 
 export function SessionGallery({ sessions }: SessionGalleryProps) {
   const [activeSession, setActiveSession] = useState<PhotoSession | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [thumbsReady, setThumbsReady] = useState(false);
 
   const photos = activeSession?.photos ?? [];
   const lightboxPhoto =
     lightboxIndex !== null && photos[lightboxIndex] ? photos[lightboxIndex] : null;
+  const galleryOpen = Boolean(activeSession) && lightboxIndex === null;
 
   function closeLightbox(): void {
     setLightboxIndex(null);
@@ -35,6 +45,19 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
     }
     setLightboxIndex((lightboxIndex + direction + photos.length) % photos.length);
   }
+
+  useEffect(() => {
+    if (!galleryOpen) {
+      setThumbsReady(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setThumbsReady(true);
+    }, GALLERY_DIALOG_ANIMATION_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [galleryOpen]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent): void {
@@ -59,6 +82,21 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [lightboxIndex, photos.length]);
 
+  useEffect(() => {
+    if (lightboxIndex === null || photos.length < 2) {
+      return;
+    }
+
+    const next = photos[(lightboxIndex + 1) % photos.length];
+    const previous = photos[(lightboxIndex - 1 + photos.length) % photos.length];
+    if (next) {
+      prefetchImage(next.fullUrl);
+    }
+    if (previous && previous !== next) {
+      prefetchImage(previous.fullUrl);
+    }
+  }, [lightboxIndex, photos]);
+
   if (sessions.length === 0) {
     return (
       <p className="col-span-full py-12 text-center font-sans text-[#888]">
@@ -74,7 +112,8 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
           <SessionCard
             key={session.id}
             title={session.title}
-            coverUrl={session.cover.url}
+            coverUrl={session.cover.coverUrl}
+            blurDataUrl={session.cover.lqip}
             photoCount={session.photos.length}
             onOpen={() => setActiveSession(session)}
           />
@@ -82,7 +121,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
       </div>
 
       <Dialog
-        open={Boolean(activeSession) && lightboxIndex === null}
+        open={galleryOpen}
         onOpenChange={(open) => {
           if (!open) {
             setActiveSession(null);
@@ -105,19 +144,24 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
           <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
             {photos.map((photo, index) => (
               <button
-                key={`${photo.url}-${index}`}
+                key={`${photo.thumbUrl}-${index}`}
                 type="button"
                 onClick={() => setLightboxIndex(index)}
                 className="relative aspect-square overflow-hidden rounded-md bg-[#e8ecef]"
                 aria-label={`${activeSession?.title} photo ${index + 1}`}
               >
-                <Image
-                  src={photo.url}
-                  alt={photo.alt}
-                  fill
-                  className="object-cover transition hover:scale-110"
-                  sizes="150px"
-                />
+                {thumbsReady ? (
+                  <Image
+                    src={photo.thumbUrl}
+                    alt={photo.alt}
+                    fill
+                    decoding="async"
+                    className="object-cover transition hover:scale-110"
+                    sizes="150px"
+                    placeholder={photo.lqip ? "blur" : "empty"}
+                    blurDataURL={photo.lqip}
+                  />
+                ) : null}
               </button>
             ))}
           </div>
@@ -156,8 +200,9 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
             </button>
             <div className="relative max-h-[84vh] min-w-0 flex-1">
               <img
-                src={lightboxPhoto.url}
+                src={lightboxPhoto.fullUrl}
                 alt={lightboxPhoto.alt}
+                decoding="async"
                 className="mx-auto max-h-[84vh] max-w-full rounded-md object-contain shadow-2xl"
               />
             </div>

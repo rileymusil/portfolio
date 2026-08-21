@@ -14,8 +14,20 @@ const session = {
   title: "Golden Hour",
   description: "Portraits at sunset.",
   category: "portraits" as const,
-  cover: { url: "https://cdn.sanity.io/cover.jpg", alt: "Cover" },
-  photos: [{ url: "https://cdn.sanity.io/one.jpg", alt: "One" }],
+  cover: {
+    alt: "Cover",
+    thumbUrl: "https://cdn.sanity.io/cover.jpg?w=400",
+    coverUrl: "https://cdn.sanity.io/cover.jpg?w=900",
+    fullUrl: "https://cdn.sanity.io/cover.jpg?w=1600",
+  },
+  photos: [
+    {
+      alt: "One",
+      thumbUrl: "https://cdn.sanity.io/one.jpg?w=400",
+      coverUrl: "https://cdn.sanity.io/one.jpg?w=900",
+      fullUrl: "https://cdn.sanity.io/one.jpg?w=1600",
+    },
+  ],
 };
 
 beforeEach(() => {

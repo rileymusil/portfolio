@@ -1,12 +1,28 @@
-import imageUrlBuilder, { type SanityImageSource } from "@sanity/image-url";
-import { sanityClient } from "@/lib/sanity/client";
+export const GALLERY_IMAGE = {
+  thumb: { width: 400, quality: 70 },
+  cover: { width: 900, quality: 75 },
+  lightbox: { width: 1600, quality: 82 },
+} as const;
 
-const builder = sanityClient ? imageUrlBuilder(sanityClient) : null;
+export type GalleryImageRole = keyof typeof GALLERY_IMAGE;
 
-export function urlForImage(source: SanityImageSource): string | null {
-  if (!builder) {
-    return null;
+function isHttpUrl(url: string): boolean {
+  return url.startsWith("https://") || url.startsWith("http://");
+}
+
+export function sizedSanityImageUrl(
+  url: string,
+  role: GalleryImageRole,
+): string {
+  if (!isHttpUrl(url)) {
+    return url;
   }
 
-  return builder.image(source).auto("format").quality(85).url();
+  const parsed = new URL(url);
+  const options = GALLERY_IMAGE[role];
+  parsed.searchParams.set("w", String(options.width));
+  parsed.searchParams.set("auto", "format");
+  parsed.searchParams.set("q", String(options.quality));
+  parsed.searchParams.set("fit", "max");
+  return parsed.toString();
 }

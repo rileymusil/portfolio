@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { CompressedImageInput } from "@/sanity/components/CompressedImageInput";
 
 export const photoSessionType = defineType({
   name: "photoSession",
@@ -41,7 +42,10 @@ export const photoSessionType = defineType({
       name: "cover",
       title: "Cover image",
       type: "image",
+      description:
+        "Large photos are resized to 2400px on the long edge when uploaded.",
       options: { hotspot: true },
+      components: { input: CompressedImageInput },
       fields: [
         defineField({
           name: "alt",
@@ -59,6 +63,7 @@ export const photoSessionType = defineType({
         {
           type: "image",
           options: { hotspot: true },
+          components: { input: CompressedImageInput },
           fields: [
             defineField({
               name: "alt",

@@ -12,9 +12,11 @@ export const photoSessionsQuery = groq`
     category,
     "coverUrl": cover.asset->url,
     "coverAlt": cover.alt,
+    "coverLqip": cover.asset->metadata.lqip,
     "photos": photos[] {
       "url": asset->url,
-      "alt": alt
+      "alt": alt,
+      "lqip": asset->metadata.lqip
     }
   }
 `;
