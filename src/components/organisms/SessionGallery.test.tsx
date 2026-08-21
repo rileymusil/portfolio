@@ -82,3 +82,46 @@ test("opens the lightbox with the large photo, not the thumbnail", async () => {
     session.photos[0]?.fullUrl,
   );
 });
+
+test("keeps the session gallery open while a photo is viewed", async () => {
+  const user = userEvent.setup();
+  render(<SessionGallery sessions={[session]} />);
+
+  await user.click(
+    screen.getByRole("button", { name: /open golden hour gallery/i }),
+  );
+  await user.click(screen.getByRole("button", { name: /golden hour photo 1/i }));
+
+  expect(screen.getByRole("dialog", { name: /photo viewer/i })).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: "Golden Hour", hidden: true, level: 2 }),
+  ).toBeInTheDocument();
+});
+
+test("closes the photo viewer from empty space without restarting the gallery", async () => {
+  const user = userEvent.setup();
+  render(<SessionGallery sessions={[session]} />);
+
+  await user.click(
+    screen.getByRole("button", { name: /open golden hour gallery/i }),
+  );
+  expect(await screen.findByRole("img", { name: "One" })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: /golden hour photo 1/i }));
+
+  const overlays = document.querySelectorAll<HTMLElement>(
+    '[data-slot="dialog-overlay"]',
+  );
+  const photoOverlay = overlays[overlays.length - 1];
+  expect(photoOverlay).toBeDefined();
+  await user.click(photoOverlay!);
+
+  expect(
+    screen.queryByRole("dialog", { name: /photo viewer/i }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByRole("dialog", { name: "Golden Hour" })).toBeInTheDocument();
+  expect(screen.getByRole("img", { name: "One" })).toHaveAttribute(
+    "src",
+    session.photos[0]?.thumbUrl,
+  );
+});
+

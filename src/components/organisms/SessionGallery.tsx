@@ -33,7 +33,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
   const photos = activeSession?.photos ?? [];
   const lightboxPhoto =
     lightboxIndex !== null && photos[lightboxIndex] ? photos[lightboxIndex] : null;
-  const galleryOpen = Boolean(activeSession) && lightboxIndex === null;
+  const sessionOpen = Boolean(activeSession);
 
   function closeLightbox(): void {
     setLightboxIndex(null);
@@ -47,7 +47,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
   }
 
   useEffect(() => {
-    if (!galleryOpen) {
+    if (!sessionOpen) {
       setThumbsReady(false);
       return;
     }
@@ -57,7 +57,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
     }, GALLERY_DIALOG_ANIMATION_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [galleryOpen]);
+  }, [sessionOpen]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent): void {
@@ -121,9 +121,9 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
       </div>
 
       <Dialog
-        open={galleryOpen}
+        open={sessionOpen}
         onOpenChange={(open) => {
-          if (!open) {
+          if (!open && lightboxIndex === null) {
             setActiveSession(null);
           }
         }}
@@ -168,19 +168,21 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
         </DialogContent>
       </Dialog>
 
-      {lightboxPhoto ? (
-        <div
-          className="fixed inset-0 z-[9500] flex items-center justify-center bg-[rgba(10,14,18,0.97)]"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Photo viewer"
+      <Dialog
+        open={lightboxIndex !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            closeLightbox();
+          }
+        }}
+      >
+        <DialogContent
+          showCloseButton={false}
+          overlayClassName="z-[9500] bg-[rgba(10,14,18,0.97)]"
+          className="z-[9500] flex w-[92vw] max-w-[1400px] items-center justify-center gap-4 border-0 bg-transparent p-0 shadow-none sm:max-w-[1400px]"
+          aria-describedby={undefined}
         >
-          <button
-            type="button"
-            className="absolute inset-0 cursor-default"
-            aria-label="Close photo viewer"
-            onClick={closeLightbox}
-          />
+          <DialogTitle className="sr-only">Photo viewer</DialogTitle>
           <button
             type="button"
             onClick={closeLightbox}
@@ -189,37 +191,35 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
           >
             <X className="size-4" />
           </button>
-          <div className="relative z-1 flex w-[92vw] max-w-[1400px] items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={() => navigateLightbox(-1)}
-              className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
-              aria-label="Previous photo"
-            >
-              <ChevronLeft className="size-5" />
-            </button>
-            <div className="relative max-h-[84vh] min-w-0 flex-1">
-              <img
-                src={lightboxPhoto.fullUrl}
-                alt={lightboxPhoto.alt}
-                decoding="async"
-                className="mx-auto max-h-[84vh] max-w-full rounded-md object-contain shadow-2xl"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() => navigateLightbox(1)}
-              className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
-              aria-label="Next photo"
-            >
-              <ChevronRight className="size-5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => navigateLightbox(-1)}
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+            aria-label="Previous photo"
+          >
+            <ChevronLeft className="size-5" />
+          </button>
+          {lightboxPhoto ? (
+            <img
+              src={lightboxPhoto.fullUrl}
+              alt={lightboxPhoto.alt}
+              decoding="async"
+              className="mx-auto max-h-[84vh] min-w-0 max-w-full rounded-md object-contain shadow-2xl"
+            />
+          ) : null}
+          <button
+            type="button"
+            onClick={() => navigateLightbox(1)}
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+            aria-label="Next photo"
+          >
+            <ChevronRight className="size-5" />
+          </button>
           <p className="absolute bottom-6 font-sans text-white">
             {(lightboxIndex ?? 0) + 1} / {photos.length}
           </p>
-        </div>
-      ) : null}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
