@@ -179,10 +179,16 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
         <DialogContent
           showCloseButton={false}
           overlayClassName="z-[9500] bg-[rgba(10,14,18,0.97)]"
-          className="z-[9500] flex w-[92vw] max-w-[1400px] items-center justify-center gap-4 border-0 bg-transparent p-0 shadow-none sm:max-w-[1400px]"
+          className="top-0 left-0 z-[9500] flex h-svh w-screen max-w-none translate-x-0 translate-y-0 items-center justify-center gap-4 border-0 bg-transparent p-0 shadow-none sm:max-w-none"
           aria-describedby={undefined}
         >
           <DialogTitle className="sr-only">Photo viewer</DialogTitle>
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label="Close photo viewer"
+            onClick={closeLightbox}
+          />
           <button
             type="button"
             onClick={closeLightbox}
@@ -194,7 +200,7 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
           <button
             type="button"
             onClick={() => navigateLightbox(-1)}
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+            className="relative z-1 flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
             aria-label="Previous photo"
           >
             <ChevronLeft className="size-5" />
@@ -204,18 +210,18 @@ export function SessionGallery({ sessions }: SessionGalleryProps) {
               src={lightboxPhoto.fullUrl}
               alt={lightboxPhoto.alt}
               decoding="async"
-              className="mx-auto max-h-[84vh] min-w-0 max-w-full rounded-md object-contain shadow-2xl"
+              className="relative z-1 mx-auto max-h-[84vh] min-w-0 max-w-full rounded-md object-contain shadow-2xl"
             />
           ) : null}
           <button
             type="button"
             onClick={() => navigateLightbox(1)}
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
+            className="relative z-1 flex size-11 shrink-0 items-center justify-center rounded-full border border-[#ddd] bg-white text-[#333] hover:bg-brand-mid hover:text-white"
             aria-label="Next photo"
           >
             <ChevronRight className="size-5" />
           </button>
-          <p className="absolute bottom-6 font-sans text-white">
+          <p className="pointer-events-none absolute bottom-6 font-sans text-white">
             {(lightboxIndex ?? 0) + 1} / {photos.length}
           </p>
         </DialogContent>

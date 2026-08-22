@@ -108,12 +108,7 @@ test("closes the photo viewer from empty space without restarting the gallery", 
   expect(await screen.findByRole("img", { name: "One" })).toBeInTheDocument();
   await user.click(screen.getByRole("button", { name: /golden hour photo 1/i }));
 
-  const overlays = document.querySelectorAll<HTMLElement>(
-    '[data-slot="dialog-overlay"]',
-  );
-  const photoOverlay = overlays[overlays.length - 1];
-  expect(photoOverlay).toBeDefined();
-  await user.click(photoOverlay!);
+  await user.click(screen.getByRole("button", { name: /close photo viewer/i }));
 
   expect(
     screen.queryByRole("dialog", { name: /photo viewer/i }),
