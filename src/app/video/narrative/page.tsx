@@ -1,25 +1,27 @@
 import type { Metadata } from "next";
+import { LiveVideoProjectGrid } from "@/components/organisms/LiveVideoProjectGrid";
 import { PageBanner } from "@/components/organisms/PageBanner";
-import { VideoProjectGrid } from "@/components/organisms/VideoProjectGrid";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
-import { narrativeProjects } from "@/lib/video-projects";
+import { getVideoCategoryMeta } from "@/lib/video";
+
+const meta = getVideoCategoryMeta("narrative");
 
 export const metadata: Metadata = {
-  title: "Narrative Video",
-  description: "Narrative films and story-driven projects by Riley Musil.",
+  title: meta.title,
+  description: meta.description,
 };
 
 export default function NarrativeVideoPage() {
   return (
     <MarketingLayout>
       <PageBanner
-        title="Narrative Video"
-        subtitle="Narrative films and story-driven projects."
+        title={meta.title}
+        subtitle={meta.subtitle}
         backHref="/video"
         backLabel="All video"
       />
       <div className="bg-brand-navy px-5 py-12 md:px-10 md:py-16">
-        <VideoProjectGrid projects={narrativeProjects} />
+        <LiveVideoProjectGrid category="narrative" />
       </div>
     </MarketingLayout>
   );

@@ -1,4 +1,6 @@
+import type { PortableTextBlock } from "@portabletext/types";
 import type { PhotoCategory } from "@/lib/photography";
+import type { VideoCategory } from "@/lib/video";
 
 export interface GalleryImage {
   alt: string;
@@ -28,6 +30,40 @@ export interface SanityPhotoDoc {
   photos: Array<{
     url: string | null;
     alt?: string | null;
+    lqip?: string | null;
+  }>;
+}
+
+export interface VideoStill {
+  alt: string;
+  caption: string;
+  thumbUrl: string;
+  fullUrl: string;
+  lqip?: string;
+}
+
+export interface VideoProject {
+  id: string;
+  number: string;
+  title: string;
+  category: VideoCategory;
+  youtubeId: string;
+  badges: string[];
+  description: PortableTextBlock[];
+  stills: VideoStill[];
+}
+
+export interface SanityVideoDoc {
+  _id: string;
+  title: string;
+  category: VideoCategory;
+  youtubeId: string;
+  badges?: string[] | null;
+  description?: PortableTextBlock[] | null;
+  stills: Array<{
+    url: string | null;
+    alt?: string | null;
+    caption?: string | null;
     lqip?: string | null;
   }>;
 }

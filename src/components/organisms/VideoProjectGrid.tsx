@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { PortableDescription } from "@/components/molecules/PortableDescription";
 import { VideoThumbCard } from "@/components/molecules/VideoThumbCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { VideoProject } from "@/lib/video-projects";
+import type { VideoProject } from "@/lib/sanity/types";
 
 interface VideoProjectGridProps {
   projects: VideoProject[];
@@ -112,24 +113,32 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                   </Badge>
                 ))}
               </div>
-              <div
+              <PortableDescription
+                value={project.description}
                 className="space-y-3 text-sm leading-7 text-[#c5ced6] [&_a]:text-accent [&_a]:underline"
-                dangerouslySetInnerHTML={{ __html: project.descriptionHtml }}
               />
-              {project.stills?.length ? (
+              {project.stills.length ? (
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {project.stills.map((still) => (
-                    <figure key={still.src} className="overflow-hidden rounded-lg">
+                    <figure
+                      key={still.fullUrl}
+                      className="overflow-hidden rounded-lg"
+                    >
                       <Image
-                        src={still.src}
+                        src={still.thumbUrl}
                         alt={still.alt}
                         width={800}
                         height={500}
                         className="h-auto w-full object-cover"
+                        {...(still.lqip
+                          ? { placeholder: "blur" as const, blurDataURL: still.lqip }
+                          : {})}
                       />
-                      <figcaption className="mt-2 text-xs tracking-wide text-[#8a9bb0] uppercase">
-                        {still.caption}
-                      </figcaption>
+                      {still.caption ? (
+                        <figcaption className="mt-2 text-xs tracking-wide text-[#8a9bb0] uppercase">
+                          {still.caption}
+                        </figcaption>
+                      ) : null}
                     </figure>
                   ))}
                 </div>

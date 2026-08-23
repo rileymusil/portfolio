@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { getYoutubeThumbnailUrl } from "@/lib/video-projects";
-import type { VideoProject } from "@/lib/video-projects";
+import type { VideoProject } from "@/lib/sanity/types";
+import { getYoutubeThumbnailUrl } from "@/lib/video";
 
 interface VideoThumbCardProps {
   project: VideoProject;

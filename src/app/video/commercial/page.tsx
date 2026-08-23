@@ -1,25 +1,27 @@
 import type { Metadata } from "next";
+import { LiveVideoProjectGrid } from "@/components/organisms/LiveVideoProjectGrid";
 import { PageBanner } from "@/components/organisms/PageBanner";
-import { VideoProjectGrid } from "@/components/organisms/VideoProjectGrid";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
-import { commercialProjects } from "@/lib/video-projects";
+import { getVideoCategoryMeta } from "@/lib/video";
+
+const meta = getVideoCategoryMeta("commercial");
 
 export const metadata: Metadata = {
-  title: "Commercial Video",
-  description: "Commercial and promotional video work by Riley Musil.",
+  title: meta.title,
+  description: meta.description,
 };
 
 export default function CommercialVideoPage() {
   return (
     <MarketingLayout>
       <PageBanner
-        title="Commercial Video"
-        subtitle="Commercial and promotional work."
+        title={meta.title}
+        subtitle={meta.subtitle}
         backHref="/video"
         backLabel="All video"
       />
       <div className="bg-brand-navy px-5 py-12 md:px-10 md:py-16">
-        <VideoProjectGrid projects={commercialProjects} />
+        <LiveVideoProjectGrid category="commercial" />
       </div>
     </MarketingLayout>
   );
