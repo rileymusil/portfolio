@@ -67,32 +67,19 @@ pnpm dev
 
 ## Editing content
 
-Everything editable lives in Sanity Studio at `/studio`. There are three sections, and they reach the site two different ways:
+Everything editable lives in Sanity Studio at `/studio`. Publish there and the change is live — no rebuild, no deploy, nothing to configure.
 
-| Studio section | Appears on | How it reaches the page |
-| --- | --- | --- |
-| Photo Sessions | `/photography/[category]` | Fetched in the browser — live the moment you publish |
-| Video Projects | `/video/narrative`, `/video/commercial` | Fetched in the browser — live the moment you publish |
-| About Page | `/about` | Baked in at build — needs a rebuild (see below) |
+| Studio section | Appears on |
+| --- | --- |
+| Photo Sessions | `/photography/[category]` |
+| Video Projects | `/video/narrative`, `/video/commercial` |
+| About Page | `/about` |
 
-The About page is read at build time on purpose: it is mostly text, so a browser fetch would show a loading flash on every visit, and a static export cannot put Sanity content into the page's `<title>` or meta description any other way.
+Photo and video galleries fetch from Sanity in the browser. The About page does both: it is prerendered with the content Sanity held at build time, so it paints real text immediately and its meta description is filled in, then it refreshes from Sanity in the browser and swaps in anything newer.
 
-To make About edits publish themselves, add a webhook in Sanity that triggers the Pages build. `.github/workflows/pages.yml` already listens for it.
+That means the only thing a rebuild changes on the About page is its `<meta name="description">`, which is taken from the banner subheading. Everything a visitor reads is current either way.
 
-1. Create a fine-grained GitHub token with **Contents: read and write** on this repository only.
-2. At [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks → **Create webhook**:
-   - **URL**: `https://api.github.com/repos/<owner>/<repo>/dispatches`
-   - **Trigger on**: Create, Update, Delete
-   - **Filter**: `_type == "aboutPage"`
-   - **HTTP method**: `POST`
-   - **HTTP headers**:
-     - `Authorization`: `Bearer <your token>`
-     - `Accept`: `application/vnd.github+json`
-   - **Projection**: `{"event_type": "sanity-publish"}`
-
-Publishing the About page then rebuilds the site, typically live in a minute or two. Photo and video edits need no webhook.
-
-If Sanity is unreachable at build time, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
+If Sanity is unreachable, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
 
 ## GitHub Pages
 
