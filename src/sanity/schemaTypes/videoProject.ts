@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { CompressedImageInput } from "@/sanity/components/CompressedImageInput";
+import { richTextMembers } from "@/sanity/schemaTypes/richText";
 
 const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 
@@ -63,49 +64,7 @@ export const videoProjectType = defineType({
       type: "array",
       description:
         "Select any text and use the link button in the toolbar to turn it into a link.",
-      of: [
-        defineArrayMember({
-          type: "block",
-          /* Deliberately narrow: the modal styles paragraphs and lists only, so
-             offering headings here would let the Studio produce markup the page
-             has no styling for. */
-          styles: [{ title: "Paragraph", value: "normal" }],
-          lists: [
-            { title: "Bulleted", value: "bullet" },
-            { title: "Numbered", value: "number" },
-          ],
-          marks: {
-            decorators: [
-              { title: "Bold", value: "strong" },
-              { title: "Italic", value: "em" },
-            ],
-            annotations: [
-              defineArrayMember({
-                name: "link",
-                type: "object",
-                title: "Link",
-                fields: [
-                  defineField({
-                    name: "href",
-                    title: "URL",
-                    type: "url",
-                    validation: (rule) =>
-                      rule.required().uri({
-                        scheme: ["http", "https", "mailto", "tel"],
-                      }),
-                  }),
-                  defineField({
-                    name: "openInNewTab",
-                    title: "Open in a new tab",
-                    type: "boolean",
-                    initialValue: true,
-                  }),
-                ],
-              }),
-            ],
-          },
-        }),
-      ],
+      of: richTextMembers,
     }),
     defineField({
       name: "stills",

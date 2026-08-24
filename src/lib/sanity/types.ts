@@ -34,6 +34,38 @@ export interface SanityPhotoDoc {
   }>;
 }
 
+export interface AboutImage {
+  url: string;
+  alt: string;
+  lqip?: string;
+}
+
+export interface AboutSkillGroup {
+  title: string;
+  tags: string[];
+}
+
+export interface AboutExperienceItem {
+  dates: string;
+  role: string;
+  organization: string;
+  bullets: string[];
+}
+
+export interface AboutPage {
+  bannerTitle: string;
+  bannerSubtitle: string;
+  role: string;
+  headshot: AboutImage;
+  intro: PortableTextBlock[];
+  skillGroups: AboutSkillGroup[];
+  experience: AboutExperienceItem[];
+  fieldPhotos: AboutImage[];
+  education: { title: string; school: string };
+  honors: string[];
+  hobbies: string[];
+}
+
 export interface VideoStill {
   alt: string;
   caption: string;

@@ -1,22 +1,30 @@
 import { FadeIn } from "@/components/atoms/FadeIn";
 import { SectionLabel } from "@/components/atoms/SectionLabel";
-import { experience } from "@/lib/about";
+import type { AboutExperienceItem } from "@/lib/sanity/types";
 
-export function ExperienceTimeline() {
+interface ExperienceTimelineProps {
+  items: AboutExperienceItem[];
+}
+
+export function ExperienceTimeline({ items }: ExperienceTimelineProps) {
+  if (!items.length) {
+    return null;
+  }
+
   return (
     <FadeIn delay={0.15}>
       <section>
         <SectionLabel>Experience</SectionLabel>
         <div className="flex flex-col">
-          {experience.map((item, index) => (
+          {items.map((item, index) => (
             <div
-              key={item.role}
+              key={`${item.role}-${item.organization}`}
               className="relative grid gap-4 pb-10 last:pb-0 md:grid-cols-[220px_1fr] md:gap-8"
             >
               <p className="pt-0.5 text-right text-[0.78rem] text-[#999] italic max-md:text-left">
                 {item.dates}
               </p>
-              {index < experience.length - 1 ? (
+              {index < items.length - 1 ? (
                 <span
                   className="absolute top-2 bottom-0 left-[226px] hidden w-px bg-[#ddd] md:block"
                   aria-hidden="true"

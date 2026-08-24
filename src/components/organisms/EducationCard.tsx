@@ -1,9 +1,13 @@
 import { GraduationCap } from "lucide-react";
 import { FadeIn } from "@/components/atoms/FadeIn";
 import { SectionLabel } from "@/components/atoms/SectionLabel";
-import { aboutCopy } from "@/lib/about";
+import type { AboutPage } from "@/lib/sanity/types";
 
-export function EducationCard() {
+interface EducationCardProps {
+  education: AboutPage["education"];
+}
+
+export function EducationCard({ education }: EducationCardProps) {
   return (
     <FadeIn delay={0.25}>
       <section>
@@ -14,9 +18,9 @@ export function EducationCard() {
           </div>
           <div>
             <h4 className="mb-1 font-serif text-[1.2rem] text-primary">
-              {aboutCopy.education.title}
+              {education.title}
             </h4>
-            <p className="text-[0.9rem] text-[#666]">{aboutCopy.education.school}</p>
+            <p className="text-[0.9rem] text-[#666]">{education.school}</p>
           </div>
         </div>
       </section>

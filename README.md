@@ -65,9 +65,38 @@ pnpm dev
 4. Add shadcn/ui components: `pnpm dlx shadcn@latest add button`
 5. Deploy with GitHub Pages (see below)
 
+## Editing content
+
+Everything editable lives in Sanity Studio at `/studio`. There are three sections, and they reach the site two different ways:
+
+| Studio section | Appears on | How it reaches the page |
+| --- | --- | --- |
+| Photo Sessions | `/photography/[category]` | Fetched in the browser — live the moment you publish |
+| Video Projects | `/video/narrative`, `/video/commercial` | Fetched in the browser — live the moment you publish |
+| About Page | `/about` | Baked in at build — needs a rebuild (see below) |
+
+The About page is read at build time on purpose: it is mostly text, so a browser fetch would show a loading flash on every visit, and a static export cannot put Sanity content into the page's `<title>` or meta description any other way.
+
+To make About edits publish themselves, add a webhook in Sanity that triggers the Pages build. `.github/workflows/pages.yml` already listens for it.
+
+1. Create a fine-grained GitHub token with **Contents: read and write** on this repository only.
+2. At [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks → **Create webhook**:
+   - **URL**: `https://api.github.com/repos/<owner>/<repo>/dispatches`
+   - **Trigger on**: Create, Update, Delete
+   - **Filter**: `_type == "aboutPage"`
+   - **HTTP method**: `POST`
+   - **HTTP headers**:
+     - `Authorization`: `Bearer <your token>`
+     - `Accept`: `application/vnd.github+json`
+   - **Projection**: `{"event_type": "sanity-publish"}`
+
+Publishing the About page then rebuilds the site, typically live in a minute or two. Photo and video edits need no webhook.
+
+If Sanity is unreachable at build time, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
+
 ## GitHub Pages
 
-The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. The page shells are static files; photography galleries fetch Sanity from the browser, so new sessions show up without a rebuild.
+The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. The page shells are static files; photography galleries and video projects fetch Sanity from the browser, so new sessions show up without a rebuild.
 
 1. In the repo, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
 2. Add repository secrets (Settings → Secrets and variables → Actions):

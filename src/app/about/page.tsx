@@ -7,24 +7,33 @@ import { PageBanner } from "@/components/organisms/PageBanner";
 import { PersonalCards } from "@/components/organisms/PersonalCards";
 import { SkillsGrid } from "@/components/organisms/SkillsGrid";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
-import { aboutCopy } from "@/lib/about";
+import { getAboutPage } from "@/lib/sanity/queries";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: aboutCopy.bannerSubtitle,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const about = await getAboutPage();
+  return {
+    title: "About",
+    description: about.bannerSubtitle,
+  };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const about = await getAboutPage();
+
   return (
     <MarketingLayout>
-      <PageBanner title={aboutCopy.bannerTitle} subtitle={aboutCopy.bannerSubtitle} />
+      <PageBanner title={about.bannerTitle} subtitle={about.bannerSubtitle} />
       <div className="mx-auto flex max-w-[1100px] flex-col gap-16 px-[5%] py-12 md:gap-20 md:py-16">
-        <AboutIntro />
-        <SkillsGrid />
-        <ExperienceTimeline />
-        <FieldPhotos />
-        <EducationCard />
-        <PersonalCards />
+        <AboutIntro
+          headshot={about.headshot}
+          role={about.role}
+          intro={about.intro}
+        />
+        <SkillsGrid groups={about.skillGroups} />
+        <ExperienceTimeline items={about.experience} />
+        <FieldPhotos photos={about.fieldPhotos} />
+        <EducationCard education={about.education} />
+        <PersonalCards honors={about.honors} hobbies={about.hobbies} />
       </div>
     </MarketingLayout>
   );

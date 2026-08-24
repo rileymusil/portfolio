@@ -1,8 +1,11 @@
 import { FadeIn } from "@/components/atoms/FadeIn";
 import { SectionLabel } from "@/components/atoms/SectionLabel";
-import { aboutCopy } from "@/lib/about";
+interface PersonalCardsProps {
+  honors: string[];
+  hobbies: string[];
+}
 
-export function PersonalCards() {
+export function PersonalCards({ honors, hobbies }: PersonalCardsProps) {
   return (
     <FadeIn delay={0.3}>
       <section>
@@ -13,7 +16,7 @@ export function PersonalCards() {
               Honors &amp; Activities
             </h4>
             <ul className="list-disc pl-4">
-              {aboutCopy.honors.map((item) => (
+              {honors.map((item) => (
                 <li key={item} className="mb-1 text-[0.9rem] leading-[1.7] text-[#555]">
                   {item}
                 </li>
@@ -25,7 +28,7 @@ export function PersonalCards() {
               Hobbies &amp; Interests
             </h4>
             <ul className="list-disc pl-4">
-              {aboutCopy.hobbies.map((item) => (
+              {hobbies.map((item) => (
                 <li key={item} className="mb-1 text-[0.9rem] leading-[1.7] text-[#555]">
                   {item}
                 </li>

@@ -2,15 +2,23 @@ import { FadeIn } from "@/components/atoms/FadeIn";
 import { SectionLabel } from "@/components/atoms/SectionLabel";
 import { SkillTag } from "@/components/atoms/SkillTag";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { skillGroups } from "@/lib/about";
+import type { AboutSkillGroup } from "@/lib/sanity/types";
 
-export function SkillsGrid() {
+interface SkillsGridProps {
+  groups: AboutSkillGroup[];
+}
+
+export function SkillsGrid({ groups }: SkillsGridProps) {
+  if (!groups.length) {
+    return null;
+  }
+
   return (
     <FadeIn delay={0.1}>
       <section>
         <SectionLabel>Skills &amp; Tools</SectionLabel>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {skillGroups.map((group) => (
+          {groups.map((group) => (
             <Card
               key={group.title}
               className="rounded-[10px] border-0 border-t-[3px] border-t-brand-mid py-0 shadow-[0_3px_14px_rgba(0,0,0,0.07)]"
