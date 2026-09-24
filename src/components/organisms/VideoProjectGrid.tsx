@@ -9,6 +9,24 @@ import { VideoThumbCard } from "@/components/molecules/VideoThumbCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { VideoProject } from "@/lib/sanity/types";
+import { cn } from "@/lib/utils";
+
+/* 18px rather than the 16px default: at 16px the chevrons read as smudges
+   against the player above them. */
+const videoControlBase =
+  "size-9 text-[#e8ecf0] [&_svg]:size-[18px] focus-visible:ring-white/60";
+
+const videoControlClass = cn(
+  videoControlBase,
+  "rounded-lg border border-white/25 bg-white/10 hover:border-white/45 hover:bg-white/20 hover:text-white",
+);
+
+/* Dismissing is not stepping through, so close inverts on hover instead of
+   brightening, and is a circle rather than a square. */
+const closeControlClass = cn(
+  videoControlBase,
+  "rounded-full border border-white/30 bg-white/15 hover:border-white hover:bg-white hover:text-brand-dark",
+);
 
 interface VideoProjectGridProps {
   projects: VideoProject[];
@@ -66,11 +84,17 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                     {project.title}
                   </h2>
                 </div>
-                <div className="flex shrink-0 gap-2">
+                {/* These sit on the dark modal, so they carry their own light-on-dark
+                    treatment rather than the outline variant's white fill. Stepping
+                    through projects and dismissing the modal are different actions, so
+                    the two chevrons are grouped as squares and the close is a separate
+                    circle, matching the photo lightbox. */}
+                <div className="flex shrink-0 items-center gap-1.5">
                   <Button
                     type="button"
                     size="icon"
-                    variant="outline"
+                    variant="ghost"
+                    className={videoControlClass}
                     onClick={() => navigate(-1)}
                     aria-label="Previous project"
                   >
@@ -79,16 +103,22 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                   <Button
                     type="button"
                     size="icon"
-                    variant="outline"
+                    variant="ghost"
+                    className={videoControlClass}
                     onClick={() => navigate(1)}
                     aria-label="Next project"
                   >
                     <ChevronRight />
                   </Button>
+                  <span
+                    aria-hidden="true"
+                    className="mx-1 h-6 w-px bg-white/20"
+                  />
                   <Button
                     type="button"
                     size="icon"
-                    variant="outline"
+                    variant="ghost"
+                    className={closeControlClass}
                     onClick={close}
                     aria-label="Close"
                   >
