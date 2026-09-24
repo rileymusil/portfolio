@@ -69,17 +69,56 @@ pnpm dev
 
 Everything editable lives in Sanity Studio at `/studio`. Publish there and the change is live — no rebuild, no deploy, nothing to configure.
 
-| Studio section | Appears on |
-| --- | --- |
-| Photo Sessions | `/photography/[category]` |
+| Studio section | Appears on                              |
+| -------------- | --------------------------------------- |
+| Photo Sessions | `/photography/[category]`               |
 | Video Projects | `/video/narrative`, `/video/commercial` |
-| About Page | `/about` |
+| — Video link   | any supported platform, see below       |
+| About Page     | `/about`                                |
 
 Photo and video galleries fetch from Sanity in the browser. The About page does both: it is prerendered with the content Sanity held at build time, so it paints real text immediately and its meta description is filled in, then it refreshes from Sanity in the browser and swaps in anything newer.
 
 That means the only thing a rebuild changes on the About page is its `<meta name="description">`, which is taken from the banner subheading. Everything a visitor reads is current either way.
 
 If Sanity is unreachable, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
+
+## Embedding video
+
+A video project takes a **Video link** — paste the URL, the platform is detected
+from it. Parsing and embed-URL construction live in `src/lib/video-embed.ts`.
+
+| Platform     | Accepted links                                                               | Thumbnail  |
+| ------------ | ---------------------------------------------------------------------------- | ---------- |
+| YouTube      | `watch?v=`, `youtu.be/`, `shorts/`, `embed/`, `live/`, or a bare 11-char ID  | automatic  |
+| Vimeo        | `vimeo.com/123`, channel and group links, unlisted links with a privacy hash | upload one |
+| Facebook     | `/videos/`, `/reel/`, `/watch?v=`, `fb.watch/` short links                   | upload one |
+| Google Drive | `/file/d/…/view`, `?id=…` — file must be shared with "anyone with the link"  | automatic  |
+| Instagram    | `/p/`, `/reel/`, `/tv/`                                                      | upload one |
+| TikTok       | `tiktok.com/@user/video/123…`                                                | upload one |
+
+Only YouTube and Google Drive expose a thumbnail without an API key. For the
+others, upload a **Cover image** on the project; without one the card falls back
+to a branded tile showing the platform name. A cover image also overrides the
+automatic thumbnail where there is one, and takes over if a platform thumbnail
+fails to load.
+
+YouTube Shorts, Facebook Reels, Instagram, and TikTok play in a 9:16 frame;
+everything else is 16:9. Grid cards stay 16:9 either way so the layout does not
+go ragged. Autoplay is only applied to YouTube and Vimeo, the two that honour it
+from a URL parameter.
+
+A link the parser does not recognise fails validation in the Studio, and a
+project whose link cannot be parsed is dropped from the page rather than
+rendering an empty player.
+
+Projects created before this used a **YouTube video ID** field. They keep
+playing untouched — the field is still read as a fallback — and it disappears
+from the Studio once a Video link is filled in.
+
+**Instagram caveat:** the `/embed/` endpoint is undocumented and Meta has
+narrowed it over time. It works for public posts today, but it is the one
+platform here that could stop working without notice. If that matters for a
+given piece, upload the video to YouTube or Vimeo as well.
 
 ## Search and social metadata
 
@@ -88,14 +127,14 @@ Every page ships a canonical URL, Open Graph and Twitter card tags, and
 back to `https://rileymusil.com`, the domain in `public/CNAME`) plus
 `NEXT_PUBLIC_BASE_PATH`.
 
-| What | Where |
-| --- | --- |
-| Canonical + Open Graph + Twitter tags | `src/lib/metadata.ts` — each page calls `pageMetadata()` |
-| Site-wide defaults, `metadataBase`, robots directives | `src/app/layout.tsx` |
-| `ProfessionalService` / `Person` / `WebSite` JSON-LD | `src/lib/structured-data.ts` |
-| `sitemap.xml` | `src/app/sitemap.ts`, from the route list in `src/lib/routes.ts` |
-| `robots.txt` | `src/app/robots.ts` — allows everything except `/studio/` |
-| Link preview image (1200×630) | `public/og-image.png` |
+| What                                                  | Where                                                            |
+| ----------------------------------------------------- | ---------------------------------------------------------------- |
+| Canonical + Open Graph + Twitter tags                 | `src/lib/metadata.ts` — each page calls `pageMetadata()`         |
+| Site-wide defaults, `metadataBase`, robots directives | `src/app/layout.tsx`                                             |
+| `ProfessionalService` / `Person` / `WebSite` JSON-LD  | `src/lib/structured-data.ts`                                     |
+| `sitemap.xml`                                         | `src/app/sitemap.ts`, from the route list in `src/lib/routes.ts` |
+| `robots.txt`                                          | `src/app/robots.ts` — allows everything except `/studio/`        |
+| Link preview image (1200×630)                         | `public/og-image.png`                                            |
 
 Add a new public page to `src/lib/routes.ts` and it appears in the sitemap;
 nothing else needs touching. `/studio` is deliberately excluded from both the

@@ -1,8 +1,7 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { parseVideoUrl, VIDEO_URL_HELP } from "@/lib/video-embed";
 import { CompressedImageInput } from "@/sanity/components/CompressedImageInput";
 import { richTextMembers } from "@/sanity/schemaTypes/richText";
-
-const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 
 export const videoProjectType = defineType({
   name: "videoProject",
@@ -29,19 +28,52 @@ export const videoProjectType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "youtubeId",
-      title: "YouTube video ID",
+      name: "videoUrl",
+      title: "Video link",
       type: "string",
-      description:
-        "Just the 11-character ID, not the whole URL. In https://youtu.be/YqYoziZZlg8 the ID is YqYoziZZlg8.",
+      description: VIDEO_URL_HELP,
       validation: (rule) =>
-        rule
-          .required()
-          .regex(YOUTUBE_ID, {
-            name: "YouTube ID",
-            invert: false,
-          })
-          .error("Enter the 11-character video ID on its own, without the URL around it."),
+        rule.custom((value, context) => {
+          /* Documents created before multi-platform support have no videoUrl;
+             they stay valid on their youtubeId until someone edits them. */
+          const legacyId = (
+            context.document as { youtubeId?: unknown } | undefined
+          )?.youtubeId;
+          if (!value) {
+            return typeof legacyId === "string" && legacyId.trim()
+              ? true
+              : "Add the video's link.";
+          }
+          return parseVideoUrl(value)
+            ? true
+            : "That link isn't one this site can embed. " + VIDEO_URL_HELP;
+        }),
+    }),
+    defineField({
+      name: "thumbnail",
+      title: "Cover image",
+      type: "image",
+      options: { hotspot: true },
+      components: { input: CompressedImageInput },
+      description:
+        "Required for Vimeo, Facebook, Instagram, and TikTok, which do not hand out a thumbnail. " +
+        "Optional for YouTube and Google Drive, where it overrides the automatic one.",
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt text",
+          type: "string",
+        }),
+      ],
+    }),
+    defineField({
+      name: "youtubeId",
+      title: "YouTube video ID (legacy)",
+      type: "string",
+      readOnly: true,
+      description:
+        "Kept so projects added before multi-platform support keep playing. Paste the full link into Video link above and this can be cleared.",
+      hidden: ({ document }) => !document?.youtubeId,
     }),
     defineField({
       name: "order",
@@ -107,13 +139,14 @@ export const videoProjectType = defineType({
     select: {
       title: "title",
       category: "category",
-      media: "stills.0",
+      media: "thumbnail",
+      fallbackMedia: "stills.0",
     },
-    prepare({ title, category, media }) {
+    prepare({ title, category, media, fallbackMedia }) {
       return {
         title: title as string,
         subtitle: String(category ?? ""),
-        media,
+        media: media ?? fallbackMedia,
       };
     },
   },

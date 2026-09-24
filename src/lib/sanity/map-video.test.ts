@@ -47,7 +47,6 @@ describe("mapVideoProject", () => {
       number: "01",
       title: "The Man in the Woods",
       category: "narrative",
-      youtubeId: "YqYoziZZlg8",
       badges: ["Camera Operator", "Director"],
       stills: [
         {
@@ -55,6 +54,10 @@ describe("mapVideoProject", () => {
           caption: "Early Location Scouting",
         },
       ],
+    });
+    expect(project?.embed).toMatchObject({
+      source: "youtube",
+      embedUrl: "https://www.youtube-nocookie.com/embed/YqYoziZZlg8",
     });
     expect(project?.stills[0]?.thumbUrl).toContain("scout.jpg");
     expect(project?.stills[0]?.thumbUrl).toContain("w=900");
@@ -88,16 +91,81 @@ describe("mapVideoProject", () => {
   });
 
   it("rejects documents that would render a dead embed or an unknown category", () => {
-    expect(mapVideoProject({ ...validDoc, youtubeId: undefined }, 0)).toBeNull();
     expect(
-      mapVideoProject(
-        { ...validDoc, youtubeId: "https://youtu.be/YqYoziZZlg8" },
-        0,
-      ),
+      mapVideoProject({ ...validDoc, youtubeId: undefined }, 0),
     ).toBeNull();
-    expect(mapVideoProject({ ...validDoc, category: "portraits" }, 0)).toBeNull();
+    expect(
+      mapVideoProject({ ...validDoc, youtubeId: "not-a-link" }, 0),
+    ).toBeNull();
+    expect(
+      mapVideoProject({ ...validDoc, category: "portraits" }, 0),
+    ).toBeNull();
     expect(mapVideoProject({ ...validDoc, title: "" }, 0)).toBeNull();
     expect(mapVideoProject(null, 0)).toBeNull();
+  });
+
+  it("reads videoUrl for any supported platform", () => {
+    const { youtubeId: _legacy, ...doc } = validDoc;
+
+    expect(
+      mapVideoProject({ ...doc, videoUrl: "https://vimeo.com/824804225" }, 0)
+        ?.embed,
+    ).toMatchObject({
+      source: "vimeo",
+      embedUrl: "https://player.vimeo.com/video/824804225",
+    });
+    expect(
+      mapVideoProject(
+        {
+          ...doc,
+          videoUrl: "https://www.tiktok.com/@a/video/7234567890123456789",
+        },
+        0,
+      )?.embed,
+    ).toMatchObject({ source: "tiktok", orientation: "portrait" });
+  });
+
+  it("keeps a legacy youtubeId document playing with no migration", () => {
+    const project = mapVideoProject(validDoc, 0);
+    expect(project?.embed.source).toBe("youtube");
+    expect(project?.thumbnailUrl).toBe(
+      "https://img.youtube.com/vi/YqYoziZZlg8/hqdefault.jpg",
+    );
+  });
+
+  it("prefers videoUrl over a legacy youtubeId when both are present", () => {
+    const project = mapVideoProject(
+      { ...validDoc, videoUrl: "https://vimeo.com/824804225" },
+      0,
+    );
+    expect(project?.embed.source).toBe("vimeo");
+  });
+
+  it("uses an uploaded cover in place of the platform thumbnail", () => {
+    const project = mapVideoProject(
+      {
+        ...validDoc,
+        thumbnail: {
+          url: "https://cdn.sanity.io/images/proj/production/cover.jpg",
+          lqip: "data:image/jpeg;base64,abc",
+        },
+      },
+      0,
+    );
+
+    expect(project?.thumbnailUrl).toContain("cover.jpg");
+    expect(project?.thumbnailUrl).toContain("w=900");
+    expect(project?.thumbnailLqip).toBe("data:image/jpeg;base64,abc");
+  });
+
+  it("leaves the thumbnail null when the platform serves none and none was uploaded", () => {
+    const { youtubeId: _legacy, ...doc } = validDoc;
+    const project = mapVideoProject(
+      { ...doc, videoUrl: "https://vimeo.com/824804225" },
+      0,
+    );
+
+    expect(project?.thumbnailUrl).toBeNull();
   });
 
   it("defaults badges, description, and stills to empty lists", () => {

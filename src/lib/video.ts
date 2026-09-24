@@ -37,12 +37,10 @@ export function isVideoCategory(value: string): value is VideoCategory {
   return VIDEO_CATEGORIES.includes(value as VideoCategory);
 }
 
-export function getVideoCategoryMeta(category: VideoCategory): VideoCategoryMeta {
+export function getVideoCategoryMeta(
+  category: VideoCategory,
+): VideoCategoryMeta {
   return CATEGORY_META[category];
-}
-
-export function getYoutubeThumbnailUrl(youtubeId: string): string {
-  return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
 }
 
 /* Display numbers are derived from list position rather than stored on the
