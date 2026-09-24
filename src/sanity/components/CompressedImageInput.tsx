@@ -1,18 +1,9 @@
-import { useState, type DragEvent, type ReactElement } from "react";
-import { set, useClient, type ObjectInputProps } from "sanity";
-import { compressImageFile } from "@/lib/sanity/compress-image";
-import { sanityEnv } from "@/lib/sanity/env";
-
-interface ImageFieldValue {
-  _type?: string;
-  alt?: string;
-  hotspot?: unknown;
-  crop?: unknown;
-  asset?: {
-    _type: string;
-    _ref: string;
-  };
-}
+import { type DragEvent, type ReactElement } from "react";
+import { type ObjectInputProps } from "sanity";
+import {
+  useImageUpload,
+  type ImageFieldValue,
+} from "@/sanity/components/use-image-upload";
 
 function isImageFile(file: File | undefined): file is File {
   return Boolean(file?.type.startsWith("image/"));
@@ -21,32 +12,10 @@ function isImageFile(file: File | undefined): file is File {
 export function CompressedImageInput(
   props: ObjectInputProps<ImageFieldValue>,
 ): ReactElement {
-  const client = useClient({ apiVersion: sanityEnv.apiVersion });
-  const [status, setStatus] = useState<string | null>(null);
+  const { status, upload } = useImageUpload(props.onChange, props.value?.alt);
 
-  async function uploadCompressed(file: File): Promise<void> {
-    setStatus("Optimizing image…");
-    try {
-      const compressed = await compressImageFile(file);
-      const asset = await client.assets.upload("image", compressed, {
-        filename: compressed.name,
-      });
-      props.onChange(
-        set({
-          _type: "image",
-          alt: props.value?.alt,
-          asset: {
-            _type: "reference",
-            _ref: asset._id,
-          },
-        }),
-      );
-      setStatus(null);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown error";
-      console.error(`Failed to upload compressed image: ${message}`);
-      setStatus("Couldn't optimize that image. Try another file.");
-    }
+  function uploadCompressed(file: File): void {
+    void upload(file, "Optimizing image…");
   }
 
   function interceptDrop(event: DragEvent<HTMLDivElement>): void {
@@ -56,7 +25,7 @@ export function CompressedImageInput(
     }
     event.preventDefault();
     event.stopPropagation();
-    void uploadCompressed(file);
+    uploadCompressed(file);
   }
 
   return (
@@ -76,7 +45,7 @@ export function CompressedImageInput(
         }
         event.preventDefault();
         event.stopPropagation();
-        void uploadCompressed(file);
+        uploadCompressed(file);
       }}
       onChangeCapture={(event) => {
         const target = event.target;
@@ -89,12 +58,12 @@ export function CompressedImageInput(
         }
         event.preventDefault();
         event.stopPropagation();
-        void uploadCompressed(file);
+        uploadCompressed(file);
         target.value = "";
       }}
     >
       {props.renderDefault(props)}
-      <p className="mt-2 text-sm text-muted-foreground">
+      <p className="text-muted-foreground mt-2 text-sm">
         Large photos are resized to 2400px on the long edge before upload.
       </p>
       {status ? (

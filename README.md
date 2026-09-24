@@ -96,11 +96,33 @@ from it. Parsing and embed-URL construction live in `src/lib/video-embed.ts`.
 | Instagram    | `/p/`, `/reel/`, `/tv/`                                                      | upload one |
 | TikTok       | `tiktok.com/@user/video/123…`                                                | upload one |
 
-Only YouTube and Google Drive expose a thumbnail without an API key. For the
-others, upload a **Cover image** on the project; without one the card falls back
-to a branded tile showing the platform name. A cover image also overrides the
-automatic thumbnail where there is one, and takes over if a platform thumbnail
-fails to load.
+### Cover images
+
+Only YouTube and Google Drive expose a thumbnail from a predictable URL. The
+**Cover image** field fills the gap for the rest, three ways, in the Studio:
+
+| Platform              | How the cover is obtained                                 |
+| --------------------- | --------------------------------------------------------- |
+| YouTube, Google Drive | automatic, from the embed                                 |
+| Vimeo, TikTok         | one click — their public oEmbed endpoints need no API key |
+| Facebook, Instagram   | capture a frame, or upload an image                       |
+
+**Fetching** (`src/lib/video-thumbnail.ts`) calls the platform's oEmbed endpoint
+and re-hosts the image in Sanity rather than linking it, because TikTok's
+thumbnail URLs are signed and expire. Facebook and Instagram retired their
+token-free oEmbed in 2020, so neither can be fetched without a Meta developer
+app.
+
+**Capturing** (`src/lib/capture-frame.ts`) takes a frame from the source video
+file. Pick the file, scrub to the moment, and the frame is drawn to a canvas,
+encoded as a JPEG, and uploaded. The video file never leaves the browser — only
+the image is sent. This exists because a frame cannot be taken from the embed
+itself: the player is a cross-origin iframe, so the browser will not let the
+page read its pixels, and the underlying media URLs are signed and expiring.
+
+Whatever is set here overrides an automatic thumbnail, and takes over if a
+platform thumbnail fails to load. With no cover at all, the card falls back to a
+branded tile showing the platform name.
 
 YouTube Shorts, Facebook Reels, Instagram, and TikTok play in a 9:16 frame;
 everything else is 16:9. Grid cards stay 16:9 either way so the layout does not
