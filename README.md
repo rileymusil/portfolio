@@ -81,6 +81,40 @@ That means the only thing a rebuild changes on the About page is its `<meta name
 
 If Sanity is unreachable, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
 
+## Search and social metadata
+
+Every page ships a canonical URL, Open Graph and Twitter card tags, and
+`schema.org` structured data, all built from `NEXT_PUBLIC_SITE_URL` (falling
+back to `https://rileymusil.com`, the domain in `public/CNAME`) plus
+`NEXT_PUBLIC_BASE_PATH`.
+
+| What | Where |
+| --- | --- |
+| Canonical + Open Graph + Twitter tags | `src/lib/metadata.ts` — each page calls `pageMetadata()` |
+| Site-wide defaults, `metadataBase`, robots directives | `src/app/layout.tsx` |
+| `ProfessionalService` / `Person` / `WebSite` JSON-LD | `src/lib/structured-data.ts` |
+| `sitemap.xml` | `src/app/sitemap.ts`, from the route list in `src/lib/routes.ts` |
+| `robots.txt` | `src/app/robots.ts` — allows everything except `/studio/` |
+| Link preview image (1200×630) | `public/og-image.png` |
+
+Add a new public page to `src/lib/routes.ts` and it appears in the sitemap;
+nothing else needs touching. `/studio` is deliberately excluded from both the
+sitemap and `robots.txt` — it is the editor, not content.
+
+## Analytics
+
+Google Analytics 4, loaded only when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set to a
+valid `G-…` ID — so local dev and preview builds report nothing.
+
+Because the site is a static export with client-side navigation, gtag's own
+`page_view` would fire once per hard load and miss every in-site link. It is
+switched off in the config call and `AnalyticsRouteTracker` sends a `page_view`
+on each route change instead, including the first.
+
+GA4 sets cookies and, depending on where your visitors are, may need a consent
+notice. There is none on the site today; to ship without one, use a
+cookieless alternative instead.
+
 ## GitHub Pages
 
 The app is statically exported (`output: "export"`) so it can be hosted on GitHub Pages. The page shells are static files; photography galleries and video projects fetch Sanity from the browser, so new sessions show up without a rebuild.
@@ -93,6 +127,7 @@ The app is statically exported (`output: "export"`) so it can be hosted on GitHu
 3. Optional repository variables:
    - `NEXT_PUBLIC_SITE_URL` — canonical URL, e.g. `https://rileymusil.com`
    - `NEXT_PUBLIC_BASE_PATH` — repo name only if this is a project site (`https://org.github.io/repo`). Leave empty for a custom domain or `username.github.io` site.
+   - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Google Analytics 4 measurement ID, e.g. `G-ABC1234567`. Leave unset to ship without analytics.
 4. Push to `main` (or run the **Deploy to GitHub Pages** workflow). Custom domain is `public/CNAME`.
 
 Sanity Studio stays available locally at `/studio` during `pnpm dev`. Hosted Studio can also be deployed with `pnpm dlx sanity@latest deploy`.
