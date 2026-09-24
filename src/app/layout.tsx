@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lora, Poppins } from "next/font/google";
+import { Analytics } from "@/components/atoms/Analytics";
 import { StructuredData } from "@/components/atoms/StructuredData";
 import { openGraphImage } from "@/lib/metadata";
 import { site } from "@/lib/site";
@@ -78,6 +79,7 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <StructuredData />
         {children}
+        <Analytics />
       </body>
     </html>
   );
