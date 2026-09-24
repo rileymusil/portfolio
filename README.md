@@ -113,12 +113,19 @@ thumbnail URLs are signed and expire. Facebook and Instagram retired their
 token-free oEmbed in 2020, so neither can be fetched without a Meta developer
 app.
 
-**Capturing** (`src/lib/capture-frame.ts`) takes a frame from the source video
-file. Pick the file, scrub to the moment, and the frame is drawn to a canvas,
-encoded as a JPEG, and uploaded. The video file never leaves the browser — only
-the image is sent. This exists because a frame cannot be taken from the embed
-itself: the player is a cross-origin iframe, so the browser will not let the
-page read its pixels, and the underlying media URLs are signed and expiring.
+**Generating** (`src/lib/capture-frame.ts`) takes a frame from the source video
+file. Choosing the file is the whole interaction: it samples five frames across
+the middle of the clip, scores each by brightness and detail, discards the ones
+that are near-black or blown out, and captures the most detailed of what is
+left — then encodes and uploads it. The video file never leaves the browser;
+only the image is sent. Scrubbing the preview and recapturing is there for when
+the automatic choice is not the wanted one.
+
+This exists because a frame cannot be taken from the embed itself: the player is
+a cross-origin iframe, so the browser will not let the page read its pixels, and
+the underlying media URLs are signed and expiring. Automating Facebook and
+Instagram entirely would need a Meta developer app and an App Access Token,
+which cannot live in client-side code.
 
 Whatever is set here overrides an automatic thumbnail, and takes over if a
 platform thumbnail fails to load. With no cover at all, the card falls back to a
