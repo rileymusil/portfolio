@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { parseVideoUrl, VIDEO_URL_HELP } from "@/lib/video-embed";
 import { CompressedImageInput } from "@/sanity/components/CompressedImageInput";
+import { VideoThumbnailInput } from "@/sanity/components/VideoThumbnailInput";
 import { richTextMembers } from "@/sanity/schemaTypes/richText";
 
 export const videoProjectType = defineType({
@@ -54,10 +55,11 @@ export const videoProjectType = defineType({
       title: "Cover image",
       type: "image",
       options: { hotspot: true },
-      components: { input: CompressedImageInput },
+      components: { input: VideoThumbnailInput },
       description:
-        "Required for Vimeo, Facebook, Instagram, and TikTok, which do not hand out a thumbnail. " +
-        "Optional for YouTube and Google Drive, where it overrides the automatic one.",
+        "Vimeo and TikTok can be fetched automatically. Facebook and Instagram publish no thumbnail, " +
+        "so capture a frame from the source video or upload an image. YouTube and Google Drive already " +
+        "have one; anything set here overrides it.",
       fields: [
         defineField({
           name: "alt",
