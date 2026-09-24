@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import { LiveVideoProjectGrid } from "@/components/organisms/LiveVideoProjectGrid";
 import { PageBanner } from "@/components/organisms/PageBanner";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
+import { pageMetadata } from "@/lib/metadata";
 import { getVideoCategoryMeta } from "@/lib/video";
 
 const meta = getVideoCategoryMeta("narrative");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: meta.title,
   description: meta.description,
-};
+  path: meta.href,
+});
 
 export default function NarrativeVideoPage() {
   return (

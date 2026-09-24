@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Lora, Poppins } from "next/font/google";
+import { StructuredData } from "@/components/atoms/StructuredData";
+import { openGraphImage } from "@/lib/metadata";
+import { site } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site-url";
 import "@/styles/globals.css";
 
 const poppins = Poppins({
@@ -15,13 +19,46 @@ const lora = Lora({
   variable: "--font-lora",
 });
 
+const defaultTitle = `${site.name} | Creative Services`;
+const defaultDescription =
+  "Event video and photography coverage, plus post-production and editing by Riley Musil in Houston, TX.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(absoluteUrl("/")),
   title: {
-    default: "Riley Musil | Creative Services",
-    template: "%s | Riley Musil",
+    default: defaultTitle,
+    template: `%s | ${site.name}`,
   },
-  description:
-    "Event video and photography coverage, plus post-production and editing by Riley Musil in Houston, TX.",
+  description: defaultDescription,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "en_US",
+    title: defaultTitle,
+    description: defaultDescription,
+    url: absoluteUrl("/"),
+    images: openGraphImage(),
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: openGraphImage(),
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -38,7 +75,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.variable} ${lora.variable}`}>
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+      <body className={`${poppins.className} antialiased`}>
+        <StructuredData />
+        {children}
+      </body>
     </html>
   );
 }

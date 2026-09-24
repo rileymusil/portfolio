@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { ContactCard } from "@/components/organisms/ContactCard";
 import { PageBanner } from "@/components/organisms/PageBanner";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
-  description: "Get in touch with Riley Musil for event coverage, portraits, and post-production.",
-};
+  description:
+    "Get in touch with Riley Musil for event coverage, portraits, and post-production.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

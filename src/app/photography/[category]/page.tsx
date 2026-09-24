@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { LiveSessionGallery } from "@/components/organisms/LiveSessionGallery";
 import { PageBanner } from "@/components/organisms/PageBanner";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
+import { pageMetadata } from "@/lib/metadata";
 import {
   getPhotoCategoryMeta,
   isPhotoCategory,
@@ -25,10 +26,11 @@ export async function generateMetadata({
     return { title: "Photography" };
   }
   const meta = getPhotoCategoryMeta(category);
-  return {
+  return pageMetadata({
     title: meta.title,
     description: meta.description,
-  };
+    path: meta.href,
+  });
 }
 
 export default async function PhotographyCategoryPage({

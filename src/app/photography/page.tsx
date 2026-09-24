@@ -3,11 +3,14 @@ import { BookNowButton } from "@/components/atoms/BookNowButton";
 import { PageBanner } from "@/components/organisms/PageBanner";
 import { PhotoCategoryGrid } from "@/components/organisms/PhotoCategoryGrid";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Photography",
-  description: "Event coverage, portraits, and creative photography by Riley Musil.",
-};
+  description:
+    "Event coverage, portraits, and creative photography by Riley Musil.",
+  path: "/photography",
+});
 
 export default function PhotographyPage() {
   return (
