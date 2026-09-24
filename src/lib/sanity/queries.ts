@@ -91,7 +91,13 @@ export const videoProjectsQuery = groq`
     _id,
     title,
     category,
+    videoUrl,
     youtubeId,
+    "thumbnail": thumbnail {
+      "url": asset->url,
+      "alt": alt,
+      "lqip": asset->metadata.lqip
+    },
     badges,
     description,
     "stills": stills[] {

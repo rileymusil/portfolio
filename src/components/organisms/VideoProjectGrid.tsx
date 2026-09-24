@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { PortableDescription } from "@/components/molecules/PortableDescription";
+import { VideoPlayerFrame } from "@/components/molecules/VideoPlayerFrame";
 import { VideoThumbCard } from "@/components/molecules/VideoThumbCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,20 +55,13 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
             onClick={close}
           />
           <div className="relative z-1 my-8 w-full max-w-4xl overflow-hidden rounded-xl bg-[#131f2e] text-[#e8ecf0] shadow-2xl">
-            <div className="relative aspect-video bg-black">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1`}
-                title={project.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-                className="absolute inset-0 size-full border-0"
-              />
-            </div>
+            <VideoPlayerFrame embed={project.embed} title={project.title} />
             <div className="p-6 md:p-8">
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm tracking-widest text-[#8a9bb0]">{project.number}</p>
+                  <p className="text-sm tracking-widest text-[#8a9bb0]">
+                    {project.number}
+                  </p>
                   <h2 id="video-modal-title" className="font-serif text-2xl">
                     {project.title}
                   </h2>
@@ -102,7 +96,7 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                   </Button>
                 </div>
               </div>
-              <div className="mb-4 flex flex-wrap gap-2">
+              <div className="mb-4 flex flex-wrap items-center gap-2">
                 {project.badges.map((badge) => (
                   <Badge
                     key={badge}
@@ -113,9 +107,17 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                   </Badge>
                 ))}
               </div>
+              <a
+                href={project.embed.watchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent mb-4 inline-block text-xs tracking-wide underline underline-offset-4 hover:text-white"
+              >
+                Watch on {project.embed.label}
+              </a>
               <PortableDescription
                 value={project.description}
-                className="space-y-3 text-sm leading-7 text-[#c5ced6] [&_a]:text-accent [&_a]:underline"
+                className="[&_a]:text-accent space-y-3 text-sm leading-7 text-[#c5ced6] [&_a]:underline"
               />
               {project.stills.length ? (
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -131,7 +133,10 @@ export function VideoProjectGrid({ projects }: VideoProjectGridProps) {
                         height={500}
                         className="h-auto w-full object-cover"
                         {...(still.lqip
-                          ? { placeholder: "blur" as const, blurDataURL: still.lqip }
+                          ? {
+                              placeholder: "blur" as const,
+                              blurDataURL: still.lqip,
+                            }
                           : {})}
                       />
                       {still.caption ? (

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   displayNumber,
   getVideoCategoryMeta,
-  getYoutubeThumbnailUrl,
   isVideoCategory,
   VIDEO_CATEGORIES,
 } from "@/lib/video";
@@ -21,12 +20,6 @@ describe("video categories", () => {
     expect(getVideoCategoryMeta("narrative").title).toBe("Narrative Video");
     expect(getVideoCategoryMeta("commercial").href).toBe("/video/commercial");
     expect(getVideoCategoryMeta("commercial").coverSrc).toBe("/Commercial.jpg");
-  });
-
-  it("builds YouTube thumbnail URLs", () => {
-    expect(getYoutubeThumbnailUrl("YqYoziZZlg8")).toBe(
-      "https://img.youtube.com/vi/YqYoziZZlg8/hqdefault.jpg",
-    );
   });
 
   it("numbers projects from their position, padded to two digits", () => {

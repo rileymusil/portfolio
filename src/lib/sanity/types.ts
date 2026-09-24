@@ -1,6 +1,7 @@
 import type { PortableTextBlock } from "@portabletext/types";
 import type { PhotoCategory } from "@/lib/photography";
 import type { VideoCategory } from "@/lib/video";
+import type { VideoEmbed } from "@/lib/video-embed";
 
 export interface GalleryImage {
   alt: string;
@@ -79,7 +80,10 @@ export interface VideoProject {
   number: string;
   title: string;
   category: VideoCategory;
-  youtubeId: string;
+  embed: VideoEmbed;
+  /** Uploaded cover if there is one, else whatever the platform exposes. */
+  thumbnailUrl: string | null;
+  thumbnailLqip?: string;
   badges: string[];
   description: PortableTextBlock[];
   stills: VideoStill[];
@@ -89,7 +93,14 @@ export interface SanityVideoDoc {
   _id: string;
   title: string;
   category: VideoCategory;
-  youtubeId: string;
+  videoUrl?: string | null;
+  /** Pre-dates multi-platform support; read as a bare YouTube ID. */
+  youtubeId?: string | null;
+  thumbnail?: {
+    url: string | null;
+    alt?: string | null;
+    lqip?: string | null;
+  } | null;
   badges?: string[] | null;
   description?: PortableTextBlock[] | null;
   stills: Array<{
