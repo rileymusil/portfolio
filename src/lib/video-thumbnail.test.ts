@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { parseVideoUrl, VIDEO_SOURCES } from "@/lib/video-embed";
 import {
+  canFetchAutomatically,
+  getThumbnailApiUrl,
   getThumbnailStrategy,
   oembedRequestUrl,
   parseOembedThumbnail,
+  thumbnailApiImageUrl,
 } from "@/lib/video-thumbnail";
 
 function embedFor(url: string) {
@@ -108,5 +111,73 @@ describe("parseOembedThumbnail", () => {
     expect(
       parseOembedThumbnail({ thumbnail_url: "javascript:alert(1)" }),
     ).toBeNull();
+  });
+});
+
+describe("getThumbnailApiUrl", () => {
+  it("is off when unset, so nothing is called", () => {
+    expect(getThumbnailApiUrl({})).toBeNull();
+    expect(getThumbnailApiUrl({ NEXT_PUBLIC_THUMBNAIL_API: "  " })).toBeNull();
+  });
+
+  it("rejects a value that is not a usable https endpoint", () => {
+    expect(
+      getThumbnailApiUrl({ NEXT_PUBLIC_THUMBNAIL_API: "nonsense" }),
+    ).toBeNull();
+    expect(
+      getThumbnailApiUrl({
+        NEXT_PUBLIC_THUMBNAIL_API: "http://example.com/api",
+      }),
+    ).toBeNull();
+  });
+
+  it("accepts an https endpoint and trims a trailing slash", () => {
+    expect(
+      getThumbnailApiUrl({
+        NEXT_PUBLIC_THUMBNAIL_API: "https://x.vercel.app/api/video-thumbnail/",
+      }),
+    ).toBe("https://x.vercel.app/api/video-thumbnail");
+  });
+
+  it("allows localhost so the endpoint can be tried in development", () => {
+    expect(
+      getThumbnailApiUrl({
+        NEXT_PUBLIC_THUMBNAIL_API: "http://localhost:3001/api",
+      }),
+    ).toBe("http://localhost:3001/api");
+  });
+});
+
+describe("thumbnailApiImageUrl", () => {
+  it("asks the relay for the bytes rather than the JSON", () => {
+    const url = new URL(
+      thumbnailApiImageUrl(
+        "https://x.vercel.app/api/video-thumbnail",
+        "https://www.facebook.com/reel/123",
+      ),
+    );
+    expect(url.searchParams.get("url")).toBe(
+      "https://www.facebook.com/reel/123",
+    );
+    expect(url.searchParams.get("image")).toBe("1");
+  });
+});
+
+describe("canFetchAutomatically", () => {
+  it("covers Vimeo and TikTok with no relay deployed", () => {
+    expect(canFetchAutomatically("vimeo", false)).toBe(true);
+    expect(canFetchAutomatically("tiktok", false)).toBe(true);
+  });
+
+  it("covers Facebook and Instagram only once a relay is deployed", () => {
+    expect(canFetchAutomatically("facebook", false)).toBe(false);
+    expect(canFetchAutomatically("instagram", false)).toBe(false);
+    expect(canFetchAutomatically("facebook", true)).toBe(true);
+    expect(canFetchAutomatically("instagram", true)).toBe(true);
+  });
+
+  it("leaves the platforms that already have a thumbnail alone", () => {
+    expect(canFetchAutomatically("youtube", true)).toBe(false);
+    expect(canFetchAutomatically("googleDrive", true)).toBe(false);
   });
 });

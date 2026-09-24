@@ -101,17 +101,46 @@ from it. Parsing and embed-URL construction live in `src/lib/video-embed.ts`.
 Only YouTube and Google Drive expose a thumbnail from a predictable URL. The
 **Cover image** field fills the gap for the rest, three ways, in the Studio:
 
-| Platform              | How the cover is obtained                                 |
-| --------------------- | --------------------------------------------------------- |
-| YouTube, Google Drive | automatic, from the embed                                 |
-| Vimeo, TikTok         | one click — their public oEmbed endpoints need no API key |
-| Facebook, Instagram   | capture a frame, or upload an image                       |
+| Platform              | How the cover is obtained                    |
+| --------------------- | -------------------------------------------- |
+| YouTube, Google Drive | automatic, from the embed                    |
+| Vimeo, TikTok         | automatic, via their public oEmbed endpoints |
+| Facebook, Instagram   | automatic, via the thumbnail relay below     |
+| anything, to override | generate a frame from the source video       |
+
+Paste the link and the cover is fetched on its own; there is nothing to click.
 
 **Fetching** (`src/lib/video-thumbnail.ts`) calls the platform's oEmbed endpoint
 and re-hosts the image in Sanity rather than linking it, because TikTok's
 thumbnail URLs are signed and expire. Facebook and Instagram retired their
 token-free oEmbed in 2020, so neither can be fetched without a Meta developer
 app.
+
+### The thumbnail relay
+
+Facebook and Instagram publish a poster in their page's Open Graph tags — the
+same one that makes a pasted link show a preview in Slack or iMessage. A browser
+cannot read it, because the fetch is cross-origin, and their CDNs send no CORS
+headers either. A server can do both, so `src/lib/thumbnail-endpoint.ts` fetches
+the page, reads `og:image`, and relays the bytes back with CORS.
+
+Deploy it either way — the handler is the same:
+
+```bash
+# Vercel: api/video-thumbnail.ts deploys as an Edge Function
+vercel deploy
+
+# or Cloudflare, without moving the site
+npx wrangler deploy workers/video-thumbnail.ts
+```
+
+Then set `NEXT_PUBLIC_THUMBNAIL_API` to the deployed URL — as a repository
+variable for the build, and in `.env.local` for the Studio in development. Leave
+it unset and Facebook and Instagram fall back to generating a frame.
+
+It only ever fetches a URL that parses as one of the six supported platforms, so
+it cannot be pointed at an internal address or used as a general proxy, and it
+caps what it relays at 10MB.
 
 **Generating** (`src/lib/capture-frame.ts`) takes a frame from the source video
 file. Choosing the file is the whole interaction: it samples five frames across
