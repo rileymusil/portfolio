@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { mapVideoProject, mapVideoProjects } from "@/lib/sanity/map-video";
+import {
+  compareByDisplayOrder,
+  mapVideoProject,
+  mapVideoProjects,
+} from "@/lib/sanity/map-video";
 
 const linkedDescription = [
   {
@@ -198,5 +202,81 @@ describe("mapVideoProjects", () => {
     expect(projects).toHaveLength(2);
     expect(projects.map((project) => project.number)).toEqual(["01", "02"]);
     expect(projects[1]?.title).toBe("Second");
+  });
+});
+
+describe("compareByDisplayOrder", () => {
+  function titlesOf(docs: Array<Record<string, unknown>>): string[] {
+    return [...docs].sort(compareByDisplayOrder).map((d) => String(d.title));
+  }
+
+  it("puts dragged projects in the order they were dragged into", () => {
+    expect(
+      titlesOf([
+        { title: "third", orderRank: "0|hzzzzz:" },
+        { title: "first", orderRank: "0|aaaaaa:" },
+        { title: "second", orderRank: "0|dzzzzz:" },
+      ]),
+    ).toEqual(["first", "second", "third"]);
+  });
+
+  it("falls back to the old numeric field when nothing has been dragged", () => {
+    expect(
+      titlesOf([
+        { title: "b", order: 2 },
+        { title: "a", order: 1 },
+        { title: "c", order: 3 },
+      ]),
+    ).toEqual(["a", "b", "c"]);
+  });
+
+  it("keeps newest-first on a numeric tie, as the old query did", () => {
+    expect(
+      titlesOf([
+        { title: "older", order: 0, _createdAt: "2026-01-01T00:00:00Z" },
+        { title: "newer", order: 0, _createdAt: "2026-06-01T00:00:00Z" },
+      ]),
+    ).toEqual(["newer", "older"]);
+  });
+
+  it("puts a dragged project above ones nobody has touched yet", () => {
+    expect(
+      titlesOf([
+        { title: "untouched", order: 1 },
+        { title: "dragged", orderRank: "0|zzzzzz:" },
+      ]),
+    ).toEqual(["dragged", "untouched"]);
+  });
+
+  it("treats a missing order as zero rather than dropping the project", () => {
+    expect(titlesOf([{ title: "b", order: 5 }, { title: "a" }])).toEqual([
+      "a",
+      "b",
+    ]);
+  });
+
+  it("does not throw on malformed entries", () => {
+    expect(() =>
+      [null, undefined, 42, { title: "x" }].sort(compareByDisplayOrder),
+    ).not.toThrow();
+  });
+});
+
+describe("mapVideoProjects ordering", () => {
+  it("numbers projects by their dragged position, not their document order", () => {
+    const base = {
+      category: "narrative",
+      videoUrl: "https://youtu.be/YqYoziZZlg8",
+      stills: [],
+    };
+    const projects = mapVideoProjects([
+      { ...base, _id: "b", title: "Second", orderRank: "0|dzzzzz:" },
+      { ...base, _id: "a", title: "First", orderRank: "0|aaaaaa:" },
+    ]);
+
+    expect(projects.map((p) => [p.number, p.title])).toEqual([
+      ["01", "First"],
+      ["02", "Second"],
+    ]);
   });
 });

@@ -87,8 +87,11 @@ export async function getAboutPage(): Promise<AboutPage> {
 }
 
 export const videoProjectsQuery = groq`
-  *[_type == "videoProject" && category == $category] | order(order asc, _createdAt desc) {
+  *[_type == "videoProject" && category == $category] {
     _id,
+    _createdAt,
+    orderRank,
+    order,
     title,
     category,
     videoUrl,
