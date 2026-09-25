@@ -9,13 +9,19 @@ import {
 } from "@/lib/capture-frame";
 import type { VideoEmbed } from "@/lib/video-embed";
 import {
+  canFetchAutomatically,
+  getThumbnailApiUrl,
   getThumbnailStrategy,
   oembedRequestUrl,
   parseOembedThumbnail,
+  thumbnailApiEnv,
+  thumbnailApiImageUrl,
 } from "@/lib/video-thumbnail";
 
 export interface VideoThumbnailPanelProps {
   embed: VideoEmbed | null;
+  /** Suppresses the automatic fetch when a cover is already set. */
+  hasCover: boolean;
   busy: boolean;
   status: string | null;
   onStatus: (status: string | null) => void;
@@ -23,7 +29,7 @@ export interface VideoThumbnailPanelProps {
   upload: (file: File, working: string) => Promise<boolean>;
 }
 
-function guidanceFor(embed: VideoEmbed | null): string {
+function guidanceFor(embed: VideoEmbed | null, relay: boolean): string {
   if (!embed) {
     return "Add the video link above, then a cover can be fetched or generated here.";
   }
@@ -34,7 +40,9 @@ function guidanceFor(embed: VideoEmbed | null): string {
     case "oembed":
       return `${embed.label} publishes a thumbnail. Fetch it, or generate one from the source video.`;
     default:
-      return `${embed.label} publishes no thumbnail, and its player is a cross-origin frame the browser will not let this page read. Generate one from the source video instead.`;
+      return relay
+        ? `${embed.label} publishes no thumbnail through an API, so its cover is read from the post itself.`
+        : `${embed.label} publishes no thumbnail. Deploy the thumbnail relay to fetch it from the post, or generate one from the source video.`;
   }
 }
 
@@ -42,6 +50,7 @@ function guidanceFor(embed: VideoEmbed | null): string {
    theme to check how it looks. */
 export function VideoThumbnailPanel({
   embed,
+  hasCover,
   busy,
   status,
   onStatus,
@@ -49,6 +58,13 @@ export function VideoThumbnailPanel({
   upload,
 }: VideoThumbnailPanelProps) {
   const oembedUrl = embed ? oembedRequestUrl(embed) : null;
+  const apiBase = getThumbnailApiUrl(thumbnailApiEnv);
+  const canFetch = embed
+    ? canFetchAutomatically(embed.source, Boolean(apiBase))
+    : false;
+  /* Remembers which links have been tried, so a failure is reported once rather
+     than retried on every keystroke in the form. */
+  const attempted = useRef<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -137,35 +153,66 @@ export function VideoThumbnailPanel({
     }
   }
 
-  async function fetchFromPlatform(): Promise<void> {
-    if (!oembedUrl || !embed) {
+  async function fetchViaOembed(
+    embed_: VideoEmbed,
+    url: string,
+  ): Promise<void> {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`${embed_.label} answered ${response.status}`);
+    }
+    const thumbnailUrl = parseOembedThumbnail(await response.json());
+    if (!thumbnailUrl) {
+      throw new Error(`${embed_.label} returned no thumbnail`);
+    }
+    /* Re-hosted rather than linked: TikTok's thumbnail URLs are signed and
+       expire, which would leave dead images on the site. */
+    const image = await fetch(thumbnailUrl);
+    if (!image.ok) {
+      throw new Error(`the thumbnail answered ${image.status}`);
+    }
+    await uploadBlob(await image.blob(), embed_.source);
+  }
+
+  /* Facebook and Instagram put a poster in their page's Open Graph tags — the
+     same one that makes a pasted link show a preview. The browser cannot read
+     it cross-origin, so the relay fetches the page and returns the bytes. */
+  async function fetchViaRelay(
+    embed_: VideoEmbed,
+    base: string,
+  ): Promise<void> {
+    const response = await fetch(thumbnailApiImageUrl(base, embed_.watchUrl));
+    if (!response.ok) {
+      const detail = await response
+        .json()
+        .then((body: { error?: string }) => body.error)
+        .catch(() => null);
+      throw new Error(detail ?? `the relay answered ${response.status}`);
+    }
+    await uploadBlob(await response.blob(), embed_.source);
+  }
+
+  async function uploadBlob(blob: Blob, source: string): Promise<void> {
+    await upload(
+      new File([blob], `${source}-thumbnail.jpg`, {
+        type: blob.type || "image/jpeg",
+      }),
+      "Uploading thumbnail…",
+    );
+  }
+
+  async function fetchAutomatically(): Promise<void> {
+    if (!embed || !canFetch) {
       return;
     }
     onBusy(true);
-    onStatus(`Asking ${embed.label} for a thumbnail…`);
+    onStatus(`Fetching a cover from ${embed.label}…`);
     try {
-      const response = await fetch(oembedUrl);
-      if (!response.ok) {
-        throw new Error(`${embed.label} answered ${response.status}`);
+      if (oembedUrl) {
+        await fetchViaOembed(embed, oembedUrl);
+      } else if (apiBase) {
+        await fetchViaRelay(embed, apiBase);
       }
-      const thumbnailUrl = parseOembedThumbnail(await response.json());
-      if (!thumbnailUrl) {
-        throw new Error(`${embed.label} returned no thumbnail`);
-      }
-
-      /* Re-hosted rather than linked: TikTok's thumbnail URLs are signed and
-         expire, which would leave dead images on the site. */
-      const image = await fetch(thumbnailUrl);
-      if (!image.ok) {
-        throw new Error(`the thumbnail answered ${image.status}`);
-      }
-      const blob = await image.blob();
-      await upload(
-        new File([blob], `${embed.source}-thumbnail.jpg`, {
-          type: blob.type || "image/jpeg",
-        }),
-        "Uploading thumbnail…",
-      );
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       console.error(`Failed to fetch a thumbnail: ${message}`);
@@ -174,6 +221,20 @@ export function VideoThumbnailPanel({
       onBusy(false);
     }
   }
+
+  /* Pasting the link is the whole interaction where a cover can be fetched:
+     this runs once per link, and only when there is no cover already. */
+  useEffect(() => {
+    if (!embed || !canFetch || hasCover) {
+      return;
+    }
+    if (attempted.current === embed.watchUrl) {
+      return;
+    }
+    attempted.current = embed.watchUrl;
+    void fetchAutomatically();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [embed?.watchUrl, canFetch, hasCover]);
 
   return (
     /* Sanity UI supplies the theming — Card, Button and Text pick up the
@@ -189,16 +250,16 @@ export function VideoThumbnailPanel({
     >
       <div style={{ display: "grid", gap: 12 }}>
         <Text muted size={1}>
-          {guidanceFor(embed)}
+          {guidanceFor(embed, Boolean(apiBase))}
         </Text>
 
         <div style={{ display: "grid", gap: 8 }}>
-          {oembedUrl ? (
+          {canFetch ? (
             <Button
               disabled={busy}
               mode="ghost"
-              onClick={() => void fetchFromPlatform()}
-              text={`Fetch thumbnail from ${embed?.label}`}
+              onClick={() => void fetchAutomatically()}
+              text={`Fetch the cover from ${embed?.label} again`}
             />
           ) : null}
 

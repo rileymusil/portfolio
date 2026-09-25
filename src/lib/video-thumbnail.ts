@@ -70,3 +70,51 @@ export function parseOembedThumbnail(payload: unknown): string | null {
     return null;
   }
 }
+
+/* Next replaces NEXT_PUBLIC_* only where it is written as a literal, so the
+   value is read here at module scope. Reading it through the env object the
+   helper below takes would leave it undefined in the browser, and the whole
+   feature would quietly never run. */
+export const thumbnailApiEnv = {
+  NEXT_PUBLIC_THUMBNAIL_API: process.env.NEXT_PUBLIC_THUMBNAIL_API,
+};
+
+/* The relay endpoint from api/video-thumbnail.ts or workers/video-thumbnail.ts,
+   if one is deployed. Without it, Facebook and Instagram fall back to
+   generating a cover from the source video. */
+export function getThumbnailApiUrl(
+  env: Record<string, string | undefined> = process.env,
+): string | null {
+  const raw = (env.NEXT_PUBLIC_THUMBNAIL_API ?? "").trim();
+  if (!raw) {
+    return null;
+  }
+  try {
+    const url = new URL(raw);
+    return url.protocol === "https:" || url.hostname === "localhost"
+      ? raw.replace(/\/+$/, "")
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export function thumbnailApiImageUrl(
+  apiBase: string,
+  watchUrl: string,
+): string {
+  const url = new URL(apiBase);
+  url.searchParams.set("url", watchUrl);
+  url.searchParams.set("image", "1");
+  return url.toString();
+}
+
+/* Whether a cover can be obtained without the editor supplying anything: either
+   the platform publishes one, or the relay can read it from the page. */
+export function canFetchAutomatically(
+  source: VideoSource,
+  hasRelay: boolean,
+): boolean {
+  const strategy = getThumbnailStrategy(source);
+  return strategy === "oembed" || (strategy === "manual" && hasRelay);
+}

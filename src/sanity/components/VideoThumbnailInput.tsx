@@ -32,6 +32,7 @@ export function VideoThumbnailInput(
       <VideoThumbnailPanel
         busy={busy}
         embed={embed}
+        hasCover={Boolean(props.value?.asset)}
         onBusy={setBusy}
         onStatus={setStatus}
         status={status}
