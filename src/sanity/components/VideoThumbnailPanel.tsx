@@ -8,6 +8,7 @@ import {
   isVideoFile,
 } from "@/lib/capture-frame";
 import type { VideoEmbed } from "@/lib/video-embed";
+import { ScreenCaptureField } from "@/sanity/components/ScreenCaptureField";
 import {
   canFetchAutomatically,
   getThumbnailApiUrl,
@@ -41,8 +42,8 @@ function guidanceFor(embed: VideoEmbed | null, relay: boolean): string {
       return `${embed.label} publishes a thumbnail. Fetch it, or generate one from the source video.`;
     default:
       return relay
-        ? `${embed.label} publishes no thumbnail through an API, so its cover is read from the post itself.`
-        : `${embed.label} publishes no thumbnail. Deploy the thumbnail relay to fetch it from the post, or generate one from the source video.`;
+        ? `${embed.label} publishes no thumbnail through an API, so its cover is read from the post itself. Capture the screen or use the source video if that misses.`
+        : `${embed.label} publishes no thumbnail. Open the post in another tab and capture it from the screen, or generate a frame from the source video.`;
   }
 }
 
@@ -262,6 +263,14 @@ export function VideoThumbnailPanel({
               text={`Fetch the cover from ${embed?.label} again`}
             />
           ) : null}
+
+          <ScreenCaptureField
+            busy={busy}
+            label={embed?.source ?? "video"}
+            onBusy={onBusy}
+            onStatus={onStatus}
+            upload={upload}
+          />
 
           <Button
             disabled={busy}
