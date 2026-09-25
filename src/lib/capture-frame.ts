@@ -3,6 +3,12 @@
    let a page read pixels out of one, and the underlying media URLs are signed
    and expiring. Reading the file the editor already has avoids both. */
 
+import {
+  cropRectToPixels,
+  isUsableCrop,
+  type CropRect,
+} from "@/lib/screen-capture";
+
 export const FRAME_JPEG_QUALITY = 0.86;
 
 export function isVideoFile(file: File | undefined | null): file is File {
@@ -34,6 +40,8 @@ export function frameFileName(sourceName: string, seconds: number): string {
 export interface CaptureFrameOptions {
   video: HTMLVideoElement;
   fileName: string;
+  /** Region of the frame to keep, as fractions of it. Omit for the whole frame. */
+  crop?: CropRect | null;
 }
 
 /* Draws the frame currently displayed. The caller seeks first and waits for
@@ -41,24 +49,42 @@ export interface CaptureFrameOptions {
 export async function captureVideoFrame({
   video,
   fileName,
+  crop,
 }: CaptureFrameOptions): Promise<File> {
-  const width = video.videoWidth;
-  const height = video.videoHeight;
+  const frameWidth = video.videoWidth;
+  const frameHeight = video.videoHeight;
 
-  if (!width || !height) {
+  if (!frameWidth || !frameHeight) {
     throw new Error("The video has not loaded far enough to read a frame yet.");
   }
 
+  /* A screen capture is the whole tab or window, so the wanted region is
+     usually a rectangle inside it. */
+  const requested = crop ?? null;
+  const region = isUsableCrop(requested)
+    ? cropRectToPixels(requested, frameWidth, frameHeight)
+    : { x: 0, y: 0, width: frameWidth, height: frameHeight };
+
   const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = region.width;
+  canvas.height = region.height;
 
   const context = canvas.getContext("2d");
   if (!context) {
     throw new Error("This browser would not provide a canvas to draw into.");
   }
 
-  context.drawImage(video, 0, 0, width, height);
+  context.drawImage(
+    video,
+    region.x,
+    region.y,
+    region.width,
+    region.height,
+    0,
+    0,
+    region.width,
+    region.height,
+  );
 
   const blob = await new Promise<Blob | null>((resolve) => {
     canvas.toBlob(resolve, "image/jpeg", FRAME_JPEG_QUALITY);

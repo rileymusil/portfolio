@@ -101,20 +101,35 @@ from it. Parsing and embed-URL construction live in `src/lib/video-embed.ts`.
 Only YouTube and Google Drive expose a thumbnail from a predictable URL. The
 **Cover image** field fills the gap for the rest, three ways, in the Studio:
 
-| Platform              | How the cover is obtained                    |
-| --------------------- | -------------------------------------------- |
-| YouTube, Google Drive | automatic, from the embed                    |
-| Vimeo, TikTok         | automatic, via their public oEmbed endpoints |
-| Facebook, Instagram   | automatic, via the thumbnail relay below     |
-| anything, to override | generate a frame from the source video       |
+| Platform              | How the cover is obtained                                     |
+| --------------------- | ------------------------------------------------------------- |
+| YouTube, Google Drive | automatic, from the embed                                     |
+| Vimeo, TikTok         | automatic, via their public oEmbed endpoints                  |
+| Facebook, Instagram   | capture the screen, or the relay below if deployed            |
+| anything, to override | capture the screen, or generate a frame from the source video |
 
-Paste the link and the cover is fetched on its own; there is nothing to click.
+Where a platform publishes a thumbnail, pasting the link fetches it on its own.
 
 **Fetching** (`src/lib/video-thumbnail.ts`) calls the platform's oEmbed endpoint
 and re-hosts the image in Sanity rather than linking it, because TikTok's
 thumbnail URLs are signed and expire. Facebook and Instagram retired their
 token-free oEmbed in 2020, so neither can be fetched without a Meta developer
 app.
+
+### Capturing from the screen
+
+The route that needs nothing deployed and cannot be broken by a platform. Open
+the post in another tab, press **Capture from the screen**, and pick that tab
+when the browser asks. The pixels come from the operating system's screen share
+rather than from the page, so the cross-origin restriction that blocks every
+other approach does not apply — it works on any embed regardless of what the
+platform serves.
+
+Freeze a frame, drag across the video to crop it out of the surrounding browser
+chrome, and it is encoded and uploaded. Sharing stops as soon as a frame is
+chosen or the capture is cancelled. `src/lib/screen-capture.ts` holds the crop
+maths; `getDisplayMedia` needs a secure context, so this works on the deployed
+Studio and on localhost.
 
 ### The thumbnail relay
 
