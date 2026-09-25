@@ -31,6 +31,57 @@ function toStill(
   };
 }
 
+interface OrderKeys {
+  /* Set by dragging a row in the Studio. A lexicographic rank, so inserting
+     between two projects does not renumber the rest. */
+  orderRank: string | null;
+  /* The numeric field this replaced, still set on projects nobody has dragged. */
+  order: number | null;
+  createdAt: string | null;
+}
+
+function orderKeys(doc: unknown): OrderKeys {
+  if (!isRecord(doc)) {
+    return { orderRank: null, order: null, createdAt: null };
+  }
+  return {
+    orderRank: asString(doc.orderRank),
+    order: typeof doc.order === "number" ? doc.order : null,
+    createdAt: asString(doc._createdAt),
+  };
+}
+
+/* Sorting here rather than in the query so the mixed state is defined: while
+   some projects have been dragged and others have not, a dragged one is
+   deliberately placed and comes first, and the rest keep the order they had
+   under the old numeric field. */
+export function compareByDisplayOrder(a: unknown, b: unknown): number {
+  const left = orderKeys(a);
+  const right = orderKeys(b);
+
+  if (left.orderRank && right.orderRank) {
+    return left.orderRank < right.orderRank
+      ? -1
+      : left.orderRank > right.orderRank
+        ? 1
+        : 0;
+  }
+  if (left.orderRank) {
+    return -1;
+  }
+  if (right.orderRank) {
+    return 1;
+  }
+
+  const byOrder = (left.order ?? 0) - (right.order ?? 0);
+  if (byOrder !== 0) {
+    return byOrder;
+  }
+
+  /* Newest first, matching what the old query did on a tie. */
+  return (right.createdAt ?? "").localeCompare(left.createdAt ?? "");
+}
+
 /* `index` is the project's position in the already-sorted list, which is where
    the "01"/"02" label comes from. See displayNumber in @/lib/video. */
 export function mapVideoProject(
@@ -121,7 +172,7 @@ export function mapVideoProjects(docs: unknown[]): VideoProject[] {
   /* Numbering runs over the projects that survive validation, so a rejected
      document can't leave a gap in the sequence. */
   const projects: VideoProject[] = [];
-  docs.forEach((doc) => {
+  [...docs].sort(compareByDisplayOrder).forEach((doc) => {
     const project = mapVideoProject(doc, projects.length);
     if (project) {
       projects.push(project);

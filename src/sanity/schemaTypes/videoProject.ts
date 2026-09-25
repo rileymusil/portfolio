@@ -1,3 +1,7 @@
+import {
+  orderRankField,
+  orderRankOrdering,
+} from "@sanity/orderable-document-list";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { parseVideoUrl, VIDEO_URL_HELP } from "@/lib/video-embed";
 import { CompressedImageInput } from "@/sanity/components/CompressedImageInput";
@@ -77,12 +81,18 @@ export const videoProjectType = defineType({
         "Kept so projects added before multi-platform support keep playing. Paste the full link into Video link above and this can be cleared.",
       hidden: ({ document }) => !document?.youtubeId,
     }),
+    /* Ordering is done by dragging rows in the Studio's Narrative and
+       Commercial lists. This holds the resulting position as a sort key; it is
+       never edited by hand, so it stays out of the form. */
+    orderRankField({ type: "videoProject" }),
     defineField({
       name: "order",
-      title: "Display order",
+      title: "Display order (legacy)",
       type: "number",
-      initialValue: 0,
-      description: "Lower numbers appear first.",
+      readOnly: true,
+      hidden: true,
+      description:
+        "Superseded by dragging rows in the Narrative and Commercial lists. Still read for projects that have not been dragged yet.",
     }),
     defineField({
       name: "badges",
@@ -127,16 +137,7 @@ export const videoProjectType = defineType({
       ],
     }),
   ],
-  orderings: [
-    {
-      title: "Display order",
-      name: "displayOrder",
-      by: [
-        { field: "order", direction: "asc" },
-        { field: "_createdAt", direction: "desc" },
-      ],
-    },
-  ],
+  orderings: [orderRankOrdering],
   preview: {
     select: {
       title: "title",

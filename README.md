@@ -69,18 +69,36 @@ pnpm dev
 
 Everything editable lives in Sanity Studio at `/studio`. Publish there and the change is live — no rebuild, no deploy, nothing to configure.
 
-| Studio section | Appears on                              |
-| -------------- | --------------------------------------- |
-| Photo Sessions | `/photography/[category]`               |
-| Video Projects | `/video/narrative`, `/video/commercial` |
-| — Video link   | any supported platform, see below       |
-| About Page     | `/about`                                |
+| Studio section                    | Appears on                              |
+| --------------------------------- | --------------------------------------- |
+| Photo Sessions                    | `/photography/[category]`               |
+| Narrative Video, Commercial Video | `/video/narrative`, `/video/commercial` |
+| — Video link                      | any supported platform, see below       |
+| About Page                        | `/about`                                |
 
 Photo and video galleries fetch from Sanity in the browser. The About page does both: it is prerendered with the content Sanity held at build time, so it paints real text immediately and its meta description is filled in, then it refreshes from Sanity in the browser and swaps in anything newer.
 
 That means the only thing a rebuild changes on the About page is its `<meta name="description">`, which is taken from the banner subheading. Everything a visitor reads is current either way.
 
 If Sanity is unreachable, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
+
+## Ordering video projects
+
+Drag the rows. Video projects appear in the Studio as two lists, **Narrative
+Video** and **Commercial Video**, each ordered by dragging a row to where it
+should sit. A drag-to-reorder list can only order what it shows, which is why
+the categories are separate lists rather than one.
+
+Position is stored as a lexicographic rank (`orderRank`, from
+`@sanity/orderable-document-list`) rather than a number, so dropping a project
+between two others does not renumber the rest.
+
+The numeric **Display order** field it replaced is hidden and read-only rather
+than deleted, because it still orders any project nobody has dragged yet.
+`compareByDisplayOrder` in `src/lib/sanity/map-video.ts` defines the mixed
+state: a dragged project is deliberately placed and comes first, and the rest
+keep the order their old numbers gave them. Drag every project in a category
+once and the old field stops mattering.
 
 ## Embedding video
 
