@@ -1,0 +1,25 @@
+{
+  "$comment": "Paste these into Sanity: Manage > API > Webhooks. They POST straight to a Discord channel webhook URL, so there is nothing to deploy. The projection is the request body, shaped as Discord expects. See README > Discord notifications.",
+  "webhooks": [
+    {
+      "name": "Discord - new photo session",
+      "description": "Posts to Discord when a photo session is published for the first time.",
+      "trigger": ["create"],
+      "includeDrafts": false,
+      "httpMethod": "POST",
+      "apiVersion": "v2021-03-25",
+      "filter": "_type == \"photoSession\" && !(_id in path(\"drafts.**\"))",
+      "projection": "{ \"embeds\": [ { \"title\": title, \"url\": \"https://rileymusil.com/photography/\" + category + \"/\", \"description\": \"New photo session in \" + category, \"color\": 2899279, \"image\": { \"url\": coalesce(cover.asset->url + \"?w=1200&fit=max&auto=format\", \"https://rileymusil.com/og-image.png\") }, \"footer\": { \"text\": \"rileymusil.com\" }, \"timestamp\": _createdAt } ] }"
+    },
+    {
+      "name": "Discord - new video project",
+      "description": "Posts to Discord when a video project is published for the first time.",
+      "trigger": ["create"],
+      "includeDrafts": false,
+      "httpMethod": "POST",
+      "apiVersion": "v2021-03-25",
+      "filter": "_type == \"videoProject\" && !(_id in path(\"drafts.**\"))",
+      "projection": "{ \"embeds\": [ { \"title\": title, \"url\": \"https://rileymusil.com/video/\" + category + \"/\", \"description\": \"New video project in \" + category, \"color\": 2899279, \"image\": { \"url\": coalesce(thumbnail.asset->url + \"?w=1200&fit=max&auto=format\", \"https://rileymusil.com/og-image.png\") }, \"footer\": { \"text\": \"rileymusil.com\" }, \"timestamp\": _createdAt } ] }"
+    }
+  ]
+}

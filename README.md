@@ -82,6 +82,75 @@ That means the only thing a rebuild changes on the About page is its `<meta name
 
 If Sanity is unreachable, the About page falls back to the copy in `src/lib/about.ts`, so a missing secret degrades to the previous content rather than an empty page.
 
+## Discord notifications
+
+A Discord message whenever a photo session or video project is published for the
+first time. There is no bot and nothing deployed: a bot means a token and a
+process kept alive, which is for answering commands. A one-way announcement only
+needs a webhook, and Sanity can POST to one directly.
+
+Sanity's webhooks take a GROQ **projection** that shapes the request body, so the
+body is built as Discord's own JSON. The exact configuration lives in
+`src/sanity/webhooks/discord-notifications.json` and is covered by tests that run
+the GROQ and assert on the message Discord receives.
+
+**1. Make the Discord webhook.** In Discord: Server Settings > Integrations >
+Webhooks > New Webhook. Pick the channel, name it, and copy the URL. That URL is
+the only secret involved — anyone holding it can post to the channel.
+
+**2. Add two Sanity webhooks.** At sanity.io/manage, pick the project, then
+API > Webhooks > Create webhook. One per document type, each with:
+
+| Field       | Value                                   |
+| ----------- | --------------------------------------- |
+| URL         | the Discord webhook URL from step 1     |
+| Dataset     | `production`                            |
+| Trigger on  | **Create** only                         |
+| Filter      | see below                               |
+| Projection  | see below                               |
+| HTTP method | `POST`                                  |
+| API version | `v2021-03-25`                           |
+| Drafts      | off                                     |
+| Secret      | leave empty — Discord does not check it |
+
+Photo sessions:
+
+```groq
+_type == "photoSession" && !(_id in path("drafts.**"))
+```
+
+```groq
+{ "embeds": [ { "title": title, "url": "https://rileymusil.com/photography/" + category + "/", "description": "New photo session in " + category, "color": 2899279, "image": { "url": coalesce(cover.asset->url + "?w=1200&fit=max&auto=format", "https://rileymusil.com/og-image.png") }, "footer": { "text": "rileymusil.com" }, "timestamp": _createdAt } ] }
+```
+
+Video projects:
+
+```groq
+_type == "videoProject" && !(_id in path("drafts.**"))
+```
+
+```groq
+{ "embeds": [ { "title": title, "url": "https://rileymusil.com/video/" + category + "/", "description": "New video project in " + category, "color": 2899279, "image": { "url": coalesce(thumbnail.asset->url + "?w=1200&fit=max&auto=format", "https://rileymusil.com/og-image.png") }, "footer": { "text": "rileymusil.com" }, "timestamp": _createdAt } ] }
+```
+
+**3. Publish something.** The message carries the title, the category, the cover
+image, and a link to the live page.
+
+Notes on why it is shaped this way:
+
+- **Create only, drafts excluded.** Publishing a document for the first time is
+  what creates the published version, so Create plus the draft exclusion means
+  one message per new item. Editing something already published stays quiet.
+- **The image falls back to the site's own card.** A video project's cover is
+  optional, and Discord refuses an embed whose image URL is null, losing the
+  notification. `coalesce` sends `og-image.png` instead.
+- **The image is requested at 1200px.** Without that, Discord would be handed
+  the original upload, which can be several megabytes.
+- **Changing the message** means editing it in Sanity's dashboard, which is the
+  one cost of having nothing deployed. Keep
+  `src/sanity/webhooks/discord-notifications.json` in step so the tests still
+  describe what is live.
+
 ## Ordering video projects
 
 Drag the rows. Video projects appear in the Studio as two lists, **Narrative
