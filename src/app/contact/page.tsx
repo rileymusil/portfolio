@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { ContactCard } from "@/components/organisms/ContactCard";
+import { DiscordPromo } from "@/components/organisms/DiscordPromo";
 import { PageBanner } from "@/components/organisms/PageBanner";
 import { MarketingLayout } from "@/components/templates/MarketingLayout";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with Riley Musil for event coverage, portraits, and post-production.",
+  description:
+    "Get in touch with Riley Musil for event coverage, portraits, and post-production.",
 };
 
 export default function ContactPage() {
@@ -15,8 +17,9 @@ export default function ContactPage() {
         title="Get In Touch"
         subtitle="Let's work together on your next project."
       />
-      <section className="flex flex-1 justify-center bg-[#f8f9fa] px-5 pt-16 pb-20">
+      <section className="flex flex-1 flex-col items-center gap-6 bg-[#f8f9fa] px-5 pt-16 pb-20">
         <ContactCard />
+        <DiscordPromo />
       </section>
     </MarketingLayout>
   );

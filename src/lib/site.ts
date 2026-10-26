@@ -14,6 +14,8 @@ export interface SiteConfig {
   bookNowUrl: string;
   linkedinUrl: string;
   instagramUrl: string;
+  discordName: string;
+  discordUrl: string;
   resumeUrl: string;
   showReelYoutubeId: string;
 }
@@ -29,6 +31,8 @@ export const site = {
   bookNowUrl: "http://rileymusil.square.site/",
   linkedinUrl: "https://www.linkedin.com/in/riley-musil-402786332",
   instagramUrl: "https://instagram.com/rileymusil",
+  discordName: "HTX │ Filmmakers Lounge",
+  discordUrl: "https://discord.gg/Qa6n8Vwvp4",
   resumeUrl:
     "https://drive.google.com/file/d/1qyKpHzOBAEuwsj0gfhm9iafWd5cBGbZd/view?usp=sharing",
   showReelYoutubeId: "GYFBoC3VqJU",
