@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
   basePath: staticExport.basePath,
   transpilePackages: ["sanity", "next-sanity", "@sanity/vision"],
   images: {
-    unoptimized: staticExport.images.unoptimized,
+    loader: staticExport.images.loader,
+    loaderFile: staticExport.images.loaderFile,
     remotePatterns: [
       {
         protocol: "https",

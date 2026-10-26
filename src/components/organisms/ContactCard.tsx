@@ -55,6 +55,7 @@ export function ContactCard() {
           fill
           className="object-cover object-[center_top] transition duration-500 group-hover:scale-[1.04]"
           sizes="(max-width: 620px) 100vw, 350px"
+          unoptimized
         />
         <div className="absolute inset-x-0 bottom-0 z-2 w-full bg-[linear-gradient(transparent,rgba(26,37,47,0.9))] px-6 pt-10 pb-6 text-white">
           <h3 className="mb-1 font-serif text-[1.3rem] leading-none font-bold tracking-normal">

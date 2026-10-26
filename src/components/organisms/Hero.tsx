@@ -38,6 +38,7 @@ export function Hero() {
           height={1080}
           className="mx-auto mb-4 block h-auto w-4/5 max-w-[520px] invert"
           priority
+          unoptimized
         />
       </div>
       <h1 data-hero-item className="sr-only">

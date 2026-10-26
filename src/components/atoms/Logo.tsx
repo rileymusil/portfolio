@@ -23,6 +23,7 @@ export function Logo({ className }: LogoProps) {
         height={800}
         className="block size-[38px] object-contain min-[681px]:size-[50px]"
         priority
+        unoptimized
       />
       <span className="font-serif text-[1.05rem] leading-none font-bold tracking-[0.5px] min-[681px]:text-[1.4rem]">
         {site.name}

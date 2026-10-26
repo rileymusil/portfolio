@@ -10,8 +10,11 @@ describe("static export for GitHub Pages", () => {
     expect(getStaticExportOptions({}).trailingSlash).toBe(true);
   });
 
-  it("disables the image optimizer, which needs a Next.js server", () => {
-    expect(getStaticExportOptions({}).images).toEqual({ unoptimized: true });
+  it("resizes through Sanity instead of the server-bound Next optimizer", () => {
+    expect(getStaticExportOptions({}).images).toEqual({
+      loader: "custom",
+      loaderFile: "./src/lib/sanity/image-loader.ts",
+    });
   });
 
   it("has no base path on a custom domain or user site", () => {

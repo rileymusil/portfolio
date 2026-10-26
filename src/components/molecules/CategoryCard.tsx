@@ -34,6 +34,7 @@ export function CategoryCard({
           imageClassName,
         )}
         sizes="(max-width: 768px) 100vw, 33vw"
+        unoptimized
       />
       {/* Touch devices keep the title permanently visible over a scrim; pointer
           devices start clean and reveal it on hover. */}
